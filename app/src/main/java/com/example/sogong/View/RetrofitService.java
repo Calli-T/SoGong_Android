@@ -25,9 +25,11 @@ public interface RetrofitService {
             @Field("email") String email,
             @Field("auto_login") boolean auto_login
     );*/
+    @POST("signup/{post}")
+    Call<User> setSignUp(@Body User user);
 
     @POST("login/")
-    Call<User> Login(@Body User user);
+    Call<String> Login(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

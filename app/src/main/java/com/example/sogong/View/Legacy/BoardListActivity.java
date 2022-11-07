@@ -41,7 +41,7 @@ public class BoardListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_test);
+        setContentView(R.layout.fragment_home);
         /*test 용 나중에 삭제할 것*/
         //setContentView(R.layout.activity_main);
 
@@ -79,7 +79,7 @@ public class BoardListActivity extends AppCompatActivity {
 //        });
 
 // 버튼 컴포넌트 초기화
-        profile_button = findViewById(R.id.profile_button);
+//        profile_button = findViewById(R.id.profile_button);
 
 // 버튼 이벤트 추가
         profile_button.setOnClickListener(new View.OnClickListener() {

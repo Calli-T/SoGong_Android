@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Model.User;
@@ -44,22 +45,22 @@ public class LoginActivity extends AppCompatActivity {
         login_button = findViewById(R.id.login_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
-
+        User testUser = new User(null,"test","test",null,false);
         // 로그인 버튼 이벤트 추가
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                Call<User> call = sv.Login(new User(null, "test", "test", null, false));//, 0));
-
-                call.enqueue(new Callback<User>() {
+                Call<String> call = sv.Login(testUser);//, 0));
+//
+                call.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {
-                            //TextView tv = findViewById(R.id.muyaho);
-                            //tv.setText(response.body().toString());
+//                            //TextView tv = findViewById(R.id.muyaho);
+//                            //tv.setText(response.body().toString());
                             if (response.body() != null)
-                                Log.d("sex", response.body().toString());
+                                Log.d("성공", response.body().toString());
                             else
                                 Log.d("sex", "sex");
 

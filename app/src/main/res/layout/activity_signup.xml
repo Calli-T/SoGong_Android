@@ -15,10 +15,10 @@
         android:layout_marginRight="40dp"
         android:hint="아이디"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
         app:layout_constraintVertical_bias="0.35">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -35,12 +35,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="-40dp"
+
         android:hint="비밀번호"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
         app:layout_constraintVertical_bias="0.50">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -57,12 +59,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="-40dp"
         android:hint="비밀번호확인"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout2"
         app:layout_constraintVertical_bias="0.65">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -78,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="-40dp"
         android:hint="닉네임"
         app:boxStrokeErrorColor="@color/red_700"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
@@ -92,34 +96,46 @@
         android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <Button
         android:id="@+id/join_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Register"
-        android:textStyle="bold"
+        android:text="회원가입"
+        android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/cancel_button"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout4"
+        app:layout_constraintVertical_bias="0.259">
+    </Button>
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/join_button"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
-        app:layout_constraintVertical_bias="0.75">
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout4"
+        app:layout_constraintVertical_bias="0.259">
 
     </Button>
 
-
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="116dp"
+        android:layout_height="139dp"
         android:layout_marginBottom="33dp"
+        android:src="@drawable/recipebook"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.891"
-        android:src="@drawable/pinkbean" />
+        app:layout_constraintVertical_bias="0.891" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 <!--<?xml version="1.0" encoding="utf-8"?>-->
 <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->

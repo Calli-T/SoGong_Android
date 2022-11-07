@@ -19,4 +19,6 @@
         <item>재밌는 게시판</item>
         <item>메이플 게시판</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

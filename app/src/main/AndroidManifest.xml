@@ -16,7 +16,7 @@
 
         <activity android:name=".View.Legacy.DetailActivity" />
         <activity android:name=".View.Legacy.PostActivity" />
-        <activity android:name=".View.Legacy.ListActivity" />
+        <activity android:name=".View.MainActivity" />
         <activity android:name=".View.Legacy.JoinActivity" />
         <activity android:name=".View.Legacy.BoardListActivity" />
 

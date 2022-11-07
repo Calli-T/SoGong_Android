@@ -25,7 +25,7 @@ public class JoinActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_join);
+        setContentView(R.layout.activity_signup);
 
 // 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
@@ -101,8 +101,4 @@ public class JoinActivity extends AppCompatActivity {
             return response;
         }
     }
-}
-
-class Join {
-
 }
