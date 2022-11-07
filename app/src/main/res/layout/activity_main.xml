@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.ListActivity">
+    tools:context=".View.Legacy.ListActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
@@ -34,7 +34,7 @@
             android:id="@+id/board_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.example.sogong.View.Boardfragment"/>
+            android:name="com.example.sogong.View.Legacy.Boardfragment"/>
 
     </FrameLayout>
 

@@ -1,4 +1,4 @@
-package com.example.sogong.View;
+package com.example.sogong.View.Legacy;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Model.Post;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.R;
+import com.example.sogong.View.Server;
 
 import java.util.ArrayList;
 import java.util.List;

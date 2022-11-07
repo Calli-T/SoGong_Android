@@ -1,4 +1,4 @@
-package com.example.sogong.View;
+package com.example.sogong.View.Legacy;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.R;
+import com.example.sogong.View.Server;
 
 public class PostActivity extends AppCompatActivity {
 

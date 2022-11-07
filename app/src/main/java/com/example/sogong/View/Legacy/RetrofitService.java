@@ -1,7 +1,7 @@
-package com.example.sogong.View;
+package com.example.sogong.View.Legacy;
 
-import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.User;
+import com.example.sogong.Model.PostObject;
 
 import java.util.List;
 

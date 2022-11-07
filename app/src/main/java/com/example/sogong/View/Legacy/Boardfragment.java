@@ -1,4 +1,4 @@
-package com.example.sogong.View;
+package com.example.sogong.View.Legacy;
 
 import android.os.Bundle;
 import android.util.Log;

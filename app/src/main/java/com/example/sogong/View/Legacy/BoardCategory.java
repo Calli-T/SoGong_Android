@@ -1,4 +1,4 @@
-package com.example.sogong.View;
+package com.example.sogong.View.Legacy;
 
 public class BoardCategory {
     private String name;

@@ -14,11 +14,11 @@
         android:theme="@style/Theme.SoGong"
         tools:targetApi="31">
 
-        <activity android:name=".View.DetailActivity" />
-        <activity android:name=".View.PostActivity" />
-        <activity android:name=".View.ListActivity" />
-        <activity android:name=".View.JoinActivity" />
-        <activity android:name=".View.BoardListActivity" />
+        <activity android:name=".View.Legacy.DetailActivity" />
+        <activity android:name=".View.Legacy.PostActivity" />
+        <activity android:name=".View.Legacy.ListActivity" />
+        <activity android:name=".View.Legacy.JoinActivity" />
+        <activity android:name=".View.Legacy.BoardListActivity" />
 
         <activity
             android:name=".View.LoginActivity"

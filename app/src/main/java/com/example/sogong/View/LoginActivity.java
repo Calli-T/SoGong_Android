@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
+import com.example.sogong.View.Legacy.BoardListActivity;
+import com.example.sogong.View.Legacy.JoinActivity;
+import com.example.sogong.View.Legacy.RetrofitClient;
+import com.example.sogong.View.Legacy.RetrofitService;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -34,15 +38,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Server.addUser("123", "123");//root계정
-// 사용할 컴포넌트 초기화
+        // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
         passwd_et = findViewById(R.id.passwd_et);
         login_button = findViewById(R.id.login_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
 
-// 로그인 버튼 이벤트 추가
+        // 로그인 버튼 이벤트 추가
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,122 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-        //서버 데이터 가져오기
-//        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://todo-drf-testone.herokuapp.com/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        service1 = retrofit.create(RetrofitService.class);
-
-        //retrofitservice를 클래스로 만듦. 양식은 다음과 같다.
-//        RetrofitService retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
-//        Call<PostSending> call = retrofitService.getPosts("1");
-
-        //delete
-//        Call<Void> call = service1.deletePost("3");
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    Log.d("성공", response.message());
-//                    return;
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                Log.d("성공", t.getMessage());
-//            }
-//        });
-
-
-        //put 약간 구현... title과 important는 수정됐지만 complete는 수정 안 됨. 백엔드가 하겠지~~
-//        PostSending postSending = new PostSending("김재환_수정됨",true,true);
-//        Call<PostSending> call = service1.getPutBody("3",postSending);
-//        call.enqueue(new Callback<PostSending>() {
-//            @Override
-//            public void onResponse(Call<PostSending> call, Response<PostSending> response) {
-//                if(response.isSuccessful()){
-//                    PostSending postresponse = response.body();
-//                    Log.d("성공",postresponse.getTitle());
-//                }else {
-//                    Log.d("실패","김재환 실패");
-//                    return;
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<PostSending> call, Throwable t) {
-//                Log.d(TAG,"onFailure"+ t.getMessage());
-//            }
-//        });
-        //get 구현 - id값으로 불러오기
-//        Call<PostSending> call = service1.getPosts("3");
-//        call.enqueue(new Callback<PostSending>() {
-//            @Override
-//            public void onResponse(Call<PostSending> call, Response<PostSending> response) {
-//                if (response.isSuccessful()) {
-//                    PostSending result = response.body();
-//                    Log.d(TAG, "onResponse : 성공, 결과\n" + result.toString());
-//                } else {
-//                    Log.d(TAG, "onResponse : 실패");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<PostSending> call, Throwable t) {
-//                Log.d(TAG, "onFailure" + t.getMessage());
-//            }
-//        });
-
-
-        //all get 구현
-//        Call<List<PostSending>> call = service1.getAllPosts();
-//        call.enqueue(new Callback<List<PostSending>>() {
-//            @Override
-//            public void onResponse(Call<List<PostSending>> call, Response<List<PostSending>> response) {
-//                if(response.isSuccessful()){
-//                    List<PostSending> posts = response.body();
-//                    for(PostSending postSending : posts){
-//                        Log.d("성공",postSending.getTitle());
-//                    }
-//                    recyclerAdapter = new RecyclerAdapter(getApplicationContext(), posts);
-//                    recyclerView.setAdapter(recyclerAdapter);
-//                }else {
-//                    Log.d("실패","김재환 실패");
-//                    return;
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<PostSending>> call, Throwable t) {
-//
-//            }
-//        });
-
-
-        //Post 구현
-//        PostSending postSending = new PostSending("김재환_ver2",true,true);
-//        Call<PostSending> call = service1.setPostBody(postSending);
-//        call.enqueue(new Callback<PostSending>() {
-//            @Override
-//            public void onResponse(Call<PostSending> call, Response<PostSending> response) {
-//                if(response.isSuccessful()){
-//                    PostSending postresponse = response.body();
-//                    Log.d("성공",postresponse.getTitle());
-//                }else {
-//                    Log.d("실패","김재환 실패");
-//                    return;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<PostSending> call, Throwable t) {
-//                Log.d(TAG,"onFailure"+ t.getMessage());
-//            }
-//        });
 
 
     }
@@ -233,7 +120,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("실패", "비밀번호 불일치");
                             result += "fail";
 
-                        } ;
+                        }
+                        ;
 
                     } else {
                         Log.d("실패", "없는 사용자 아이디 입니다.");
@@ -247,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             String result = "success";
-            return  result;
+            return result;
 
 //            String server_url = "http://15.164.252.136/login.php";
 //
