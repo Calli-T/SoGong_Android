@@ -14,6 +14,9 @@ public class User {
     @SerializedName("auto_login")
     private boolean auto_login;
 
+    //@SerializedName("code")
+    //private int code;
+
     public String getNickname() {
         return nickname;
     }
@@ -53,6 +56,35 @@ public class User {
     public void setAuto_login(boolean auto_login) {
         this.auto_login = auto_login;
     }
+
+    /*public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }*/
+
+    /*public User(String nickname, String uid, String password, String email, boolean auto_login, int code) {
+        this.nickname = nickname;
+        this.uid = uid;
+        this.password = password;
+        this.email = email;
+        this.auto_login = auto_login;
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "nickname='" + nickname + '\'' +
+                ", uid='" + uid + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", auto_login=" + auto_login +
+                ", code=" + code +
+                '}';
+    }*/
 
     public User(String nickname, String uid, String password, String email, boolean auto_login) {
         this.nickname = nickname;

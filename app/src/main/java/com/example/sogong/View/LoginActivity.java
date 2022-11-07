@@ -47,9 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                Call<User> call = sv.Login(new User(null, "test", "test", null, false));
+                Call<User> call = sv.Login(new User(null, "test", "test", null, false));//, 0));
 
                 call.enqueue(new Callback<User>() {
                     @Override
@@ -57,25 +56,20 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             //TextView tv = findViewById(R.id.muyaho);
                             //tv.setText(response.body().toString());
-                            Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                            if (response.body().toString() != null)
+                                Log.d("sex", response.body().toString());
+                            else
+                                Log.d("sex", "sex");
+
+                            Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        System.out.println("muyaho");
+                        Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                // 조인 버튼 이벤트 추가
-                join_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-                        //startActivity(intent);
-                    }
-                });
-
 
             }
         });
@@ -153,4 +147,14 @@ class LoginTask extends AsyncTask<String, Void, String> {
                     return result;
                 }
             }
+ */
+/*
+// 조인 버튼 이벤트 추가
+                join_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                        //startActivity(intent);
+                    }
+                });
  */
