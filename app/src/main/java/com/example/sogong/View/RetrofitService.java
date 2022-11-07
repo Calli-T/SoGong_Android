@@ -15,6 +15,8 @@ import retrofit2.http.Path;
 
 public interface RetrofitService {
 
+}
+/*
     // @GET( EndPoint-자원위치(URI) )
     //가져오기
     @GET("board/{post}")
@@ -53,4 +55,4 @@ public interface RetrofitService {
     //삭제
     @DELETE("board/{id}")
     Call<Void> deletePost(@Path("id") String id);
-}
+ */

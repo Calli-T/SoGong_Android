@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Model.Post;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.R;
-import com.example.sogong.View.Server;
 
 import java.util.ArrayList;
 import java.util.List;

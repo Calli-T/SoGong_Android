@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.R;
-import com.example.sogong.View.Server;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class JoinActivity extends AppCompatActivity {
