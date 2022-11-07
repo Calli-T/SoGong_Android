@@ -7,21 +7,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
-import com.example.sogong.View.Legacy.BoardListActivity;
-import com.example.sogong.View.Legacy.JoinActivity;
-import com.example.sogong.View.Legacy.RetrofitClient;
-import com.example.sogong.View.Legacy.RetrofitService;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -49,13 +49,20 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-// 로그인 함수
-                LoginTask loginTask = new LoginTask();
-                loginTask.execute(userid_et.getText().toString(), passwd_et.getText().toString());
+
+                RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+                Call<User> call =sv.Login(new User(null, "test", "test", null, null));
+
+                call.enqueue(new Callback<Register_POST_Result>() {
+                    @Override
+                    public void onResponse(Call<Register_POST_Result> call, Response<Register_POST_Result> response) {
+                        if(response.isSuccessful()){
+                            TextView tv = findViewById(R.id.muyaho);
+                            tv.setText(response.body().toString());
             }
         });
 
-// 조인 버튼 이벤트 추가
+        // 조인 버튼 이벤트 추가
         join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "잘못된 정보입니다.", Toast.LENGTH_SHORT).show();
             }
         }
-
 
         @Override
         protected String doInBackground(String... params) {

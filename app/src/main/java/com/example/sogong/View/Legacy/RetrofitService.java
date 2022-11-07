@@ -53,4 +53,6 @@ public interface RetrofitService {
     //삭제
     @DELETE("board/{id}")
     Call<Void> deletePost(@Path("id") String id);
+
+    Call<User> Login(User user);
 }
