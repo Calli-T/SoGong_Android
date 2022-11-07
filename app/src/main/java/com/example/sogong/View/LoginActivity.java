@@ -16,6 +16,8 @@ import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,12 +58,17 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             //TextView tv = findViewById(R.id.muyaho);
                             //tv.setText(response.body().toString());
-                            if (response.body().toString() != null)
+                            if (response.body() != null)
                                 Log.d("sex", response.body().toString());
                             else
                                 Log.d("sex", "sex");
 
                             Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            String result = response.toString();
+                            String[] results = result.split(",");
+                            Log.d("sex", results[1]);
                         }
                     }
 
