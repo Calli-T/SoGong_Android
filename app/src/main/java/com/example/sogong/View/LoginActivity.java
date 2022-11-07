@@ -21,8 +21,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
-
 public class LoginActivity extends AppCompatActivity {
 
     // 로그에 사용할 TAG 변수 선언
@@ -51,98 +49,107 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                Call<User> call =sv.Login(new User(null, "test", "test", null, null));
+                Call<User> call = sv.Login(new User(null, "test", "test", null, false));
 
-                call.enqueue(new Callback<Register_POST_Result>() {
+                call.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<Register_POST_Result> call, Response<Register_POST_Result> response) {
-                        if(response.isSuccessful()){
-                            TextView tv = findViewById(R.id.muyaho);
-                            tv.setText(response.body().toString());
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            //TextView tv = findViewById(R.id.muyaho);
+                            //tv.setText(response.body().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        System.out.println("muyaho");
+                    }
+                });
+
+                // 조인 버튼 이벤트 추가
+                join_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                        //startActivity(intent);
+                    }
+                });
+
+
             }
         });
-
-        // 조인 버튼 이벤트 추가
-        join_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
     }
+}
 
-    class LoginTask extends AsyncTask<String, Void, String> {
+/*
+class LoginTask extends AsyncTask<String, Void, String> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
 
-            Log.d(TAG, "onPreExecute");
-        }
+                    Log.d(TAG, "onPreExecute");
+                }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "onPostExecute, " + result);
+                @Override
+                protected void onPostExecute(String result) {
+                    super.onPostExecute(result);
+                    Log.d(TAG, "onPostExecute, " + result);
 
-            if (result.equals("success")) {
+                    if (result.equals("success")) {
 // 결과값이 success 이면
 // 토스트 메시지를 뿌리고
 // userid 값을 가지고 ListActivity 로 이동
-                Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, BoardListActivity.class);
-                intent.putExtra("userid", userid_et.getText().toString());
-                startActivity(intent);
-            } else if (result.equals("fail")) {
-                textInputLayout2.setError("로그인실패");
-                Toast.makeText(LoginActivity.this, "잘못된 정보입니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String userid = params[0];
-            String passwd = params[1];
-
-            //final String[] result = {""};
-
-            RetrofitService retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
-            Call<User> call = retrofitService.getLogin(userid);
-            call.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    String result = "";
-                    if (response.isSuccessful()) {
-                        User user = response.body();
-                        Log.d("성공", user.getUserId());
-                        if (passwd.equals(user.getPassword())) {
-                            Log.d("성공", "비밀번호 일치");
-                            result = "success";
-                        } else {
-                            Log.d("실패", "비밀번호 불일치");
-                            result += "fail";
-
-                        }
-                        ;
-
-                    } else {
-                        Log.d("실패", "없는 사용자 아이디 입니다.");
-                        result += "fail";
+                        Toast.makeText(LoginActivity.this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, BoardListActivity.class);
+                        intent.putExtra("userid", userid_et.getText().toString());
+                        startActivity(intent);
+                    } else if (result.equals("fail")) {
+                        textInputLayout2.setError("로그인실패");
+                        Toast.makeText(LoginActivity.this, "잘못된 정보입니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                protected String doInBackground(String... params) {
 
+                    String userid = params[0];
+                    String passwd = params[1];
+
+                    //final String[] result = {""};
+
+                    RetrofitService retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
+                    Call<User> call = retrofitService.getLogin(userid);
+                    call.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            String result = "";
+                            if (response.isSuccessful()) {
+                                User user = response.body();
+                                Log.d("성공", user.getUserId());
+                                if (passwd.equals(user.getPassword())) {
+                                    Log.d("성공", "비밀번호 일치");
+                                    result = "success";
+                                } else {
+                                    Log.d("실패", "비밀번호 불일치");
+                                    result += "fail";
+
+                                }
+                                ;
+
+                            } else {
+                                Log.d("실패", "없는 사용자 아이디 입니다.");
+                                result += "fail";
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+
+                        }
+                    });
+                    String result = "success";
+                    return result;
                 }
-            });
-            String result = "success";
-            return result;
-        }
-    }
-
-}
+            }
+ */
