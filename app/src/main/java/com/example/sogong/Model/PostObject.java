@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.Model;
 
 import com.google.gson.annotations.SerializedName;
 

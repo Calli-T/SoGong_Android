@@ -1,4 +1,6 @@
-package com.example.sogong;
+package com.example.sogong.View;
+
+import com.example.sogong.Model.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;

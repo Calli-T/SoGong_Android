@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 public class BoardCategory {
     private String name;

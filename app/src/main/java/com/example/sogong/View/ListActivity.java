@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,6 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sogong.Model.Post;
+import com.example.sogong.Model.PostObject;
+import com.example.sogong.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.Model;
 
 public class Post {
     String id;

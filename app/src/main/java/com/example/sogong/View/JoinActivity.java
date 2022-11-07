@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class JoinActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.content.Context;
 import android.net.Uri;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sogong.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

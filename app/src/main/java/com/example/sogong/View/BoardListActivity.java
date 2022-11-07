@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -9,19 +9,16 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.sogong.Model.Post;
+import com.example.sogong.R;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
 
 public class BoardListActivity extends AppCompatActivity {
     // 로그에 사용할 TAG 변수

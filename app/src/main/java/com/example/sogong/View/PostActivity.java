@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,9 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.sogong.R;
 
 public class PostActivity extends AppCompatActivity {
 

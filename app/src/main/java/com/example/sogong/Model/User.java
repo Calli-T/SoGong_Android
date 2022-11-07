@@ -1,8 +1,8 @@
-package com.example.sogong;
+package com.example.sogong.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginObject {
+public class User {
     @SerializedName("uid")
     private String UserId;
     @SerializedName("nickname")
@@ -34,7 +34,7 @@ public class LoginObject {
         this.password = password;
     }
 
-    public LoginObject(String userId, String nickname, String password) {
+    public User(String userId, String nickname, String password) {
         this.UserId = userId;
         this.nickname = nickname;
         this.password = password;

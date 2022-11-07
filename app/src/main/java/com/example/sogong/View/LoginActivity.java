@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.Model.User;
+import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -218,15 +218,15 @@ public class LoginActivity extends AppCompatActivity {
             //final String[] result = {""};
 
             RetrofitService retrofitService = RetrofitClient.getClient().create(RetrofitService.class);
-            Call<LoginObject> call = retrofitService.getLogin(userid);
-            call.enqueue(new Callback<LoginObject>() {
+            Call<User> call = retrofitService.getLogin(userid);
+            call.enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<LoginObject> call, Response<LoginObject> response) {
+                public void onResponse(Call<User> call, Response<User> response) {
                     String result = "";
                     if (response.isSuccessful()) {
-                        LoginObject loginObject = response.body();
-                        Log.d("성공", loginObject.getUserId());
-                        if (passwd.equals(loginObject.getPassword())) {
+                        User user = response.body();
+                        Log.d("성공", user.getUserId());
+                        if (passwd.equals(user.getPassword())) {
                             Log.d("성공", "비밀번호 일치");
                             result = "success";
                         } else {
@@ -242,7 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<LoginObject> call, Throwable t) {
+                public void onFailure(Call<User> call, Throwable t) {
 
                 }
             });
@@ -296,7 +296,6 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //
 //            return response;
-            return null;
         }
     }
 

@@ -1,4 +1,7 @@
-package com.example.sogong;
+package com.example.sogong.View;
+
+import com.example.sogong.Model.User;
+import com.example.sogong.Model.PostObject;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ public interface RetrofitService {
     Call<List<PostObject>> getAllPosts();
 
     @GET("login/{uid}")
-    Call<LoginObject> getLogin(@Path("uid") String uid);
+    Call<User> getLogin(@Path("uid") String uid);
 
 
     //등록
@@ -29,7 +32,7 @@ public interface RetrofitService {
     Call<PostObject> setPostBody(@Body PostObject post);
 
     @POST("login/")
-    Call<LoginObject> setLoginBody(@Body LoginObject loginObject);
+    Call<User> setLoginBody(@Body User user);
 
 //    @FormUrlEncoded
 //    @POST("todo")

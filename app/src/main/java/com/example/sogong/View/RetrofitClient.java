@@ -1,4 +1,4 @@
-package com.example.sogong;
+package com.example.sogong.View;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
