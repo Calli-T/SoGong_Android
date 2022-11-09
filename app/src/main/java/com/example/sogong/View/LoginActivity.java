@@ -49,48 +49,46 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                //Toast.makeText(LoginActivity.this, "muyaho", Toast.LENGTH_SHORT).show();
-                Call<User> call = sv.Login(new User(null, userid_et.getText().toString(), passwd_et.getText().toString(), null, false));//, 0));
+                login();
+            }
+        });
+    }
 
-                call.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        // 반응 제대로 옴
-                        if (response.isSuccessful()) {
-                            //TextView tv = findViewById(R.id.muyaho);
-                            //tv.setText(response.body().toString());
-                            if (response.body() != null) {
-                                //Log.d("sex", response.body().toString());
+    public void login() {
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        Call<User> call = sv.Login(new User(null, userid_et.getText().toString(), passwd_et.getText().toString(), null, false));//, 0));
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                // 반응 제대로 옴
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
                                 /*
                                 할일
                                 로그인해서, 답이오면 코드가 200에 내용물들은 body()에 있을것이다. 그건 body().getX()로 가져올 수 있따
                                 만약 로그인이 실패했다면 code가 200인데 body에 뭐가 없을것이다
                                  */
-                                if(response.code()==200) {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                            else
-                                Log.d("sex", "sex");
-
-                            Toast.makeText(LoginActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+                        if (response.code() == 200) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
                         }
-                        else {
-                            // 안옴
-                            String result = response.toString();
-                            String[] results = result.split(",");
-                            Log.d("sex", results[1]);
-                        }
-                    }
+                    } else
+                        Log.d("empty_response", "with login");
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    //Toast.makeText(LoginActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+                } else {
+                    // 안옴
+                    String result = response.toString();
+                    String[] results = result.split(",");
+                    //Log.d("sex", results[1]);
+                    Toast.makeText(LoginActivity.this, results[1], Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
     }
