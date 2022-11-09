@@ -54,21 +54,17 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                String id = userid_et.getText().toString();
+                String pw = passwd_et.getText().toString();
+                Boolean auto_login = checkbox.isChecked();
+
+                ControlLogin_f clf = new ControlLogin_f();
+                if(clf.login(id, pw, auto_login) == 200){
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
-    }
-
-    public void login() {
-        String id = userid_et.getText().toString();
-        String pw = passwd_et.getText().toString();
-        Boolean auto_login = checkbox.isChecked();
-
-        ControlLogin_f clf = new ControlLogin_f();
-        if(clf.login(id, pw, auto_login) == 200){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
     }
 }
 /*

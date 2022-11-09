@@ -23,6 +23,10 @@ public class ControlLogin_f {
         return pw.hashCode();
     }
 
+    public static int getResponseCode() {
+        return responseCode;
+    }
+
     public int login(String id, String pw, boolean isAutoLogin) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Login(new User(null, id, pw, null, isAutoLogin));
