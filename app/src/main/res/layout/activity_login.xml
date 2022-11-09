@@ -13,12 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
         android:hint="아이디"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
         app:layout_constraintVertical_bias="0.35">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -35,14 +36,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="70dp"
-        android:layout_marginTop="10dp"
         android:hint="비밀번호"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout"
         app:layout_constraintVertical_bias="0.50">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,16 +54,15 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-
         android:text="로그인"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/join_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.60">
+        app:layout_constraintTop_toBottomOf="@id/find_button"
+        app:layout_constraintVertical_bias="0.01">
 
     </Button>
 
@@ -74,14 +71,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:text="회원가입"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/login_button"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.60">
+        app:layout_constraintTop_toBottomOf="@id/find_button"
+        app:layout_constraintVertical_bias="0.01">
 
     </Button>
 
@@ -89,9 +86,8 @@
         android:id="@+id/imageView"
         android:layout_width="116dp"
         android:layout_height="139dp"
-        android:layout_marginBottom="33dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/recipebook"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,10 +102,9 @@
         android:text="아이디/비밀번호 찾기"
         android:textColor="@color/blue"
         android:textSize="15sp"
-        android:layout_marginLeft="150dp"
-        app:layout_constraintBottom_toTopOf="@+id/join_button"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
 
@@ -119,13 +114,10 @@
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="230dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
         android:text="자동로그인"
         android:textColor="@color/blue"
-
-
-        app:layout_constraintBottom_toTopOf="@+id/login_button"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 

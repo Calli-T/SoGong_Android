@@ -29,7 +29,7 @@ public interface RetrofitService {
     Call<User> setSignUp(@Body User user);
 
     @POST("login/")
-    Call<String> Login(@Body User user);
+    Call<User> Login(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

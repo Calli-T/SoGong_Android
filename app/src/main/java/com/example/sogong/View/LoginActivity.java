@@ -51,18 +51,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                Call<String> call = sv.Login(testUser);//, 0));
+                Call<User> call = sv.Login(testUser);//, 0));
 //
-                call.enqueue(new Callback<String>() {
+                call.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                         if (response.isSuccessful()) {
 //                            //TextView tv = findViewById(R.id.muyaho);
 //                            //tv.setText(response.body().toString());
                             if (response.body() != null)
                                 Log.d("성공", response.body().toString());
                             else
-                                Log.d("sex", "sex");
+                                Log.d("실패", "실패ㅜㅜ");
 
                             Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                         }
@@ -79,6 +79,13 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
+            }
+        });
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

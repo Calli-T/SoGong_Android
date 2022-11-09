@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.Legacy.ListActivity">
+    tools:context=".View.MainActivity">
 
 
     <androidx.core.widget.NestedScrollView
@@ -54,27 +54,27 @@
                 android:id="@+id/recipebox"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:paddingLeft="30dp"
-                android:background="@color/beige"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-
+                android:background="@color/beige"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageView"
+                app:layout_constraintBottom_toTopOf="@id/photobox"
                 />
             <TextView
                 android:id="@+id/textrecipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:text="추천 레시피"
-
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView" />
+                app:layout_constraintStart_toStartOf="@id/recipebox"
+                app:layout_constraintTop_toTopOf="@id/recipebox" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_recipe_recyclerview"
@@ -88,6 +88,18 @@
                 app:layout_constraintTop_toBottomOf="@id/textrecipe"
                 app:layout_constraintBottom_toBottomOf="@id/recipebox"
                  />
+            <View
+                android:id="@+id/photobox"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/beige"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipebox"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
