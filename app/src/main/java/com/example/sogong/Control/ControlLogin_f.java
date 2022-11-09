@@ -33,8 +33,6 @@ public class ControlLogin_f {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
-                            //Intent intent = new Intent(context, MainActivity.class);
-                            //startActivity(intent);
                             userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
                             LoginActivity.responseCode = response.code();
                         }
@@ -45,7 +43,6 @@ public class ControlLogin_f {
                     // 안옴
                     String result = response.toString();
                     String[] results = result.split(",");
-                    //Log.d("sex", results[1]);
                     //Toast.makeText(LoginActivity.this, results[1], Toast.LENGTH_SHORT).show();
                 }
             }
