@@ -29,21 +29,21 @@ public class ControlLogin_f {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                // 반응 제대로 옴
+                // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
                             userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
                             LoginActivity.responseCode = response.code();
                         }
-                    } else
-                        Log.d("empty_response", "with login");
-
+                    } else // 404
+                        Log.d("404 Not Found", "with login");
                 } else {
-                    // 안옴
-                    String result = response.toString();
-                    String[] results = result.split(",");
-                    //Toast.makeText(LoginActivity.this, results[1], Toast.LENGTH_SHORT).show();
+                    // 400?
+                    //String result = response.toString();
+                    //String[] results = result.split(",");
+                    //results[1].to;
+                    LoginActivity.responseCode = response.code();
                 }
             }
 

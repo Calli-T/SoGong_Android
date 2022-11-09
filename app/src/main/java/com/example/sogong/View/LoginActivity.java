@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Control.ControlLogin_f;
@@ -75,6 +76,16 @@ public class LoginActivity extends AppCompatActivity {
                             responseCode = 0;
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
+                        } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
+                            responseCode = 0;
+                            Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 잘못 입력했습니다.", Toast.LENGTH_SHORT).show();
+                        } else if (responseCode == 500) {
+                            responseCode = 0;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            builder.setTitle("서버 오류");
+                            builder.setMessage("로그인에 실패했습니다.");
+                            builder.setPositiveButton("확인", null);
+                            builder.create().show();
                         }
                     }
                 };
