@@ -1,17 +1,20 @@
 package com.example.sogong.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     // 사용할 컴포넌트 선언
     EditText userid_et, passwd_et;
     Button login_button, join_button;
+    CheckBox checkbox;
     TextInputLayout textInputLayout2;
 
     @Override
@@ -44,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         login_button = findViewById(R.id.login_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
+        checkbox = findViewById(R.id.checkBox);
 
         // 로그인 버튼 이벤트 추가
         login_button.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +60,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
+        String id = userid_et.getText().toString();
+        String pw = passwd_et.getText().toString();
+        Boolean auto_login = checkbox.isChecked();
+
+        ControlLogin_f clf = new ControlLogin_f();
+        if(clf.login(id, pw, auto_login) == 200){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    }
+}
+/*
+    public void login() {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Login(new User(null, userid_et.getText().toString(), passwd_et.getText().toString(), null, false));//, 0));
 
@@ -64,11 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                 // 반응 제대로 옴
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                                /*
-                                할일
-                                로그인해서, 답이오면 코드가 200에 내용물들은 body()에 있을것이다. 그건 body().getX()로 가져올 수 있따
-                                만약 로그인이 실패했다면 code가 200인데 body에 뭐가 없을것이다
-                                 */
                         if (response.code() == 200) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -92,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-}
+ */
 
 /*
 class LoginTask extends AsyncTask<String, Void, String> {

@@ -57,35 +57,6 @@ public class User {
         this.auto_login = auto_login;
     }
 
-    /*public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }*/
-
-    /*public User(String nickname, String uid, String password, String email, boolean auto_login, int code) {
-        this.nickname = nickname;
-        this.uid = uid;
-        this.password = password;
-        this.email = email;
-        this.auto_login = auto_login;
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "nickname='" + nickname + '\'' +
-                ", uid='" + uid + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", auto_login=" + auto_login +
-                ", code=" + code +
-                '}';
-    }*/
-
     public User(String nickname, String uid, String password, String email, boolean auto_login) {
         this.nickname = nickname;
         this.uid = uid;
