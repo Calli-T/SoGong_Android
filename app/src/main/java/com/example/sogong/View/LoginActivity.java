@@ -120,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 }
 
+//
 /*
 final Runnable runnable = new Runnable() {
             @Override
