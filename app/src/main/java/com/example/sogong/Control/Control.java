@@ -3,7 +3,6 @@ package com.example.sogong.Control;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.sogong.View.Legacy.BoardListActivity;
 import com.example.sogong.View.LoginActivity;
 
 import java.util.List;

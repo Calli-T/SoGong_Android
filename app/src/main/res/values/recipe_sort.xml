@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recipe_sort">
+        <item>최근 순</item>
+        <item>조회 순</item>
+        <item>좋아요 순</item>
+        <item>시간 대비 누적 조회 순</item>
+    </string-array>
+</resources>

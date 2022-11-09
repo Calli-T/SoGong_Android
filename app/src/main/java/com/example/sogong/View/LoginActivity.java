@@ -1,6 +1,5 @@
 package com.example.sogong.View;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -182,10 +181,56 @@ final Runnable runnable = new Runnable() {
                     Toast.makeText(LoginActivity.this, results[1], Toast.LENGTH_SHORT).show();
                 }
             }
+                // 커스텀 다이얼로그를 생성한다. 사용자가 만든 클래스이다.
+                Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+                // 커스텀 다이얼로그를 호출한다.
+                // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+                customDialog.callFunction();
+            }
+        });
+//        login_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+//                Call<User> call = sv.Login(testUser);//, 0));
+////
+//                call.enqueue(new Callback<User>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+//                        if (response.isSuccessful()) {
+////                            //TextView tv = findViewById(R.id.muyaho);
+////                            //tv.setText(response.body().toString());
+//                            if (response.body() != null)
+//                                Log.d("성공", response.body().toString());
+//                            else
+//                                Log.d("실패", "실패ㅜㅜ");
+//
+//                            Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//                            String result = response.toString();
+//                            String[] results = result.split(",");
+//                            Log.d("sex", results[1]);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<User> call, Throwable t) {
+//                        Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//            }
+//        });
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

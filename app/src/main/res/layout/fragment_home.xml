@@ -6,104 +6,124 @@
     android:layout_height="match_parent"
     tools:context=".View.MainActivity">
 
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/west"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/main_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageButton>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="홈 화면"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="62dp"
+        android:layout_height="74dp"
+        android:src="@drawable/recipebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/main_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+    <View
+        android:id="@+id/recipebox"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/roundedrectangle"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_line"
+        app:layout_constraintBottom_toTopOf="@id/photobox"/>
+
+    <TextView
+        android:id="@+id/textrecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="추천 레시피"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/recipebox"
+        app:layout_constraintTop_toTopOf="@id/recipebox" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_recipe_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toBottomOf="@id/recipebox"
+        app:layout_constraintEnd_toEndOf="@id/recipebox"
+        app:layout_constraintStart_toStartOf="@id/recipebox"
+        app:layout_constraintTop_toBottomOf="@id/textrecipe" />
+
+    <View
+        android:id="@+id/photobox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/roundedrectangle"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/recipebox"
+         />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/textphoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="추천 요리 사진"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/photobox"
+        app:layout_constraintTop_toTopOf="@id/photobox" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_photo_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toBottomOf="@id/photobox"
+        app:layout_constraintEnd_toEndOf="@id/photobox"
+        app:layout_constraintStart_toStartOf="@id/photobox"
+        app:layout_constraintTop_toBottomOf="@id/textphoto" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="30dp"
-                android:text="홈화면"
-
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="62dp"
-                android:layout_height="74dp"
-                android:src="@drawable/recipebook"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#000000"
-                app:layout_constraintTop_toBottomOf="@id/imageView"
-                />
-
-            <View
-                android:id="@+id/recipebox"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:background="@color/beige"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView"
-                app:layout_constraintBottom_toTopOf="@id/photobox"
-                />
-            <TextView
-                android:id="@+id/textrecipe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="추천 레시피"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/recipebox"
-                app:layout_constraintTop_toTopOf="@id/recipebox" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/home_recipe_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:nestedScrollingEnabled="true"
-                app:layout_constraintStart_toStartOf="@id/recipebox"
-                app:layout_constraintEnd_toEndOf="@id/recipebox"
-                app:layout_constraintTop_toBottomOf="@id/textrecipe"
-                app:layout_constraintBottom_toBottomOf="@id/recipebox"
-                 />
-            <View
-                android:id="@+id/photobox"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:background="@color/beige"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipebox"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
