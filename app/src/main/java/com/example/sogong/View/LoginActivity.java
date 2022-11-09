@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Model.User;
@@ -45,28 +44,41 @@ public class LoginActivity extends AppCompatActivity {
         login_button = findViewById(R.id.login_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
-        User testUser = new User(null,"test","test",null,false);
+
         // 로그인 버튼 이벤트 추가
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-                Call<User> call = sv.Login(testUser);//, 0));
-//
+                //Toast.makeText(LoginActivity.this, "muyaho", Toast.LENGTH_SHORT).show();
+                Call<User> call = sv.Login(new User(null, userid_et.getText().toString(), passwd_et.getText().toString(), null, false));//, 0));
+
                 call.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        // 반응 제대로 옴
                         if (response.isSuccessful()) {
-//                            //TextView tv = findViewById(R.id.muyaho);
-//                            //tv.setText(response.body().toString());
-                            if (response.body() != null)
-                                Log.d("성공", response.body().toString());
+                            //TextView tv = findViewById(R.id.muyaho);
+                            //tv.setText(response.body().toString());
+                            if (response.body() != null) {
+                                //Log.d("sex", response.body().toString());
+                                /*
+                                할일
+                                로그인해서, 답이오면 코드가 200에 내용물들은 body()에 있을것이다. 그건 body().getX()로 가져올 수 있따
+                                만약 로그인이 실패했다면 code가 200인데 body에 뭐가 없을것이다
+                                 */
+                                if(response.code()==200) {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
                             else
-                                Log.d("실패", "실패ㅜㅜ");
+                                Log.d("sex", "sex");
 
-                            Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, response.code(), Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            // 안옴
                             String result = response.toString();
                             String[] results = result.split(",");
                             Log.d("sex", results[1]);
@@ -79,13 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-            }
-        });
-        join_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
     }

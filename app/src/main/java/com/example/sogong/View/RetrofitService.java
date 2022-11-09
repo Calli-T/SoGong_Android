@@ -16,15 +16,17 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
-    /*@FormUrlEncoded
+    /*
+    @FormUrlEncoded
     @POST("login/")
     Call<User> Login(
-            @Field("uid") String title,
-            @Field("nickname") String description,
-            @Field("password") String important,
+            @Field("uid") String uid,
+            @Field("nickname") String nickname,
+            @Field("password") String password,
             @Field("email") String email,
             @Field("auto_login") boolean auto_login
-    );*/
+    );
+    */
     @POST("signup/{post}")
     Call<User> setSignUp(@Body User user);
 
