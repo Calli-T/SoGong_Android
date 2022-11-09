@@ -19,7 +19,9 @@ import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login_button, join_button;
     CheckBox checkbox;
     TextInputLayout textInputLayout2;
+
+    public static int responseCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +62,80 @@ public class LoginActivity extends AppCompatActivity {
                 String pw = passwd_et.getText().toString();
                 Boolean auto_login = checkbox.isChecked();
 
-                ControlLogin_f clf = new ControlLogin_f();
-                if(clf.login(id, pw, auto_login) == 200){
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        int i = 5;
+                        while (i > 0) {
+                            i--;
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            runOnUiThread(runnable);
+                        }
+                    }
                 }
+
+                ControlLogin_f clf = new ControlLogin_f();
+                clf.login(id, pw, auto_login);
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+
             }
         });
     }
 }
+
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                String strTime = sdf.format(cal.getTime());
+
+                clockTextView = findViewById(R.id.clock);
+                clockTextView.setText(strTime);
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                while(true){
+
+                    try{
+                        Thread.sleep(1000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    runOnUiThread(runnable);
+                }
+            }
+        }
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
+
 /*
     public void login() {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);

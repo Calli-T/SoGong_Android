@@ -17,17 +17,12 @@ import retrofit2.Response;
 
 public class ControlLogin_f {
     static User userinfo;
-    static int responseCode;
 
     public int hashCode(String pw) {
         return pw.hashCode();
     }
 
-    public static int getResponseCode() {
-        return responseCode;
-    }
-
-    public int login(String id, String pw, boolean isAutoLogin) {
+    public void login(String id, String pw, boolean isAutoLogin) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Login(new User(null, id, pw, null, isAutoLogin));
 
@@ -41,7 +36,7 @@ public class ControlLogin_f {
                             //Intent intent = new Intent(context, MainActivity.class);
                             //startActivity(intent);
                             userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
-                            responseCode = response.code();
+                            LoginActivity.responseCode = response.code();
                         }
                     } else
                         Log.d("empty_response", "with login");
@@ -60,7 +55,5 @@ public class ControlLogin_f {
                 //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
-
-        return responseCode;
     }
 }
