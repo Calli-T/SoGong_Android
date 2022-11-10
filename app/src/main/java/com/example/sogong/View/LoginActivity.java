@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.Custom_Dialog;
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -61,6 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
+                customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
                 Toast_Nomal("테스트용");
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
@@ -77,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = 0;
+                            Toast_Nomal("로그인 성공ㅅ");
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
@@ -84,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast_Nomal("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
+                            Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
+                            customDialog.callFunction("서버 오류","로그인에 실패했습니다.",0);
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle("서버 오류");
                             builder.setMessage("로그인에 실패했습니다.");
