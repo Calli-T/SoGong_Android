@@ -1,9 +1,7 @@
 package com.example.sogong.View;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +15,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Control.ControlLogin_f;
-import com.example.sogong.Control.Custom_Dialog;
-import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class LoginActivity extends AppCompatActivity {

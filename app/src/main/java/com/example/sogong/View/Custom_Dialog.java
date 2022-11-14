@@ -1,4 +1,4 @@
-package com.example.sogong.Control;
+package com.example.sogong.View;
 
 
 import android.app.Dialog;
