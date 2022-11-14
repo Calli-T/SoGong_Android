@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = 0;
-                            Toast_Nomal("로그인 성공ㅅ");
+                            Toast_Nomal("로그인 성공");
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것

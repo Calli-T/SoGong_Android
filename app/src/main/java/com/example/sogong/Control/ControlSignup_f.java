@@ -12,6 +12,7 @@ import retrofit2.Response;
 public class ControlSignup_f {
     private  RetrofitService retrofitService;
     public void signUp(User userinfo){
+        /*
         retrofitService = com.example.sogong.View.Legacy.RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = retrofitService.setSignUp(userinfo);
         call.enqueue(new Callback<User>() {
@@ -30,6 +31,6 @@ public class ControlSignup_f {
 
             }
         });
-
+        */
     }
 }
