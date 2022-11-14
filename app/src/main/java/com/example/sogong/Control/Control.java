@@ -21,7 +21,12 @@ import java.util.List;
 public interface Control {
     public abstract void startToast(String message);
     public abstract void startDialog(int type, String title, String message, List<String> btnTxtList);
-    public abstract void changePage(String nowPage, String pageName);
+    //public abstract void changePage(String nowPage, String pageName);
+    /*default void changePage(String nowPage, String pageName){
+        System.out.println(nowPage+pageName);
+    }*/
+
+    public abstract void changePage();
 }
 
 /* The origin

@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,7 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toast_Nomal("테스트용");
+
+        //Toast_Nomal("테스트용");
 
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
@@ -50,9 +54,21 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
-                customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
-                Toast_Nomal("테스트용");
+                //Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
+                //customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
+
+                Login_UI_Control luc = new Login_UI_Control();
+                
+                // 위는 UI controler, 아래는 Dialog코드
+                /*
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add("확인");
+                luc.startDialog(0, "TestT", "TestMSG", temp);
+                */
+
+                // Toast 예제 코드
+                //luc.startToast("테스트용");
+
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
                 Boolean auto_login = checkbox.isChecked();
@@ -68,21 +84,16 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = 0;
-                            Toast_Nomal("로그인 성공");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            //Toast_Nomal("로그인 성공");
+
+                            luc.changePage();
+                            //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            //startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
                             responseCode = 0;
-                            Toast_Nomal("아이디 또는 비밀번호를 잘못 입력했습니다.");
+                            luc.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
-                            Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
-                            customDialog.callFunction("서버 오류","로그인에 실패했습니다.",0);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                            builder.setTitle("서버 오류");
-                            builder.setMessage("로그인에 실패했습니다.");
-                            builder.setPositiveButton("확인", null);
-                            builder.create().show();
                         }
                     }
                 };
@@ -90,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        int i = 5;
+                        int i = 30;
                         while (i > 0) {
                             i--;
 
@@ -105,8 +116,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
-                ControlLogin_f clf = new ControlLogin_f();
-                clf.login(id, pw, auto_login);
+                if (responseCode != -1) {
+                    ControlLogin_f clf = new ControlLogin_f();
+                    clf.login(id, pw, auto_login);
+                    responseCode = -1;
+                }
 
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
@@ -115,7 +129,53 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public void Toast_Nomal(String message){
+
+    class Login_UI_Control implements Control {
+
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup)findViewById(R.id.toast_layout));
+            TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getApplicationContext());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+            Custom_Dialog cd = new Custom_Dialog(LoginActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
+        }
+
+        @Override
+        public void changePage() {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
+}
+
+// response 500에 있던 코드들
+/*
+                            Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
+                            customDialog.callFunction("서버 오류","로그인에 실패했습니다.",0);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            builder.setTitle("서버 오류");
+                            builder.setMessage("로그인에 실패했습니다.");
+                            builder.setPositiveButton("확인", null);
+                            builder.create().show();
+                             */
+
+/*
+public void Toast_Nomal(String message){
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup)findViewById(R.id.toast_layout));
         TextView toast_textview  = layout.findViewById(R.id.toast_textview);
@@ -128,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
-}
+ */
 
 //
 /*
