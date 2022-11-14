@@ -32,6 +32,12 @@ public interface RetrofitService {
 
     @POST("login/")
     Call<User> Login(@Body User user);
+
+    @POST("logout/")
+    Call<User> Logout(@Body User user);
+
+    @POST("changenickname/")
+    Call<User> EditNickname(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

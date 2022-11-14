@@ -23,6 +23,7 @@ public class ControlLogin_f {
     }
 
     public void login(String id, String pw, boolean isAutoLogin) {
+
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Login(new User(null, id, pw, null, isAutoLogin));
 
@@ -52,5 +53,6 @@ public class ControlLogin_f {
                 //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }
