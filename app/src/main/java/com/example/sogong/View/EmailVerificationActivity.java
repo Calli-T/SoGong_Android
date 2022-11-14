@@ -50,7 +50,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -1;
-                            euc.startToast("Test1");
+                            euc.startToast("쩨발, 테스트를 확인해줘");
                             //luc.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
@@ -107,8 +107,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (responseCode == 200) {
+                            euc.startToast("쩨발, 테스트를 확인해줘");
                             responseCode = 0;
-                            euc.startToast("Test2");
                             //luc.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
@@ -146,7 +146,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     cef.authFinish(email, code);
                     //responseCode = -2;
-                    responseCode = 0;
+                    //responseCode = 0;
                 }
 
                 NewRunnable nr = new NewRunnable();

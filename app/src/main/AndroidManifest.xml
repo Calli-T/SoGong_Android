@@ -14,18 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SoGong"
         tools:targetApi="31">
-        <activity
-            android:name=".EmailVerificationActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity android:name=".View.Legacy.DetailActivity" />
         <activity android:name=".View.Legacy.PostActivity" />
         <activity android:name=".View.MainActivity" />
         <activity android:name=".View.Legacy.JoinActivity" />
-        <activity android:name=".View.Legacy.BoardListActivity" />
+        <activity android:name=".View.EmailVerificationActivity" />
         <activity
             android:name=".View.LoginActivity"
             android:exported="true"
