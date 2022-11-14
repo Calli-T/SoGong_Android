@@ -36,6 +36,9 @@ public interface RetrofitService {
     @POST("logout/")
     Call<User> Logout(@Body User user);
 
+    @POST("changepw/")
+    Call<User> EditPassword(@Body User user);
+
     @POST("changenickname/")
     Call<User> EditNickname(@Body User user);
 }

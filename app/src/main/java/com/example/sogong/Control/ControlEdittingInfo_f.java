@@ -12,7 +12,40 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlEdittingInfo_f {
-    public void editPassword(String nickname, String pw){}
+    public void editPassword(String nickname, String pw){
+
+        User user = ControlLogin_f.userinfo;
+
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        Call<User> call = sv.EditPassword(new User(user.getNickname(), user.getUid(), pw, user.getEmail(), user.isAuto_login()));
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                // 200
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
+                            //ControlLogin_f.userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
+                            ControlLogin_f.userinfo.setPassword(pw);
+                            //LoginActivity.responseCode = response.code();
+                        }
+                    } else // 404
+                        Log.d("404 Not Found", "with editPassword");
+                } else {
+                    // 500 or 502
+
+                    //LoginActivity.responseCode = response.code();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
     public void editNickname(String old_nickname, String new_nickname){
 
         User user = ControlLogin_f.userinfo;
