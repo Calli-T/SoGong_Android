@@ -1,5 +1,6 @@
 package com.example.sogong.View;
 
+import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.User;
 
@@ -41,6 +42,12 @@ public interface RetrofitService {
 
     @POST("changenickname/")
     Call<User> EditNickname(@Body User user);
+
+    @POST("firstcheck/")
+    Call<AuthInfo> AuthStart(@Body AuthInfo authInfo);
+
+    @POST("secondcheck/")
+    Call<AuthInfo> AuthFinish(@Body AuthInfo authInfo);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

@@ -40,10 +40,7 @@ public class ControlLogin_f {
                     } else // 404
                         Log.d("404 Not Found", "with login");
                 } else {
-                    // 400?
-                    //String result = response.toString();
-                    //String[] results = result.split(",");
-                    //results[1].to;
+                    // 400 or anything
                     LoginActivity.responseCode = response.code();
                 }
             }
