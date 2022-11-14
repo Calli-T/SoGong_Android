@@ -26,7 +26,8 @@ public interface Control {
         System.out.println(nowPage+pageName);
     }*/
 
-    public abstract void changePage();
+    // 같은 액티비티에서 여러 액티비티로 갈 경우를 대비해서 목적지를 int로 가름, 하나인 경우 0
+    public abstract void changePage(int dest);
 }
 
 /* The origin

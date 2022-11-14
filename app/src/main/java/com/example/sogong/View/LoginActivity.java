@@ -40,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Toast_Nomal("테스트용");
+        //UI controller
+        Login_UI_Control luc = new Login_UI_Control();
 
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
@@ -56,18 +57,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
                 //customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
-
-                Login_UI_Control luc = new Login_UI_Control();
-                
-                // 위는 UI controler, 아래는 Dialog코드
-                /*
-                ArrayList<String> temp = new ArrayList<>();
-                temp.add("확인");
-                luc.startDialog(0, "TestT", "TestMSG", temp);
-                */
-
-                // Toast 예제 코드
-                //luc.startToast("테스트용");
 
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
@@ -86,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                             responseCode = 0;
                             //Toast_Nomal("로그인 성공");
 
-                            luc.changePage();
+                            luc.changePage(0);
                             //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             //startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
@@ -128,6 +117,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                luc.changePage(1);
+            }
+        });
     }
 
     class Login_UI_Control implements Control {
@@ -135,8 +131,8 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup)findViewById(R.id.toast_layout));
-            TextView toast_textview  = layout.findViewById(R.id.toast_textview);
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
             //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
@@ -153,15 +149,31 @@ public class LoginActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
+        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
-        public void changePage() {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+        public void changePage(int dest) {
+            if (dest == 0) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else if (dest == 1) {
+                Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                startActivity(intent);
+            }
         }
 
     }
 
 }
+
+// 위는 UI controler, 아래는 Dialog코드
+                /*
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add("확인");
+                luc.startDialog(0, "TestT", "TestMSG", temp);
+                */
+
+// Toast 예제 코드
+//luc.startToast("테스트용");
 
 // response 500에 있던 코드들
 /*
