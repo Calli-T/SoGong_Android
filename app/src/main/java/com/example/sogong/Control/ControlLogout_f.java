@@ -12,8 +12,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlLogout_f {
-    public void logout(){}
-    public void autoLoginDisabled(String nickname){
+    public void logout(){
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Logout(ControlLogin_f.userinfo);
@@ -27,13 +26,14 @@ public class ControlLogout_f {
                         if (response.code() == 200) {
                             //userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
                             //LoginActivity.responseCode = response.code();
+                            autoLoginDisabled("muyaho"); // 자동로그인 해제 로직이 정해지면 만듭시다
                         }
                     } else // 404
                         Log.d("404 Not Found", "with logout");
                 } else {
                     // 400 or 500
 
-                    LoginActivity.responseCode = response.code();
+                    //LoginActivity.responseCode = response.code();
                 }
             }
 
@@ -42,6 +42,11 @@ public class ControlLogout_f {
                 //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+    public void autoLoginDisabled(String nickname){
+
+        ControlLogin_f.userinfo.setAuto_login(false);
 
     }
 }
