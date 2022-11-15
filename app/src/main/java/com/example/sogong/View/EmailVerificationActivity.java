@@ -30,6 +30,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailverification);
 
+        responseCode = 0;
+
         //UI controller
         EV_UI_Control euc = new EV_UI_Control();
 
@@ -50,7 +52,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -1;
-                            euc.startToast("쩨발, 테스트를 확인해줘");
+                            euc.startToast("코드 전송됨");
                             //luc.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
@@ -95,6 +97,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 t.start();
 
             }
+
         });
 
         check_button.setOnClickListener(new View.OnClickListener() {

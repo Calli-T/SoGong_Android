@@ -22,7 +22,7 @@ public class ControlEmailVerification_f {
         call.enqueue(new Callback<AuthInfo>() {
             @Override
             public void onResponse(Call<AuthInfo> call, Response<AuthInfo> response) {
-                LoginActivity.responseCode = response.code();
+                EmailVerificationActivity.responseCode = response.code();
             }
 
             @Override
@@ -40,7 +40,7 @@ public class ControlEmailVerification_f {
         call.enqueue(new Callback<AuthInfo>() {
             @Override
             public void onResponse(Call<AuthInfo> call, Response<AuthInfo> response) {
-                LoginActivity.responseCode = response.code();
+                EmailVerificationActivity.responseCode = response.code();
             }
 
             @Override
