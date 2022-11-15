@@ -52,8 +52,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -1;
-                            euc.startToast("코드 전송됨");
-                            //luc.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -65,6 +63,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                         } else if (responseCode == 502) {
                             responseCode = 0;
                         }
+
+                        if(responseCode != 0) euc.startToast("코드 전송");
                     }
                 };
 
@@ -109,6 +109,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        if(responseCode != 0) euc.startToast(""+responseCode);
+
                         if (responseCode == 200) {
                             euc.startToast("쩨발, 테스트를 확인해줘");
                             responseCode = 0;
