@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     MyPageFragment myPageFragment;
 
     //------------------------------------------------------------
-
+    public static int responseCode;
     //------------------------------------------------------------
 
     @Override
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_postlist);
         setContentView(R.layout.activity_main);
+
+        responseCode = 0;
 
         homeFragment = new HomeFragment();
         recipeFragment = new RecipeFragment();

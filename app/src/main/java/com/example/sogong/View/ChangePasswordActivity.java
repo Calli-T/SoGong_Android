@@ -39,10 +39,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
         change_button = findViewById(R.id.change_button);
         cancel_button = findViewById(R.id.cancel_button);
 
-        //UI controller
+        // UI controller
         CP_UI cu = new CP_UI();
 
-        // code전송
+        // 비밀번호 변경
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

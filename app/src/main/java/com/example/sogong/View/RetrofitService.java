@@ -34,9 +34,6 @@ public interface RetrofitService {
     @POST("login/")
     Call<User> Login(@Body User user);
 
-    @POST("logout/")
-    Call<User> Logout(@Body User user);
-
     @POST("firstcheck/")
     Call<String> AuthStart(@Body AuthInfo authInfo);
 
@@ -51,6 +48,9 @@ public interface RetrofitService {
 
     @POST("changenickname/")
     Call<String> EditNickname(@Body User user);
+
+    @POST("logout/")
+    Call<String> Logout(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

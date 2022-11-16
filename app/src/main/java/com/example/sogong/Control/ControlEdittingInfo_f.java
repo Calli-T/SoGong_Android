@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.User;
+import com.example.sogong.View.ChangeNicknameActivity;
 import com.example.sogong.View.ChangePasswordActivity;
 import com.example.sogong.View.LoginActivity;
 import com.example.sogong.View.RetrofitClient;
@@ -55,12 +56,13 @@ public class ControlEdittingInfo_f {
         User old = ControlLogin_f.userinfo;
         User newUser = new User(new_nickname, old.getUid(), old.getPassword(), old.getEmail(), old.isAuto_login());
 
-        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.EditNickname(newUser);
 
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                ChangeNicknameActivity.responseCode = response.code();
                 // 200
                 /*if (response.isSuccessful()) {
                     if (response.body() != null) {

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlEdittingInfo_f;
+import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.R;
 
 import java.util.List;
@@ -21,19 +23,19 @@ public class MyPageFragment extends Fragment {
     Button pwdchange_text, nicknamechange_text, logout_text;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // 프래그먼트에 버튼 두려면 return에 ViewGroup을 바로 박아버리면 안됨
-        ViewGroup rootview = (ViewGroup)inflater.inflate(R.layout.fragment_mypage,container,false);
-        pwdchange_text = (Button)rootview.findViewById(R.id.pwdchange_text);
-        nicknamechange_text = (Button)rootview.findViewById(R.id.nicknamechange_text);
-        logout_text = (Button)rootview.findViewById(R.id.logout_text);
+        ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
+        pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
+        nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
+        logout_text = (Button) rootview.findViewById(R.id.logout_text);
 
         MyPage_UI mu = new MyPage_UI();
 
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 //mu.startToast("Test1");
                 EmailVerificationActivity.destination = 1; // 이메일 인증 Activity의 분기 결정 Flag
 
@@ -43,25 +45,64 @@ public class MyPageFragment extends Fragment {
         });
         nicknamechange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View view){
-                mu.startToast("Test2");
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChangeNicknameActivity.class);
+                startActivity(intent);
             }
         });
+        // 프래그먼트에서 구현한 로그아웃 및 api call 로직
         logout_text.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View view){
-                mu.startToast("Test3");
+            public void onClick(View view) {
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (MainActivity.responseCode == 200) {
+                            MainActivity.responseCode = -1;
+                            mu.startToast("로그아웃");
+                            getActivity().finish();
+                        } else {
+
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            getActivity().runOnUiThread(runnable);
+                        }
+                    }
+                }
+
+                if (MainActivity.responseCode == 0) {
+                    MainActivity.responseCode = -1;
+
+                    ControlLogout_f clf = new ControlLogout_f();
+                    clf.logout();
+                }
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
             }
         });
 
         return rootview;
     }
 
-    class MyPage_UI implements Control{
+    class MyPage_UI implements Control {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup)getActivity().findViewById(R.id.toast_layout));
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());
