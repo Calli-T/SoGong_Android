@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlSignup_f;
+import com.example.sogong.Model.User;
 import com.example.sogong.R;
 
 import java.util.List;
@@ -24,12 +26,18 @@ public class SignupActivity extends AppCompatActivity {
     Button join_button, cancel_button;
 
     public static int responseCode;
+    public static String authEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        
+
+        responseCode = 0;
+
+        //UI controler
+        SignupActivity_UI su = new SignupActivity_UI();
+
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
         passwd_et = findViewById(R.id.passwd_et);
@@ -38,11 +46,73 @@ public class SignupActivity extends AppCompatActivity {
         join_button = findViewById(R.id.join_button);
         cancel_button = findViewById(R.id.cancel_button);
 
-        // 취소
+        // 취소 버튼
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        // 회원가입 버튼
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -2;
+                            su.startToast("회원가입완료");
+                            su.changePage(0);
+                        } else if (responseCode == 400) {
+                            responseCode = 0;
+                        } else if (responseCode == 401) {
+                            responseCode = 0;
+                        } else if (responseCode == 402) {
+                            responseCode = 0;
+                        } else if (responseCode == 500) {
+                            responseCode = 0;
+                        } else if (responseCode == 502) {
+                            responseCode = 0;
+                        }
+                    }
+
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            runOnUiThread(runnable);
+                        }
+                    }
+                }
+
+                if (responseCode == 0) {
+                    // 비밀번호와 확인이 일치
+                    if (passwd_et.getText().toString().equals(passwdcheck_et.getText().toString())) {
+                        // 자동 로그인 default는 false
+                        User temp = new User(nickname_et.getText().toString(), userid_et.getText().toString(), passwd_et.getText().toString(), authEmail, false);
+                        responseCode = -1;
+                        ControlSignup_f csf = new ControlSignup_f();
+                        csf.signUp(temp);
+
+                        NewRunnable nr = new NewRunnable();
+                        Thread t = new Thread(nr);
+                        t.start();
+                    } else { // 미일치
+
+                    }
+                }
+
             }
         });
     }
@@ -74,7 +144,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void changePage(int dest) {
             if (dest == 0) {
-                Intent intent = new Intent(SignupActivity.this, SignupActivity.class);
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 // stack식 액티비티 천환 해결방식을 생각해둘것
             }

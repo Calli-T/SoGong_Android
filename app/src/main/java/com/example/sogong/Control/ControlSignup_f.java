@@ -1,18 +1,37 @@
 package com.example.sogong.Control;
 
 import com.example.sogong.Model.User;
-import com.example.sogong.View.LoginActivity;
-import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
+import com.example.sogong.View.RetrofitStringClient;
+import com.example.sogong.View.SignupActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlSignup_f {
-    private  RetrofitService retrofitService;
     public void signUp(User userinfo){
-        /*
+
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.SignUp(userinfo);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                SignupActivity.responseCode = response.code();
+            }
+
+
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+}
+/*
         retrofitService = com.example.sogong.View.Legacy.RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = retrofitService.setSignUp(userinfo);
         call.enqueue(new Callback<User>() {
@@ -32,5 +51,3 @@ public class ControlSignup_f {
             }
         });
         */
-    }
-}

@@ -26,14 +26,14 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
     public static int responseCode;
     public static int destination = 0; // 액티비티 이동 분기, 회원가입으로 or 닉네임 변경으로
-    public boolean isFinish = false; // 스레드의 접근권한 제어
+    private boolean isFinish = false; // 스레드의 접근권한 제어
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailverification);
 
-        responseCode = 0;
+        //responseCode = 0;
 
         //UI controller
         EV_UI eu = new EV_UI();
@@ -120,8 +120,11 @@ public class EmailVerificationActivity extends AppCompatActivity {
                             if (responseCode == 200) {
                                 responseCode = -4;
                                 eu.startToast("인증 완료");
-                                if (destination == 0)
+                                if (destination == 0) {
+                                    SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
                                     eu.changePage(0);
+                                }
+                                
                             } else if (responseCode == 400) {
                                 responseCode = 0;
                             } else if (responseCode == 404) {

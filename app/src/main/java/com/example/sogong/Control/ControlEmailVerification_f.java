@@ -26,7 +26,9 @@ public class ControlEmailVerification_f {
                 if (response.isSuccessful())// && response.body() != null)
                 {
                     EmailVerificationActivity.responseCode = response.code();
-                    Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
+                    //Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
+                } else {
+                    EmailVerificationActivity.responseCode = response.code();
                 }
             }
 
@@ -37,7 +39,7 @@ public class ControlEmailVerification_f {
         });
     }
 
-    public void authFinish(String email, String code){
+    public void authFinish(String email, String code) {
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.AuthFinish(new AuthInfo(email, code));
         call.enqueue(new Callback<String>() {

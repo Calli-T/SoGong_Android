@@ -43,15 +43,14 @@ public interface RetrofitService {
     @POST("changenickname/")
     Call<User> EditNickname(@Body User user);
 
-    //@POST("firstcheck/")
-    //Call<AuthInfo> AuthStart(@Body AuthInfo authInfo);
-
-    // for string response test
     @POST("firstcheck/")
     Call<String> AuthStart(@Body AuthInfo authInfo);
 
     @POST("secondcheck/")
     Call<String> AuthFinish(@Body AuthInfo authInfo);
+
+    @POST("signup/")
+    Call<String> SignUp(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )
