@@ -127,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class Login_UI implements Control {
-
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
@@ -163,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-
     }
 
 }
