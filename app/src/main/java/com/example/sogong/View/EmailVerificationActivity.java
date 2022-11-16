@@ -50,8 +50,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+
                         if (responseCode == 200) {
                             responseCode = -1;
+                            euc.startToast(""+responseCode);
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -64,7 +66,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                             responseCode = 0;
                         }
 
-                        if(responseCode != 0) euc.startToast("코드 전송");
                     }
                 };
 
@@ -87,9 +88,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 }
 
                 if (responseCode == 0) {
+                    responseCode = -1;
+
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     cef.authStart(email);
-                    responseCode = -1;
                 }
 
                 NewRunnable nr = new NewRunnable();
@@ -109,12 +111,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if(responseCode != 0) euc.startToast(""+responseCode);
+                        euc.startToast(""+responseCode);
 
                         if (responseCode == 200) {
-                            euc.startToast("쩨발, 테스트를 확인해줘");
                             responseCode = 0;
-                            //luc.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -147,17 +147,14 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     }
                 }
 
-                if (responseCode == -1) {
+                //if (responseCode == -1) {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     cef.authFinish(email, code);
-                    //responseCode = -2;
-                    //responseCode = 0;
-                }
+                //}
 
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
                 t.start();
-
             }
         });
 

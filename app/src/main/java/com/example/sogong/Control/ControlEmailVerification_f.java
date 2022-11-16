@@ -17,7 +17,7 @@ public class ControlEmailVerification_f {
     public void authStart(String email){
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<AuthInfo> call = sv.AuthStart(new AuthInfo(email,"1234"));
+        Call<AuthInfo> call = sv.AuthStart(new AuthInfo(email,"123456"));
 
         call.enqueue(new Callback<AuthInfo>() {
             @Override
