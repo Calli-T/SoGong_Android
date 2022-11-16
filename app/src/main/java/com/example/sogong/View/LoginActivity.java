@@ -57,10 +57,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
                 //customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
-
+                luc.startToast("로그인 중");
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
-                Boolean auto_login = checkbox.isChecked();
+                boolean auto_login = checkbox.isChecked();
 
                 // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
                 /*

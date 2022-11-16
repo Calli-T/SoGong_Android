@@ -14,13 +14,13 @@
         android:background="@drawable/west"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="냉장고"
+        android:text="쪽지함"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
@@ -44,25 +44,78 @@
         android:background="#000000"
         app:layout_constraintTop_toBottomOf="@id/imageView" />
 
+
+    <View
+        android:id="@+id/middle_line"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toTopOf="@id/sub_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_line" />
+
+    <TextView
+        android:id="@+id/sendmail_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center"
+        android:text="보낸 쪽지"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/sub_line"
+        app:layout_constraintEnd_toEndOf="@id/middle_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/main_line" />
+
+    <TextView
+        android:id="@+id/receivemail_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center"
+        android:text="받은 쪽지"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/sub_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/middle_line"
+        app:layout_constraintTop_toTopOf="@id/main_line" />
+    <!--자바 코드에서 background색 변경하여 클릭효과 내기-->
+
+    <View
+        android:id="@+id/sub_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="35dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/main_line" />
+
+
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/refrigerator_scrollview"
+        android:id="@+id/report_scrollview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_line">
+        app:layout_constraintTop_toBottomOf="@id/sub_line">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ingredients_recyclerview"
+            android:id="@+id/mail_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="true"
-            app:layout_constraintBottom_toBottomOf="@id/refrigerator_scrollview"
-            app:layout_constraintEnd_toEndOf="@id/refrigerator_scrollview"
-            app:layout_constraintStart_toStartOf="@id/refrigerator_scrollview"
-            app:layout_constraintTop_toTopOf="@id/refrigerator_scrollview" />
+            app:layout_constraintBottom_toBottomOf="@id/report_scrollview"
+            app:layout_constraintEnd_toEndOf="@id/report_scrollview"
+            app:layout_constraintStart_toStartOf="@id/report_scrollview"
+            app:layout_constraintTop_toTopOf="@id/report_scrollview" />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -81,5 +134,6 @@
         app:layout_constraintEnd_toEndOf="parent">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

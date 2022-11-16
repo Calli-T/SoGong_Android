@@ -21,7 +21,7 @@
         <activity android:name=".View.Legacy.JoinActivity" />
         <activity android:name=".View.EmailVerificationActivity" />
         <activity
-            android:name=".View.LoginActivity"
+            android:name=".View.RecipeAddActivity"
             android:exported="true"
             android:theme="@style/Theme.SoGong.NoActionBar">
             <intent-filter>
