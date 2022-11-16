@@ -24,6 +24,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
     Button sendcode_button, check_button;
 
     public static int responseCode;
+    public static String testStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +51,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        euc.startToast(testStr + responseCode);
+
 
                         if (responseCode == 200) {
                             responseCode = -1;
-                            euc.startToast(""+responseCode);
+                            //euc.startToast(""+responseCode);
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -91,7 +94,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     responseCode = -1;
 
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                    cef.authStart(email);
+                    //cef.authStart(email);
+                    cef.getMsg(email);
                 }
 
                 NewRunnable nr = new NewRunnable();

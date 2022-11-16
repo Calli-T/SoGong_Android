@@ -2,22 +2,46 @@ package com.example.sogong.Control;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.User;
 import com.example.sogong.View.EmailVerificationActivity;
 import com.example.sogong.View.LoginActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
+import com.example.sogong.View.RetrofitStringClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlEmailVerification_f {
-    public void authStart(String email){
+    public void getMsg(String email) {
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.fTest(new AuthInfo(email, "123456"));
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful())// && response.body() != null)
+                {
+                    EmailVerificationActivity.responseCode = response.code();
+                    EmailVerificationActivity.testStr = response.body();
+                    Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void authStart(String email) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<AuthInfo> call = sv.AuthStart(new AuthInfo(email,"123456"));
+        Call<AuthInfo> call = sv.AuthStart(new AuthInfo(email, "123456"));
 
         call.enqueue(new Callback<AuthInfo>() {
             @Override
@@ -32,7 +56,8 @@ public class ControlEmailVerification_f {
         });
 
     }
-    public void authFinish(String email, String code){
+
+    public void authFinish(String email, String code) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<AuthInfo> call = sv.AuthFinish(new AuthInfo(email, code));
