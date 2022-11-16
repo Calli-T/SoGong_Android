@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //UI controller
-        Login_UI_Control luc = new Login_UI_Control();
+        Login_UI lu = new Login_UI();
 
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
@@ -75,12 +75,12 @@ public class LoginActivity extends AppCompatActivity {
                             responseCode = 0;
                             //Toast_Nomal("로그인 성공");
 
-                            luc.changePage(0);
+                            lu.changePage(0);
                             //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             //startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
                             responseCode = 0;
-                            luc.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
+                            lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
                         }
@@ -121,12 +121,12 @@ public class LoginActivity extends AppCompatActivity {
         join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                luc.changePage(1);
+                lu.changePage(1);
             }
         });
     }
 
-    class Login_UI_Control implements Control {
+    class Login_UI implements Control {
 
         @Override
         public void startToast(String message) {
