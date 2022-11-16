@@ -46,12 +46,12 @@ public interface RetrofitService {
     //@POST("firstcheck/")
     //Call<AuthInfo> AuthStart(@Body AuthInfo authInfo);
 
-    @POST("secondcheck/")
-    Call<String> AuthFinish(@Body AuthInfo authInfo);
-
     // for string response test
     @POST("firstcheck/")
     Call<String> AuthStart(@Body AuthInfo authInfo);
+
+    @POST("secondcheck/")
+    Call<String> AuthFinish(@Body AuthInfo authInfo);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
         passwd_et = findViewById(R.id.passwd_et);
-        login_button = findViewById(R.id.login_button);
+        login_button = findViewById(R.id.change_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
         checkbox = findViewById(R.id.checkBox);

@@ -25,7 +25,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
     Button sendcode_button, check_button;
 
     public static int responseCode;
-    public static int destination = 0;
+    public static int destination = 0; // 액티비티 이동 분기, 회원가입으로 or 닉네임 변경으로
+    public boolean isFinish = false; // 스레드 접근권한 제어
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         sendcode_button = findViewById(R.id.sendcode_button);
         check_button = findViewById(R.id.check_button);
 
-        // code버튼 추가
+        // code전송
         sendcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,21 +53,23 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -2;
-                            euc.startToast("코드 전송");
-                        } else if (responseCode == 400) {
-                            responseCode = 0;
-                        } else if (responseCode == 404) {
-                            responseCode = 0;
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                        } else if (responseCode == 501) {
-                            responseCode = 0;
-                        } else if (responseCode == 502) {
-                            responseCode = 0;
+                        if (!isFinish) {
+                            if (responseCode == 200) {
+                                responseCode = -2;
+                                euc.startToast("코드 전송");
+                                isFinish = true;
+                            } else if (responseCode == 400) {
+                                responseCode = 0;
+                            } else if (responseCode == 404) {
+                                responseCode = 0;
+                            } else if (responseCode == 500) {
+                                responseCode = 0;
+                            } else if (responseCode == 501) {
+                                responseCode = 0;
+                            } else if (responseCode == 502) {
+                                responseCode = 0;
+                            }
                         }
-
                     }
                 };
 
@@ -92,7 +95,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     responseCode = -1;
 
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                    //cef.authStart(email);
                     cef.authStart(email);
                 }
 
@@ -104,6 +106,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         });
 
+        // 인증 완료
         check_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,19 +116,23 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -4;
-                            euc.startToast("인증 완료");
-                        } else if (responseCode == 400) {
-                            responseCode = 0;
-                        } else if (responseCode == 404) {
-                            responseCode = 0;
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                        } else if (responseCode == 501) {
-                            responseCode = 0;
-                        } else if (responseCode == 502) {
-                            responseCode = 0;
+                        if (isFinish) {
+                            if (responseCode == 200) {
+                                responseCode = -4;
+                                euc.startToast("인증 완료");
+                                if (destination == 0)
+                                    euc.changePage(0);
+                            } else if (responseCode == 400) {
+                                responseCode = 0;
+                            } else if (responseCode == 404) {
+                                responseCode = 0;
+                            } else if (responseCode == 500) {
+                                responseCode = 0;
+                            } else if (responseCode == 501) {
+                                responseCode = 0;
+                            } else if (responseCode == 502) {
+                                responseCode = 0;
+                            }
                         }
                     }
                 };
@@ -151,7 +158,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 if (responseCode == -2) {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     cef.authFinish(email, code);
-                    responseCode = - 3;
+                    responseCode = -3;
                 }
 
                 NewRunnable nr = new NewRunnable();
