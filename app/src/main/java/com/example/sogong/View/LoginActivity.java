@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
         passwd_et = findViewById(R.id.passwd_et);
-        login_button = findViewById(R.id.change_button);
+        login_button = findViewById(R.id.login_button);
         join_button = findViewById(R.id.join_button);
         textInputLayout2 = findViewById(R.id.textInputLayout2);
         checkbox = findViewById(R.id.checkBox);
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
                 //customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
-                luc.startToast("로그인 중");
+                lu.startToast("로그인 중");
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
                 boolean auto_login = checkbox.isChecked();
