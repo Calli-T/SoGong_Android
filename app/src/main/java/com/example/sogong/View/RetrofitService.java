@@ -37,12 +37,6 @@ public interface RetrofitService {
     @POST("logout/")
     Call<User> Logout(@Body User user);
 
-    @POST("changepw/")
-    Call<User> EditPassword(@Body User user);
-
-    @POST("changenickname/")
-    Call<User> EditNickname(@Body User user);
-
     @POST("firstcheck/")
     Call<String> AuthStart(@Body AuthInfo authInfo);
 
@@ -51,6 +45,12 @@ public interface RetrofitService {
 
     @POST("signup/")
     Call<String> SignUp(@Body User user);
+
+    @POST("changepw/")
+    Call<String> EditPassword(@Body User user);
+
+    @POST("changenickname/")
+    Call<String> EditNickname(@Body User user);
 }
 /*
     // @GET( EndPoint-자원위치(URI) )

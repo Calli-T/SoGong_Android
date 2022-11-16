@@ -16,7 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlLogin_f {
-    static User userinfo;
+    public static User userinfo;
 
     public int hashCode(String pw) {
         return pw.hashCode();

@@ -34,7 +34,11 @@ public class MyPageFragment extends Fragment {
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view){
-                mu.startToast("Test1");
+                //mu.startToast("Test1");
+                EmailVerificationActivity.destination = 1; // 이메일 인증 Activity의 분기 결정 Flag
+
+                Intent intent = new Intent(getActivity(), EmailVerificationActivity.class);
+                startActivity(intent);
             }
         });
         nicknamechange_text.setOnClickListener(new Button.OnClickListener() {

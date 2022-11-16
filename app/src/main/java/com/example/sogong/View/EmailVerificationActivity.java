@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEmailVerification_f;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 
 import java.util.List;
@@ -95,7 +96,17 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     responseCode = -1;
 
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                    cef.authStart(email);
+                    // 비밀변경에는 사용자의 email과 대조하는 과정이 추가로 필요하다.
+                    // 아예 자동으로 userinfo에서 꺼내와서 code 전송하고 잠궈라
+                    if(destination == 0){
+                        cef.authStart(email);
+                    } else if(destination == 1){
+                        eu.startToast("코드 전송");
+                        //if(ControlLogin_f.userinfo.getEmail() == email)
+                            cef.authStart(email);
+                        //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
+                    }
+
                 }
 
                 NewRunnable nr = new NewRunnable();
@@ -123,6 +134,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 if (destination == 0) {
                                     SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
                                     eu.changePage(0);
+                                } else if(destination == 1){
+                                    eu.changePage(1);
                                 }
                                 
                             } else if (responseCode == 400) {
@@ -202,6 +215,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 Intent intent = new Intent(EmailVerificationActivity.this, SignupActivity.class);
                 startActivity(intent);
                 // stack식 액티비티 천환 해결방식을 생각해둘것
+            } else if (dest == 1){
+                Intent intent = new Intent(EmailVerificationActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
             }
         }
 
