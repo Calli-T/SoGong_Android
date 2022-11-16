@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
     Button sendcode_button, check_button;
 
     public static int responseCode;
-    public static String testStr;
+    public static int destination = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +52,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        euc.startToast(testStr + responseCode);
-
-
                         if (responseCode == 200) {
-                            responseCode = -1;
-                            //euc.startToast(""+responseCode);
+                            responseCode = -2;
+                            euc.startToast("코드 전송");
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -95,7 +93,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     //cef.authStart(email);
-                    cef.getMsg(email);
+                    cef.authStart(email);
                 }
 
                 NewRunnable nr = new NewRunnable();
@@ -115,10 +113,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        euc.startToast(""+responseCode);
-
                         if (responseCode == 200) {
-                            responseCode = 0;
+                            responseCode = -4;
+                            euc.startToast("인증 완료");
                         } else if (responseCode == 400) {
                             responseCode = 0;
                         } else if (responseCode == 404) {
@@ -151,10 +148,11 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     }
                 }
 
-                //if (responseCode == -1) {
+                if (responseCode == -2) {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     cef.authFinish(email, code);
-                //}
+                    responseCode = - 3;
+                }
 
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
@@ -190,11 +188,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-            /*if (dest == 0) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            if (dest == 0) {
+                Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
                 startActivity(intent);
-            }*/
+            }
         }
 
     }
 }
+
+// responseCode가 -1이면 authStart전송, -2이면 authStart정상처리, -3이면 authFinish전송, -4면 authFinish정상처리

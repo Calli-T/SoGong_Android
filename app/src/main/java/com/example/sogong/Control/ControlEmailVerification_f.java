@@ -17,16 +17,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlEmailVerification_f {
-    public void getMsg(String email) {
+    public void authStart(String email) {
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
-        Call<String> call = sv.fTest(new AuthInfo(email, "123456"));
+        Call<String> call = sv.AuthStart(new AuthInfo(email, "123456"));
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful())// && response.body() != null)
                 {
                     EmailVerificationActivity.responseCode = response.code();
-                    EmailVerificationActivity.testStr = response.body();
                     Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
                 }
             }
@@ -38,27 +37,28 @@ public class ControlEmailVerification_f {
         });
     }
 
-    public void authStart(String email) {
-
-        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<AuthInfo> call = sv.AuthStart(new AuthInfo(email, "123456"));
-
-        call.enqueue(new Callback<AuthInfo>() {
+    public void authFinish(String email, String code){
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.AuthFinish(new AuthInfo(email, code));
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<AuthInfo> call, Response<AuthInfo> response) {
-                EmailVerificationActivity.responseCode = response.code();
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful())// && response.body() != null)
+                {
+                    EmailVerificationActivity.responseCode = response.code();
+                    //Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
+                }
             }
 
             @Override
-            public void onFailure(Call<AuthInfo> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
             }
         });
-
     }
 
-    public void authFinish(String email, String code) {
 
+    /*public void authFinish(String email, String code) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<AuthInfo> call = sv.AuthFinish(new AuthInfo(email, code));
 
@@ -74,7 +74,7 @@ public class ControlEmailVerification_f {
             }
         });
 
-    }
+    }*/
 }
 /*
 - 0. = 501

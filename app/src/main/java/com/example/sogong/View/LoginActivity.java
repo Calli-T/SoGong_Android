@@ -156,6 +156,9 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             } else if (dest == 1) {
+                // 회원가입에서 요청한 이메일 인증
+                EmailVerificationActivity.destination = 0;
+
                 Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
                 startActivity(intent);
             }
