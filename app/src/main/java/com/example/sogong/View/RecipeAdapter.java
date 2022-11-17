@@ -42,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         void onBind(RecipePost recipePost) {
             title.setText(recipePost.getTitle());
-            spicy.setText(recipePost.getDegree_of_spicy());
+            spicy.setText("X"+ String.valueOf(recipePost.getDegree_of_spicy()));
             date.setText(recipePost.getUpload_time());
             author.setText(recipePost.getNickname());
             likecnt.setText(String.valueOf(recipePost.getLike_count()));
