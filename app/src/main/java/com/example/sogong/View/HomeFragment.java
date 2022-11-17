@@ -26,8 +26,6 @@ public class HomeFragment extends Fragment {
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
         Home_UI hu = new Home_UI();
 
-
-
         return rootview;
     }
 
