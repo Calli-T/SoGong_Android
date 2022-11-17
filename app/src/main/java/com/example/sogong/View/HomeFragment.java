@@ -26,7 +26,39 @@ public class HomeFragment extends Fragment {
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
         Home_UI hu = new Home_UI();
 
-        final Runnable runnable = new Runnable() {
+
+
+        return rootview;
+    }
+
+    class Home_UI implements Control {
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getActivity());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+        }
+
+        @Override
+        public void changePage(int dest) {
+
+        }
+    }
+}
+/*
+final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 hu.startToast(str);
@@ -60,36 +92,7 @@ public class HomeFragment extends Fragment {
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-
-        return rootview;
-    }
-
-    class Home_UI implements Control {
-        @Override
-        public void startToast(String message) {
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
-            TextView toast_textview = layout.findViewById(R.id.toast_textview);
-            toast_textview.setText(String.valueOf(message));
-            Toast toast = new Toast(getActivity());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
-            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
-            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
-            toast.setView(layout);
-            toast.show();
-        }
-
-        @Override
-        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
-        }
-
-        @Override
-        public void changePage(int dest) {
-
-        }
-    }
-}
+ */
 
 // json object
 // java json parser

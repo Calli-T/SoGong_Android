@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.View.HomeFragment;
+import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 import com.example.sogong.View.RetrofitStringClient;
@@ -24,7 +25,9 @@ public class ControlRecipeList_f {
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(@NonNull Call<RecipeList> call, @NonNull Response<RecipeList> response) {
-                HomeFragment.str = response.body().getRecipeList().size()+""+response.body().getTotal_page();
+                RecipeFragment.responseCode = response.code();
+                RecipeFragment.list = response.body().getRecipeList();
+                RecipeFragment.totalpage = response.body().getTotal_page();
             }
 
             @Override

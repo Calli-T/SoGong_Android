@@ -9,12 +9,19 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sogong.Control.ControlRecipeList_f;
+import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
+
+import java.util.List;
 
 public class RecipeFragment extends Fragment {
 
     String[] pagenum = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"};
+    public static int totalpage;
+    public static List<RecipePost> list = null;
+    public static int responseCode = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -25,7 +32,39 @@ public class RecipeFragment extends Fragment {
         spinner1.setAdapter(adapter1);
         spinner1.setPrompt("이동할 페이지");
 
-        //RecipePost recipePost1 = new recipe
+        responseCode = 0;
+
+        // t.start까지 코드는 시작하자마자 불러오는 레시피 리스트
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    responseCode = -1;
+                } else {
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    getActivity().runOnUiThread(runnable);
+                }
+            }
+        }
+        ControlRecipeList_f crlf = new ControlRecipeList_f();
+        crlf.lookupRecipeList(1);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
         
         return view;
     }
