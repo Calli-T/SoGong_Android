@@ -85,26 +85,16 @@
         android:layout_marginTop="5dp"
         android:background="#000000"
         app:layout_constraintTop_toBottomOf="@id/search_edit" />
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/search_scrollview"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/category_viewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/category_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
-            app:layout_constraintBottom_toBottomOf="@id/refrigerator_scrollview"
-            app:layout_constraintEnd_toEndOf="@id/refrigerator_scrollview"
-            app:layout_constraintStart_toStartOf="@id/refrigerator_scrollview"
-            app:layout_constraintTop_toTopOf="@id/refrigerator_scrollview" />
-
-    </androidx.core.widget.NestedScrollView>
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/sub_line"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                             lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
-                            lu.startDialog(1,"서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                            lu.startDialog(0,"서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }
                 };
