@@ -1,6 +1,8 @@
 package com.example.sogong.View;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlRecipeList_f;
@@ -18,24 +22,33 @@ import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RecipeFragment extends Fragment {
 
-    String[] pagenum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"};
+    String[] pagenum;
     public static int totalpage;
     public static List<RecipePost> recipelist = null;
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    public RecipeAdapter recipeAdapter;
+    public RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
-        Spinner spinner1 = view.findViewById(R.id.recipe_page_spinner);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner1.setAdapter(adapter1);
-        spinner1.setPrompt("이동할 페이지");
+
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
+
+        recipeAdapter = new RecipeAdapter();
+
+        recyclerView.setAdapter(recipeAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
 
         responseCode = 0;
 
@@ -50,7 +63,30 @@ public class RecipeFragment extends Fragment {
             public void run() {
                 if (responseCode == 200) {
                     responseCode = -1;
-                } else {
+                    recipeAdapter.setRecipeList(recipelist);
+                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClicked(int position, String data) {
+                            Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("recipeId", recipelist.get(position).getPost_id());
+                            startActivity(intent);
+                        }
+                    });
+                    pagenum = new String[totalpage];
+                    for (int i = 1; i <= totalpage; i++) {
+                        pagenum[i - 1] = String.valueOf(i);
+                    }
+                    Spinner spinner1 = view.findViewById(R.id.recipe_page_spinner);
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner1.setAdapter(adapter1);
+                    spinner1.setPrompt("이동할 페이지");
+
+                } else if(responseCode == 500){
+                    rlu.startDialog(0,"서버 오류","서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
+                }else if(responseCode == 502){
+                    rlu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                 }
             }
         };
