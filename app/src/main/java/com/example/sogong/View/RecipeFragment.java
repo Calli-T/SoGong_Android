@@ -50,7 +50,6 @@ public class RecipeFragment extends Fragment {
 
             @Override
             public void run() {
-                rlu.startToast("" + (++tt));
                 if (responseCode == 200) {
                     responseCode = -1;
                 } else {
