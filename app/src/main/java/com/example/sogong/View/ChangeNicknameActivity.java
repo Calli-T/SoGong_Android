@@ -16,6 +16,8 @@ import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEdittingInfo_f;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChangeNicknameActivity extends AppCompatActivity {
@@ -51,18 +53,17 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -2;
-                            cu.startToast("닉네임 변경완료");
+                            cu.startToast("닉네임 변경 완료");
                             finish();
                         } else if (responseCode == 400) {
                             responseCode = 0;
-                        } else if (responseCode == 404) {
+                            cu.startDialog(0,"닉네임 중복", "중복된 닉네임입니다.",new ArrayList<>(Arrays.asList("확인")));
+                        }  else if (responseCode == 500) {
                             responseCode = 0;
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                        } else if (responseCode == 501) {
-                            responseCode = 0;
+                            cu.startDialog(0,"서버 오류", "서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
                         } else if (responseCode == 502) {
                             responseCode = 0;
+                            cu.startDialog(0,"서버 오류", "알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };

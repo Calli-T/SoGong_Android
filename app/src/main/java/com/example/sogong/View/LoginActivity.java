@@ -19,6 +19,9 @@ import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -55,13 +58,10 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Custom_Dialog customDialog = new Custom_Dialog(LoginActivity.this);
-                //customDialog.callFunction("서버 오류","로그인에 실패했습니다.",1);
                 lu.startToast("로그인 중");
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
                 boolean auto_login = checkbox.isChecked();
-
                 // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
                 /*
                 컨트롤러에서 API호출을 하는동안
@@ -73,16 +73,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = 0;
-                            //Toast_Nomal("로그인 성공");
-
+                            lu.startToast("로그인 성공");
                             lu.changePage(0);
-                            //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            //startActivity(intent);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
                             responseCode = 0;
                             lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
+                            lu.startDialog(1,"서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -93,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                         int i = 30;
                         while (i > 0) {
                             i--;
-
                             try {
                                 Thread.sleep(1000);
                             } catch (Exception e) {
@@ -157,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
             } else if (dest == 1) {
                 // 회원가입에서 요청한 이메일 인증
                 EmailVerificationActivity.destination = 0;
-
                 Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
                 startActivity(intent);
             }

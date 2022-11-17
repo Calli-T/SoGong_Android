@@ -17,6 +17,8 @@ import com.example.sogong.Control.ControlEdittingInfo_f;
 import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MyPageFragment extends Fragment {
@@ -60,9 +62,15 @@ public class MyPageFragment extends Fragment {
                         if (MainActivity.responseCode == 200) {
                             MainActivity.responseCode = -1;
                             mu.startToast("로그아웃");
-                            getActivity().finish();
-                        } else {
+                            mu.changePage(0);
+//                            getActivity().finish();
 
+                        } else if (MainActivity.responseCode == 500) {
+                            MainActivity.responseCode = 0;
+                            mu.startToast("자동 로그인 해제를 실패했습니다.");
+                        } else if (MainActivity.responseCode == 502) {
+                            MainActivity.responseCode = 0;
+                            mu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -94,7 +102,6 @@ public class MyPageFragment extends Fragment {
                 t.start();
             }
         });
-
         return rootview;
     }
 
@@ -122,6 +129,11 @@ public class MyPageFragment extends Fragment {
 
         @Override
         public void changePage(int dest) {
+            if (dest == 0) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
 
         }
     }

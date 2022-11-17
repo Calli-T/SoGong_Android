@@ -18,6 +18,8 @@ import com.example.sogong.Control.ControlSignup_f;
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
@@ -64,18 +66,23 @@ public class SignupActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -2;
-                            su.startToast("회원가입완료");
+                            su.startToast("회원가입 완료");
                             su.changePage(0);
                         } else if (responseCode == 400) {
                             responseCode = 0;
+                            su.startToast("중복된 아이디입니다.");
                         } else if (responseCode == 401) {
                             responseCode = 0;
+                            su.startToast("중복된 닉네임입니다.");
                         } else if (responseCode == 402) {
                             responseCode = 0;
+                            su.startToast("중복된 아이디와 닉네임입니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
+                            su.startDialog(0,"서버 오류","정보 등록에 실패했습니다.",new ArrayList<String>(Arrays.asList("확인")));
                         } else if (responseCode == 502) {
                             responseCode = 0;
+                            su.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }
 

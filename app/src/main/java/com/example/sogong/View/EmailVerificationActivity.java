@@ -18,6 +18,8 @@ import com.example.sogong.Control.ControlEmailVerification_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EmailVerificationActivity extends AppCompatActivity {
@@ -59,16 +61,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 responseCode = -2;
                                 eu.startToast("코드 전송");
                                 isFinish = true;
-                            } else if (responseCode == 400) {
-                                responseCode = 0;
                             } else if (responseCode == 404) {
                                 responseCode = 0;
-                            } else if (responseCode == 500) {
+                                eu.startToast("존재하지 않는 이메일입니다.");
+                            }  else if (responseCode == 501) {
                                 responseCode = 0;
-                            } else if (responseCode == 501) {
-                                responseCode = 0;
-                            } else if (responseCode == 502) {
-                                responseCode = 0;
+                                eu.startDialog(0,"서버 오류","서버 연결에 실패했습니다.",new ArrayList<String>(Arrays.asList("확인")));
                             }
                         }
                     }
@@ -140,14 +138,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 
                             } else if (responseCode == 400) {
                                 responseCode = 0;
-                            } else if (responseCode == 404) {
-                                responseCode = 0;
+                                eu.startToast("잘못된 인증코드입니다.");
                             } else if (responseCode == 500) {
                                 responseCode = 0;
-                            } else if (responseCode == 501) {
-                                responseCode = 0;
+                                eu.startDialog(0,"서버 오류","이메일 등록에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
+                                eu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
                     }

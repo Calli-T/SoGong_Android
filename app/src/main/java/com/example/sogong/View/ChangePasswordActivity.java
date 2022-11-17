@@ -19,6 +19,8 @@ import com.example.sogong.Control.ControlEmailVerification_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChangePasswordActivity extends AppCompatActivity {
@@ -56,16 +58,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             responseCode = -2;
                             cu.startToast("비밀번호 변경완료");
                             finish();
-                        } else if (responseCode == 400) {
+                        }  else if (responseCode == 500) {
                             responseCode = 0;
-                        } else if (responseCode == 404) {
-                            responseCode = 0;
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                        } else if (responseCode == 501) {
-                            responseCode = 0;
+                            cu.startToast("비밀번호 변경요청 실패했습니다.");
                         } else if (responseCode == 502) {
                             responseCode = 0;
+                            cu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -131,12 +129,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         @Override
         public void startDialog(int type, String title, String message, List<String> btnTxtList) {
-
+            Custom_Dialog cd = new Custom_Dialog(ChangePasswordActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
         }
 
         @Override
         public void changePage(int dest) {
-
+            if (dest == 0) {
+                Intent intent = new Intent(ChangePasswordActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         }
 
     }
