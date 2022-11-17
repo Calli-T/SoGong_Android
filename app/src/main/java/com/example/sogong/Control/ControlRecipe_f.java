@@ -21,12 +21,51 @@ public class ControlRecipe_f {
     }
 
     public void addRecipe(RecipePost newRecipe) {
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.AddRecipe(newRecipe);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                //.responseCode = response.code();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
     }
 
     public void editRecipe(RecipePost edittedRecipe) {
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.EditRecipe(edittedRecipe);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                //.responseCode = response.code();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
     }
 
     public void deleteRecipe(String nickname, int postId) {
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.DeleteRecipe(nickname, postId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                //.responseCode = response.code();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
     }
 
     public void showRecipe(RecipePost recipePost) {
