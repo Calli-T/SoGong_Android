@@ -60,3 +60,72 @@ public class Comment {
         this.comment_time = comment_time;
     }
 }
+
+//public class Comments
+//{
+//    private String comment_time;
+//
+//    private String comments;
+//
+//    private String post_id;
+//
+//    private String nickname;
+//
+//    private String comment_id;
+//
+//    public String getComment_time ()
+//    {
+//        return comment_time;
+//    }
+//
+//    public void setComment_time (String comment_time)
+//    {
+//        this.comment_time = comment_time;
+//    }
+//
+//    public String getComments ()
+//    {
+//        return comments;
+//    }
+//
+//    public void setComments (String comments)
+//    {
+//        this.comments = comments;
+//    }
+//
+//    public String getPost_id ()
+//    {
+//        return post_id;
+//    }
+//
+//    public void setPost_id (String post_id)
+//    {
+//        this.post_id = post_id;
+//    }
+//
+//    public String getNickname ()
+//    {
+//        return nickname;
+//    }
+//
+//    public void setNickname (String nickname)
+//    {
+//        this.nickname = nickname;
+//    }
+//
+//    public String getComment_id ()
+//    {
+//        return comment_id;
+//    }
+//
+//    public void setComment_id (String comment_id)
+//    {
+//        this.comment_id = comment_id;
+//    }
+//
+//    @Override
+//    public String toString()
+//    {
+//        return "ClassPojo [comment_time = "+comment_time+", comments = "+comments+", post_id = "+post_id+", nickname = "+nickname+", comment_id = "+comment_id+"]";
+//    }
+//}

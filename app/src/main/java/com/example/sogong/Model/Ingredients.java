@@ -72,3 +72,73 @@ public class Ingredients {
         this.ammount = ammount;
     }
 }
+
+
+//public class Recipe_Ingredients
+//{
+//    private String unit;
+//
+//    private String amount;
+//
+//    private String post_id;
+//
+//    private String name;
+//
+//    private String id;
+//
+//    public String getUnit ()
+//    {
+//        return unit;
+//    }
+//
+//    public void setUnit (String unit)
+//    {
+//        this.unit = unit;
+//    }
+//
+//    public String getAmount ()
+//    {
+//        return amount;
+//    }
+//
+//    public void setAmount (String amount)
+//    {
+//        this.amount = amount;
+//    }
+//
+//    public String getPost_id ()
+//    {
+//        return post_id;
+//    }
+//
+//    public void setPost_id (String post_id)
+//    {
+//        this.post_id = post_id;
+//    }
+//
+//    public String getName ()
+//    {
+//        return name;
+//    }
+//
+//    public void setName (String name)
+//    {
+//        this.name = name;
+//    }
+//
+//    public String getId ()
+//    {
+//        return id;
+//    }
+//
+//    public void setId (String id)
+//    {
+//        this.id = id;
+//    }
+//
+//    @Override
+//    public String toString()
+//    {
+//        return "ClassPojo [unit = "+unit+", amount = "+amount+", post_id = "+post_id+", name = "+name+", id = "+id+"]";
+//    }
+//}

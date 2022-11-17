@@ -30,3 +30,37 @@ public class RecipeList {
         this.total_page = total_page;
     }
 }
+
+
+//public class RecipeList
+//{
+//    private RecipeList[] recipeList;
+//
+//    private String total_page;
+//
+//    public RecipeList[] getRecipeList ()
+//    {
+//        return recipeList;
+//    }
+//
+//    public void setRecipeList (RecipeList[] recipeList)
+//    {
+//        this.recipeList = recipeList;
+//    }
+//
+//    public String getTotal_page ()
+//    {
+//        return total_page;
+//    }
+//
+//    public void setTotal_page (String total_page)
+//    {
+//        this.total_page = total_page;
+//    }
+//
+//    @Override
+//    public String toString()
+//    {
+//        return "ClassPojo [recipeList = "+recipeList+", total_page = "+total_page+"]";
+//    }
+//}
