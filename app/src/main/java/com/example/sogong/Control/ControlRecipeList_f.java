@@ -17,7 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlRecipeList_f {
-    List<RecipeList> recipeList;
+    List<RecipePost> recipeList;
     public void lookupRecipeList(int page){
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<RecipeList> call = sv.LookupRecipeList(page);

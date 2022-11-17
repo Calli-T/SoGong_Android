@@ -18,6 +18,7 @@ public class ControlRecipe_f {
     RecipePost recipePost;
 
     public void lookupRecipe(int postId) {
+        
     }
 
     public void addRecipe(RecipePost newRecipe) {
