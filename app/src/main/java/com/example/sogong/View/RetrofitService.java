@@ -3,12 +3,16 @@ package com.example.sogong.View;
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.LikeInfo;
 import com.example.sogong.Model.Ingredients;
+import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.Model.User;
+import com.example.sogong.Model.PhotoList;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,6 +20,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -55,6 +60,19 @@ public interface RetrofitService {
 
     @POST("logout/")
     Call<String> Logout(@Body User user);
+
+    //-----------------------------------------------------------case 17 ~
+    @GET("photoboard/{page}/")
+    Call<PhotoList> LookupPhotoList(@Path("page") int page);
+
+    @GET("photo/{postid}/")
+    Call<PhotoPost> LookupPhoto(@Path("postid") int postid);
+
+    @POST("uploadphoto/")
+    Call<PhotoPost> AddPhoto(@Body PhotoPost photoPost);
+
+    @HTTP(method = "DELETE", path = "https://recippe-sg.herokuapp.com/deletephoto/", hasBody = true)
+    Call<Integer> DeletePhoto(@Body PhotoPost deletePhoto);
 
     //-----------------------------------------------------------case 23
 

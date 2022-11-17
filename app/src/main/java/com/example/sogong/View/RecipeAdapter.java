@@ -1,6 +1,7 @@
 package com.example.sogong.View;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
@@ -42,12 +45,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         void onBind(RecipePost recipePost) {
             title.setText(recipePost.getTitle());
-            spicy.setText(recipePost.getDegree_of_spicy());
-            date.setText(recipePost.getUpload_time());
+            spicy.setText("X" + String.valueOf(recipePost.getDegree_of_spicy()));
+            String time = recipePost.getUpload_time();
+            String[] time1 = time.split("T");
+            date.setText(time1[0]);
             author.setText(recipePost.getNickname());
             likecnt.setText(String.valueOf(recipePost.getLike_count()));
             commentcnt.setText(String.valueOf(recipePost.getComment_count()));
             viewcnt.setText(String.valueOf(recipePost.getViews()));
+        }
+
+        public TextView getTitle() {
+            return title;
         }
     }
 
@@ -59,9 +68,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         View view = inflater.inflate(R.layout.recycler_recipepostlist, parent, false);
         RecipeAdapter.ViewHolder vh = new RecipeAdapter.ViewHolder(view);
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String data = "";
+                int position = vh.getAbsoluteAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    data = vh.getTitle().getText().toString();
+                }
+                itemClickListener.onItemClicked(position, data);
+
+            }
+        });
+
         return vh;
     }
-    public void setRecipeList(List<RecipePost> list){
+
+    public void setRecipeList(List<RecipePost> list) {
         this.mData = list;
         notifyDataSetChanged();
     }
@@ -75,8 +98,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        if(mData==null)
+        if (mData == null)
             return 0;
         else return mData.size();
     }
+
+    public interface OnItemClickListener {
+        void onItemClicked(int position, String data);
+    }
+
+    private OnItemClickListener itemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        itemClickListener = listener;
+    }
+
+
 }
