@@ -37,4 +37,23 @@ public class ControlRecipeList_f {
     public void sortRecipeList(String sortBy, int page){}
     public void showList(List<RecipePost> recipeList){}
     public void noResult(String message){}
+
+    /*
+    public void testStringList(int page){
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<String> call = sv.listString(page);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                HomeFragment.str = response.body().toString();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
+    }
+    */
 }
