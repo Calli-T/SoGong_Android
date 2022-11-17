@@ -14,9 +14,6 @@ public class Comment {
     @SerializedName("comment_time")
     private String comment_time;
 
-    @SerializedName("code")
-    private int code;
-
     public String getNickname() {
         return nickname;
     }
@@ -57,32 +54,12 @@ public class Comment {
         this.comment_time = comment_time;
     }
 
-    public int getCode() {
-        return code;
-    }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public Comment(String nickname, int comment_id, int post_id, String comments, String comment_time, int code) {
+    public Comment(String nickname, int comment_id, int post_id, String comments, String comment_time) {
         this.nickname = nickname;
         this.comment_id = comment_id;
         this.post_id = post_id;
         this.comments = comments;
         this.comment_time = comment_time;
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "nickname='" + nickname + '\'' +
-                ", comment_id=" + comment_id +
-                ", post_id=" + post_id +
-                ", comments='" + comments + '\'' +
-                ", comment_time='" + comment_time + '\'' +
-                ", code=" + code +
-                '}';
     }
 }
