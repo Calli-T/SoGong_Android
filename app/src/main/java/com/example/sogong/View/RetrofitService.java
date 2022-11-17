@@ -54,6 +54,8 @@ public interface RetrofitService {
     @POST("logout/")
     Call<String> Logout(@Body User user);
 
+    //-----------------------------------------------------------case 23
+
     // 레시피 한 개 받아오는거 테스트용
     @GET("recipe/{pid}/")
     Call<RecipePost> test(@Path("pid") int pid);
@@ -67,6 +69,29 @@ public interface RetrofitService {
 
     @GET("recipeboard/{page}/")
     Call<RecipeList> LookupRecipeList(@Path("pid") int page);
+
+    @POST("uploadrecipe/")
+    Call<String> AddRecipe(@Body RecipePost recipePost);
+
+    @POST("updaterecipe/")
+    Call<String> EditRecipe(@Body RecipePost recipePost);
+
+    @POST("deleterecipe/")
+    Call<String> DeleteRecipe(
+            @Field("nickname") String nickname,
+            @Field("post_id") int post_id
+    );
+    /*
+    {
+	"like_id": 0 or null,
+	"nickname": 시스템을 사용중인 사용자 닉네임,
+	"postType": 게시글 종류 1==레시피, -1==사진,
+	"postId": 게시글 아이디,
+	"task": "취소" or "등록" -> "좋아요"를 취소할지 등록할지 정하는 것
+}
+     */
+    //@POST("likerecipe/")
+    //Call<String>
 
     //@GET("recipeboard/{page}")
     //Call<String>
