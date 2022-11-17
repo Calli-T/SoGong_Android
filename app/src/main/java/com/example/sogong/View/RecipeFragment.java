@@ -1,5 +1,6 @@
 package com.example.sogong.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.example.sogong.Control.ControlRecipeList_f;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -28,6 +30,8 @@ public class RecipeFragment extends Fragment {
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
 
+    FloatingActionButton recipe_add_button;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
@@ -38,6 +42,17 @@ public class RecipeFragment extends Fragment {
         spinner1.setPrompt("이동할 페이지");
 
         responseCode = 0;
+
+        // 사용할 컴포넌트
+        recipe_add_button = (FloatingActionButton) view.findViewById(R.id.recipe_add_button);
+
+        recipe_add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddRecipeActivity.class); //그룹 만들기 화면으로 연결
+                startActivity(intent); //액티비티 열기
+            }
+        });
 
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
