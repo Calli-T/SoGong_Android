@@ -151,6 +151,24 @@ public class RecipePost {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    @Override
+    public String toString() {
+        return "RecipePost{" +
+                "post_id=" + post_id +
+                ", nickname='" + nickname + '\'' +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", degree_of_spicy=" + degree_of_spicy +
+                ", description='" + description + '\'' +
+                ", views=" + views +
+                ", like_count=" + like_count +
+                ", comment_count=" + comment_count +
+                ", upload_time='" + upload_time + '\'' +
+                ", Recipe_Ingredients=" + Recipe_Ingredients +
+                ", comments=" + comments +
+                '}';
+    }
 }
 
 /*

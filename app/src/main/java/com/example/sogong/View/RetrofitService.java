@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.LikeInfo;
+import com.example.sogong.Model.Ingredients;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
@@ -98,6 +99,10 @@ public interface RetrofitService {
 
     //@GET("recipeboard/{page}")
     //Call<String>
+    //사용자 보유 재료 조회
+    @GET("/inquiryrefrigerator/{nickname}/")
+    Call<Ingredients> LookupIngredientsList(@Path("nickname") String nickname);
+
 }
 /*
     // @GET( EndPoint-자원위치(URI) )
