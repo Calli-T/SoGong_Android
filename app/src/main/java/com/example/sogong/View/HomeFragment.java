@@ -19,7 +19,7 @@ import com.example.sogong.R;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    public static String str;
+    public static String str = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

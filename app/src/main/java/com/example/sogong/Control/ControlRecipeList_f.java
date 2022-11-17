@@ -24,7 +24,7 @@ public class ControlRecipeList_f {
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(@NonNull Call<RecipeList> call, @NonNull Response<RecipeList> response) {
-                HomeFragment.str = response.code()+"";
+                HomeFragment.str = response.body().getRecipeList().size()+""+response.body().getTotal_page();
             }
 
             @Override

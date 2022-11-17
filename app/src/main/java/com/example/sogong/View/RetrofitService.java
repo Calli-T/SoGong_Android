@@ -61,8 +61,12 @@ public interface RetrofitService {
     @GET("recipe/{pid}/")
     Call<String> testString(@Path("pid") int pid);
 
+    // String용 테스트
     @GET("recipeboard/{page}/")
-    Call<RecipeList> LookupRecipeList(@Path("pid") int pid);
+    Call<String> listString(@Path("page") int page);
+
+    @GET("recipeboard/{page}/")
+    Call<RecipeList> LookupRecipeList(@Path("pid") int page);
 
     //@GET("recipeboard/{page}")
     //Call<String>
