@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/main_line"
         app:layout_constraintBottom_toTopOf="@id/refrigeratorbox"/>
 
-    <TextView
+    <Button
         android:id="@+id/writtenrecipe_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,10 +68,11 @@
         android:text="내가 쓴 레시피"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/recipebox"
         app:layout_constraintTop_toTopOf="@id/recipebox"
         app:layout_constraintBottom_toTopOf="@id/likedrecipe_text" />
-    <TextView
+    <Button
         android:id="@+id/likedrecipe_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,11 +80,12 @@
         android:text="좋아요 누른 레시피"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/recipebox"
         app:layout_constraintTop_toBottomOf="@id/writtenrecipe_text"
         app:layout_constraintBottom_toTopOf="@id/commentrecipe_text"/>
 
-    <TextView
+    <Button
         android:id="@+id/commentrecipe_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,6 +93,7 @@
         android:text="댓글 단 레시피"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintBottom_toBottomOf="@+id/recipebox"
         app:layout_constraintStart_toStartOf="@id/recipebox"
         app:layout_constraintTop_toBottomOf="@id/likedrecipe_text" />
@@ -108,7 +111,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recipebox"
         app:layout_constraintBottom_toTopOf="@id/mailbox"/>
-    <TextView
+    <Button
         android:id="@+id/refrigerator_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,6 +119,7 @@
         android:text="냉장고"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/refrigeratorbox"
         app:layout_constraintTop_toTopOf="@id/refrigeratorbox"
         app:layout_constraintBottom_toBottomOf="@id/refrigeratorbox" />
@@ -133,7 +137,7 @@
         app:layout_constraintTop_toBottomOf="@id/refrigeratorbox"
         app:layout_constraintBottom_toTopOf="@id/changebox"/>
 
-    <TextView
+    <Button
         android:id="@+id/mailbox_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -141,6 +145,7 @@
         android:text="쪽지함"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/mailbox"
         app:layout_constraintTop_toTopOf="@id/mailbox"
         app:layout_constraintBottom_toBottomOf="@id/mailbox" />
@@ -170,6 +175,7 @@
         android:text="비밀번호 변경"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/changebox"
         app:layout_constraintTop_toTopOf="@id/changebox"
         app:layout_constraintBottom_toTopOf="@id/nicknamechange_text" />
@@ -181,6 +187,7 @@
         android:text="닉네임 변경"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintStart_toStartOf="@id/changebox"
         app:layout_constraintTop_toBottomOf="@id/pwdchange_text"
         app:layout_constraintBottom_toBottomOf="@id/logout_text" />
@@ -192,6 +199,7 @@
         android:text="로그아웃"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        android:background="@drawable/visibility"
         app:layout_constraintEnd_toEndOf="@id/changebox"
         app:layout_constraintTop_toBottomOf="@id/nicknamechange_text"
         app:layout_constraintBottom_toBottomOf="@id/changebox" />

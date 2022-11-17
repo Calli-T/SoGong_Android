@@ -66,8 +66,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.title);
-            complete = (TextView) itemView.findViewById(R.id.complete);
-            important = (TextView) itemView.findViewById(R.id.important);
+            complete = (TextView) itemView.findViewById(R.id.date);
+            important = (TextView) itemView.findViewById(R.id.author);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
