@@ -46,8 +46,6 @@ public class RecipeFragment extends Fragment {
         threadFlag = true;
 
         final Runnable runnable = new Runnable() {
-            int tt = 0;
-
             @Override
             public void run() {
                 if (responseCode == 200) {
