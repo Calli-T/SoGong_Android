@@ -23,6 +23,8 @@ public class RecipeFragment extends Fragment {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adapter1);
         spinner1.setPrompt("이동할 페이지");
+
+        
         return view;
     }
 }

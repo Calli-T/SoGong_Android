@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.PostObject;
+import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
 import com.example.sogong.Model.User;
 
@@ -54,8 +55,14 @@ public interface RetrofitService {
     Call<String> Logout(@Body User user);
 
     // 레시피 한 개 받아오는거 테스트용
-    @GET("recipe/{pid}")
-    Call<RecipePost> test(@Path("pid") String pid);
+    @GET("recipe/{pid}/")
+    Call<RecipePost> test(@Path("pid") int pid);
+
+    @GET("recipe/{pid}/")
+    Call<String> testString(@Path("pid") int pid);
+
+    @GET("recipeboard/{page}/")
+    Call<RecipeList> LookupRecipeList(@Path("pid") int pid);
 
     //@GET("recipeboard/{page}")
     //Call<String>

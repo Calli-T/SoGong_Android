@@ -1,17 +1,23 @@
 package com.example.sogong.Model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Comment {
     @SerializedName("nickname")
+    @Expose
     private String nickname;
     @SerializedName("comment_id")
+    @Expose
     private int comment_id;
     @SerializedName("post_id")
+    @Expose
     private int post_id;
     @SerializedName("comments")
+    @Expose
     private String comments;
     @SerializedName("comment_time")
+    @Expose
     private String comment_time;
 
     public String getNickname() {
@@ -51,15 +57,6 @@ public class Comment {
     }
 
     public void setComment_time(String comment_time) {
-        this.comment_time = comment_time;
-    }
-
-
-    public Comment(String nickname, int comment_id, int post_id, String comments, String comment_time) {
-        this.nickname = nickname;
-        this.comment_id = comment_id;
-        this.post_id = post_id;
-        this.comments = comments;
         this.comment_time = comment_time;
     }
 }

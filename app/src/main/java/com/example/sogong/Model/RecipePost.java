@@ -1,45 +1,60 @@
 package com.example.sogong.Model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RecipePost {
     @SerializedName("post_id")
+    @Expose
     private int post_id;
 
     @SerializedName("nickname")
+    @Expose
     private String nickname;
 
     @SerializedName("title")
+    @Expose
     private String title;
 
     @SerializedName("category")
+    @Expose
     private String category;
 
     @SerializedName("degree_of_spicy")
+    @Expose
     private int degree_of_spicy;
 
     @SerializedName("description")
+    @Expose
     private String description;
 
     @SerializedName("views")
+    @Expose
     private int views;
 
     @SerializedName("like_count")
+    @Expose
     private int like_count;
 
     @SerializedName("comment_count")
+    @Expose
     private int comment_count;
 
     @SerializedName("upload_time")
+    @Expose
     private String upload_time;
 
     @SerializedName("Recipe_Ingredients")
-    private ArrayList<Ingredients> Recipe_Ingredients;
+    @Expose
+    private List<RecipePost> Recipe_Ingredients;
 
     @SerializedName("comments")
-    private ArrayList<Comment> comments;
+    @Expose
+    private List<Comment> comments;
 
     public int getPost_id() {
         return post_id;
@@ -121,34 +136,19 @@ public class RecipePost {
         this.upload_time = upload_time;
     }
 
-    public ArrayList<Ingredients> getRecipe_Ingredients() {
+    public List<RecipePost> getRecipe_Ingredients() {
         return Recipe_Ingredients;
     }
 
-    public void setRecipe_Ingredients(ArrayList<Ingredients> recipe_Ingredients) {
+    public void setRecipe_Ingredients(List<RecipePost> recipe_Ingredients) {
         Recipe_Ingredients = recipe_Ingredients;
     }
 
-    public ArrayList<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public RecipePost(int post_id, String nickname, String title, String category, int degree_of_spicy, String description, int views, int like_count, int comment_count, String upload_time, ArrayList<Ingredients> recipe_Ingredients, ArrayList<Comment> comments) {
-        this.post_id = post_id;
-        this.nickname = nickname;
-        this.title = title;
-        this.category = category;
-        this.degree_of_spicy = degree_of_spicy;
-        this.description = description;
-        this.views = views;
-        this.like_count = like_count;
-        this.comment_count = comment_count;
-        this.upload_time = upload_time;
-        Recipe_Ingredients = recipe_Ingredients;
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 }

@@ -1,21 +1,27 @@
 package com.example.sogong.Model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Ingredients {
     @SerializedName("ingre_id")
+    @Expose
     private int ingre_id;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("unit")
+    @Expose
     private String unit;
 
     @SerializedName("post_id")
+    @Expose
     private int post_id;
 
     @SerializedName("ammount")
+    @Expose
     private float ammount;
 
     public int getIngre_id() {
