@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
 
 public class RecipeFragment extends Fragment {
@@ -24,6 +25,7 @@ public class RecipeFragment extends Fragment {
         spinner1.setAdapter(adapter1);
         spinner1.setPrompt("이동할 페이지");
 
+        //RecipePost recipePost1 = new recipe
         
         return view;
     }

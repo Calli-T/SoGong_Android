@@ -71,7 +71,7 @@ public interface RetrofitService {
 
     // 레시피 게시판 받아오는거 String 테스트
     @GET("recipeboard/{page}/")
-    Call<RecipeList> LookupRecipeList(@Path("pid") int page);
+    Call<RecipeList> LookupRecipeList(@Path("page") int page);
 
     // 레시피 업로드
     @POST("uploadrecipe/")

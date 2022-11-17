@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
         }
 
         ControlRecipeList_f crlf = new ControlRecipeList_f();
-        crlf.lookupRecipeList(19);
+        crlf.lookupRecipeList(1);
 
 
         NewRunnable nr = new NewRunnable();
@@ -93,3 +93,40 @@ public class HomeFragment extends Fragment {
 
 // json object
 // java json parser
+
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                hu.startToast(str);
+                if (MainActivity.responseCode == 200) {
+                    MainActivity.responseCode = -1;
+                    hu.startToast(str);
+                } else {
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    getActivity().runOnUiThread(runnable);
+                }
+            }
+        }
+
+        ControlRecipeList_f crlf = new ControlRecipeList_f();
+        crlf.lookupRecipeList(1);
+
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
