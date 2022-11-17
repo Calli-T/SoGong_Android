@@ -1,14 +1,18 @@
 package com.example.sogong.View;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlRecipeList_f;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
@@ -33,6 +37,9 @@ public class RecipeFragment extends Fragment {
         spinner1.setPrompt("이동할 페이지");
 
         responseCode = 0;
+
+        // UI controller
+        RecipeList_UI rlu = new RecipeList_UI();
 
         // t.start까지 코드는 시작하자마자 불러오는 레시피 리스트
         final Runnable runnable = new Runnable() {
@@ -67,5 +74,31 @@ public class RecipeFragment extends Fragment {
         t.start();
         
         return view;
+    }
+
+    class RecipeList_UI implements Control {
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getActivity());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+        }
+
+        @Override
+        public void changePage(int dest) {
+
+        }
     }
 }
