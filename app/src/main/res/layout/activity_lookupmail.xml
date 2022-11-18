@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/option">
+       >
 
     </ImageButton>
 

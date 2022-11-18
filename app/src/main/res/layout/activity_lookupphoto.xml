@@ -46,7 +46,6 @@
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/more_vert"
-        app:menu="@menu/option"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -138,9 +137,9 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/recipebook"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/photodate_text1"
-                app:layout_constraintHeight_percent="0.3"/>
+                app:layout_constraintTop_toBottomOf="@id/photodate_text1" />
 
             <TextView
                 android:id="@+id/photolike_text"
@@ -151,9 +150,9 @@
                 android:text="좋아요 수"
                 android:textColor="@color/red_700"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/like_btn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/photopost"
-                app:layout_constraintBottom_toBottomOf="@id/like_btn" />
+                app:layout_constraintTop_toBottomOf="@id/photopost" />
 
             <TextView
                 android:id="@+id/photolikecnt_text"
@@ -164,9 +163,9 @@
                 android:text="123"
                 android:textColor="@color/red_700"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/like_btn"
                 app:layout_constraintStart_toEndOf="@id/photolike_text"
-                app:layout_constraintTop_toBottomOf="@id/photopost"
-                app:layout_constraintBottom_toBottomOf="@id/like_btn" />
+                app:layout_constraintTop_toBottomOf="@id/photopost" />
 
             <ImageButton
                 android:id="@+id/report_btn"
@@ -175,9 +174,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/report"
+                app:layout_constraintBottom_toBottomOf="@id/like_btn"
                 app:layout_constraintEnd_toStartOf="@id/like_btn"
-                app:layout_constraintTop_toBottomOf="@id/photopost"
-                app:layout_constraintBottom_toBottomOf="@id/like_btn"/>
+                app:layout_constraintTop_toBottomOf="@id/photopost" />
 
             <ImageButton
                 android:id="@+id/like_btn"
@@ -188,9 +187,6 @@
                 android:background="@drawable/thumb_up"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/photopost" />
-
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

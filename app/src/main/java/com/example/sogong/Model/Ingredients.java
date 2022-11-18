@@ -1,9 +1,12 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Ingredients {
+public class Ingredients implements Parcelable {
     @SerializedName("ingre_id")
     @Expose
     private int ingre_id;
@@ -23,6 +26,26 @@ public class Ingredients {
     @SerializedName("ammount")
     @Expose
     private float ammount;
+
+    protected Ingredients(Parcel in) {
+        ingre_id = in.readInt();
+        name = in.readString();
+        unit = in.readString();
+        post_id = in.readInt();
+        ammount = in.readFloat();
+    }
+
+    public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
+        @Override
+        public Ingredients createFromParcel(Parcel in) {
+            return new Ingredients(in);
+        }
+
+        @Override
+        public Ingredients[] newArray(int size) {
+            return new Ingredients[size];
+        }
+    };
 
     public int getIngre_id() {
         return ingre_id;
@@ -70,6 +93,30 @@ public class Ingredients {
         this.unit = unit;
         this.post_id = post_id;
         this.ammount = ammount;
+    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(ingre_id);
+        dest.writeString(name);
+        dest.writeString(unit);
+        dest.writeInt(post_id);
+        dest.writeFloat(ammount);
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredients{" +
+                "ingre_id=" + ingre_id +
+                ", name='" + name + '\'' +
+                ", unit='" + unit + '\'' +
+                ", post_id=" + post_id +
+                ", ammount=" + ammount +
+                '}';
     }
 }
 

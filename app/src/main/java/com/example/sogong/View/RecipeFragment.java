@@ -34,20 +34,20 @@ public class RecipeFragment extends Fragment {
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     public RecipeAdapter recipeAdapter;
-    public RecyclerView recyclerView;
+    public RecyclerView recipeRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
 
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
+        recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
 
         recipeAdapter = new RecipeAdapter();
 
-        recyclerView.setAdapter(recipeAdapter);
+        recipeRecyclerView.setAdapter(recipeAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        recipeRecyclerView.setLayoutManager(layoutManager);
 
 
         responseCode = 0;
@@ -79,8 +79,9 @@ public class RecipeFragment extends Fragment {
                         public void onItemClicked(int position, String data) {
                             Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipe_post_id", recipelist.get(position).getPost_id());
+                            intent.putExtra("recipe_post", recipelist.get(position));
                             startActivity(intent);
+                            //+조회수 관련 로직 추가할 것
                         }
                     });
 

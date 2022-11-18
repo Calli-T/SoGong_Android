@@ -75,28 +75,68 @@ public class MainActivity extends AppCompatActivity {
         responseCode = 0;
 
         homeFragment = new HomeFragment();
-        recipeFragment = new RecipeFragment();
-        photoFragment = new PhotoFragment();
-        myPageFragment = new MyPageFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
-        Log.d("test","프래그먼트");
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
         NavigationBarView navigationBarView = findViewById(R.id.bottomNavi);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
+                        if (homeFragment == null) {
+                            homeFragment = new HomeFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.containers, homeFragment).commit();
+                        }
+                        if (homeFragment != null)
+                            getSupportFragmentManager().beginTransaction().show(homeFragment).commit();
+                        if (recipeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(recipeFragment).commit();
+                        if (photoFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(photoFragment).commit();
+                        if (myPageFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(myPageFragment).commit();
                         return true;
                     case R.id.recipe:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, recipeFragment).commit();
+                        if (recipeFragment == null) {
+                            recipeFragment = new RecipeFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.containers, recipeFragment).commit();
+                        }
+                        if (homeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
+                        if (recipeFragment != null)
+                            getSupportFragmentManager().beginTransaction().show(recipeFragment).commit();
+                        if (photoFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(photoFragment).commit();
+                        if (myPageFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(myPageFragment).commit();
                         return true;
                     case R.id.photo:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, photoFragment).commit();
+                        if (photoFragment == null) {
+                            photoFragment = new PhotoFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.containers, photoFragment).commit();
+                        }
+                        if (homeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
+                        if (recipeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(recipeFragment).commit();
+                        if (photoFragment != null)
+                            getSupportFragmentManager().beginTransaction().show(photoFragment).commit();
+                        if (myPageFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(myPageFragment).commit();
                         return true;
                     case R.id.mypage:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, myPageFragment).commit();
+                        if (myPageFragment == null) {
+                            myPageFragment = new MyPageFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.containers, myPageFragment).commit();
+                        }
+                        if (homeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(homeFragment).commit();
+                        if (recipeFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(recipeFragment).commit();
+                        if (photoFragment != null)
+                            getSupportFragmentManager().beginTransaction().hide(photoFragment).commit();
+                        if (myPageFragment != null)
+                            getSupportFragmentManager().beginTransaction().show(myPageFragment).commit();
                         return true;
                 }
                 return false;

@@ -1,9 +1,12 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Comment {
+public class Comment implements Parcelable {
     @SerializedName("nickname")
     @Expose
     private String nickname;
@@ -19,6 +22,26 @@ public class Comment {
     @SerializedName("comment_time")
     @Expose
     private String comment_time;
+
+    protected Comment(Parcel in) {
+        nickname = in.readString();
+        comment_id = in.readInt();
+        post_id = in.readInt();
+        comments = in.readString();
+        comment_time = in.readString();
+    }
+
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 
     public String getNickname() {
         return nickname;
@@ -58,6 +81,20 @@ public class Comment {
 
     public void setComment_time(String comment_time) {
         this.comment_time = comment_time;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nickname);
+        dest.writeInt(comment_id);
+        dest.writeInt(post_id);
+        dest.writeString(comments);
+        dest.writeString(comment_time);
     }
 }
 

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RecipePost implements Serializable {
+public class RecipePost implements Parcelable  {
     @SerializedName("post_id")
     @Expose
     private int post_id;
@@ -54,11 +54,38 @@ public class RecipePost implements Serializable {
 
     @SerializedName("Recipe_Ingredients")
     @Expose
-    private List<RecipePost> Recipe_Ingredients;
+    private List<Ingredients> Recipe_Ingredients;
 
     @SerializedName("comments")
     @Expose
     private List<Comment> comments;
+
+    protected RecipePost(Parcel in) {
+        post_id = in.readInt();
+        nickname = in.readString();
+        title = in.readString();
+        category = in.readString();
+        degree_of_spicy = in.readInt();
+        description = in.readString();
+        views = in.readInt();
+        like_count = in.readInt();
+        comment_count = in.readInt();
+        upload_time = in.readString();
+        Recipe_Ingredients = in.createTypedArrayList(Ingredients.CREATOR);
+        comments = in.createTypedArrayList(Comment.CREATOR);
+    }
+
+    public static final Creator<RecipePost> CREATOR = new Creator<RecipePost>() {
+        @Override
+        public RecipePost createFromParcel(Parcel in) {
+            return new RecipePost(in);
+        }
+
+        @Override
+        public RecipePost[] newArray(int size) {
+            return new RecipePost[size];
+        }
+    };
 
     public int getPost_id() {
         return post_id;
@@ -140,11 +167,11 @@ public class RecipePost implements Serializable {
         this.upload_time = upload_time;
     }
 
-    public List<RecipePost> getRecipe_Ingredients() {
+    public List<Ingredients> getRecipe_Ingredients() {
         return Recipe_Ingredients;
     }
 
-    public void setRecipe_Ingredients(List<RecipePost> recipe_Ingredients) {
+    public void setRecipe_Ingredients(List<Ingredients> recipe_Ingredients) {
         Recipe_Ingredients = recipe_Ingredients;
     }
 
@@ -174,6 +201,28 @@ public class RecipePost implements Serializable {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(post_id);
+        dest.writeString(nickname);
+        dest.writeString(title);
+        dest.writeString(category);
+        dest.writeInt(degree_of_spicy);
+        dest.writeString(description);
+        dest.writeInt(views);
+        dest.writeInt(like_count);
+        dest.writeInt(comment_count);
+        dest.writeString(upload_time);
+        dest.writeTypedList(Recipe_Ingredients);
+        dest.writeTypedList(comments);
+
+
+    }
 }
 
 /*
