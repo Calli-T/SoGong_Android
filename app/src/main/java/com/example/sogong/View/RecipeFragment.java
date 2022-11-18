@@ -64,15 +64,7 @@ public class RecipeFragment extends Fragment {
                 if (responseCode == 200) {
                     responseCode = -1;
                     recipeAdapter.setRecipeList(recipelist);
-                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClicked(int position, String data) {
-                            Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipeId", recipelist.get(position).getPost_id());
-                            startActivity(intent);
-                        }
-                    });
+
                     pagenum = new String[totalpage];
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
@@ -82,6 +74,15 @@ public class RecipeFragment extends Fragment {
                     adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner1.setAdapter(adapter1);
                     spinner1.setPrompt("이동할 페이지");
+                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClicked(int position, String data) {
+                            Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("recipe_post_id", recipelist.get(position).getPost_id());
+                            startActivity(intent);
+                        }
+                    });
 
                 } else if(responseCode == 500){
                     rlu.startDialog(0,"서버 오류","서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));

@@ -6,11 +6,12 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RecipePost{
+public class RecipePost implements Serializable {
     @SerializedName("post_id")
     @Expose
     private int post_id;

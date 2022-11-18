@@ -1,11 +1,16 @@
 package com.example.sogong.Control;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.User;
 import com.example.sogong.View.EmailVerificationActivity;
 import com.example.sogong.View.HomeFragment;
+import com.example.sogong.View.LoginActivity;
+import com.example.sogong.View.RecipeLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 import com.example.sogong.View.RetrofitStringClient;
@@ -18,7 +23,31 @@ public class ControlRecipe_f {
     RecipePost recipePost;
 
     public void lookupRecipe(int postId) {
-        
+        RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
+        Call<RecipePost> call = sv.GetRecipePost(postId);
+        call.enqueue(new Callback<RecipePost>() {
+            @Override
+            public void onResponse(@NonNull Call<RecipePost> call, @NonNull Response<RecipePost> response) {
+                //.responseCode = response.code();
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
+                            RecipeLookupActivity.responseCode = response.code();
+                            RecipeLookupActivity.recipePost = response.body();
+                        }
+                    } else // 404
+                        Log.d("404 Not Found", "with login");
+                } else {
+                    // 400 or anything
+                    RecipeLookupActivity.responseCode = response.code();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RecipePost> call, @NonNull Throwable t) {
+                //Log.e(TAG, t.getLocalizedMessage());
+            }
+        });
     }
 
     public void addRecipe(RecipePost newRecipe) {

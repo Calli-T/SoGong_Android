@@ -85,6 +85,11 @@ public interface RetrofitService {
     // 레시피 삭젠
     @POST("deleterecipe/")
     Call<String> DeleteRecipe(@Field("nickname") String nickname, @Field("post_id") int post_id);
+
+    // 레시피 id로 GET
+    @GET("recipe/{pid}")
+    Call<RecipePost> GetRecipePost(@Path("pid") int pid);
+
     /*
     {
 	"like_id": 0 or null,

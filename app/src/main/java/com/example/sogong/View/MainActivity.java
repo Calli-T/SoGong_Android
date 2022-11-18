@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         photoFragment = new PhotoFragment();
         myPageFragment = new MyPageFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.containers, homeFragment).commit();
+        Log.d("test","프래그먼트");
+
         NavigationBarView navigationBarView = findViewById(R.id.bottomNavi);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
