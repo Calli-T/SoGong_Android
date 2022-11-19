@@ -31,8 +31,8 @@ public class ControlRecipe_f {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
-                            /*RecipeLookupActivity.responseCode = response.code();
-                            RecipeLookupActivity.recipePostF = response.body();*/
+                            RecipeLookupActivity.responseCode = response.code();
+                            RecipeLookupActivity.recipePostF = response.body();
 
                             recipePostF = response.body();
                             Log.d("result", recipePostF.toString());

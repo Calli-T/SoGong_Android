@@ -9,6 +9,7 @@ import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -30,14 +31,13 @@ public class ControlRecipeList_f {
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(@NonNull Call<RecipeList> call, @NonNull Response<RecipeList> response) {
-                /*RecipeFragment.responseCode = response.code();
-                RecipeFragment.recipelist = response.body().getRecipeList();
-                RecipeFragment.totalpage = response.body().getTotal_page();*/
-
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
+                            RecipeFragment.responseCode = response.code();
+                            RecipeFragment.recipelist = response.body().getRecipeList();
+                            RecipeFragment.totalpage = response.body().getTotal_page();
                             recipeList = response.body();
                             Log.d("result", ""+recipeList.getRecipeList().size());
                         }
