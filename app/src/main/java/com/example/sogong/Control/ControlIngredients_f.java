@@ -1,12 +1,74 @@
 package com.example.sogong.Control;
 
-import com.example.sogong.Model.Ingredients;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.example.sogong.Model.RecipeList;
+import com.example.sogong.Model.Recipe_Ingredients;
+import com.example.sogong.View.RetrofitClient;
+import com.example.sogong.View.RetrofitService;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ControlIngredients_f {
-    List<Ingredients> unExistIngredients;
-    public void lookupUnExistIngredients(String nickname, int postId){}
-    public void showUnExistIngredients(List<Ingredients> unExistIngredients){}
-    public void remainAmmounts(String nickname, int postId){}
+
+    List<Recipe_Ingredients> unExistIngredients;
+
+    public void lookupUnExistIngredients(String nickname, int postId) {
+
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        Call<List<Recipe_Ingredients>> call = sv.LookupUnExistIngredients(nickname, postId);
+
+        call.enqueue(new Callback<List<Recipe_Ingredients>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Recipe_Ingredients>> call, @NonNull Response<List<Recipe_Ingredients>> response) {
+                // 200
+                if(response.isSuccessful()) {
+                    if(response.body() != null) {
+                        if(response.code() == 200) {
+                            unExistIngredients = response.body();
+                            Log.d("result", unExistIngredients.toString());
+                        }
+                    }
+                } else { // 500
+                    Log.d("result", "디비 오류");
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<Recipe_Ingredients>> call, @NonNull Throwable t) { // 502
+                Log.d("result", "알 수 없는 오류");
+            }
+        });
+    }
+    public void showUnExistIngredients(List<Recipe_Ingredients> unExistIngredients){}
+    public void remainAmmounts(String nickname, int postId){
+
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        Call<Integer> call = sv.RemainAmmounts(nickname, postId);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                // 200
+                if(response.isSuccessful()) {
+                    if(response.body() != null) {
+                        if(response.code() == 200) {
+                            Log.d("result", ""+response.body());
+                        }
+                    }
+                } else { // 500
+                    Log.d("result", "디비 오류");
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 502
+                Log.d("result", "알 수 없는 오류");
+            }
+        });
+    }
 }

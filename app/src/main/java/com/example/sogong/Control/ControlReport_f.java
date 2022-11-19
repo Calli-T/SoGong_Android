@@ -15,7 +15,9 @@ public class ControlReport_f {
     public void reportPost(Report reportInfo){
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<Integer> call = sv.ReportPost(reportInfo);
+        Call<Integer> call;
+        if(reportInfo.getPost_type() == 1) call = sv.ReportRecipePost(reportInfo);
+        else call = sv.ReportPhotoPost(reportInfo);
 
         call.enqueue(new Callback<Integer>() {
             @Override

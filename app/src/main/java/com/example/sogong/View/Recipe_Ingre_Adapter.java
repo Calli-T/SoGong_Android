@@ -1,33 +1,22 @@
 package com.example.sogong.View;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sogong.Control.ControlLogin_f;
-import com.example.sogong.Model.Comment;
-import com.example.sogong.Model.Ingredients;
-import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adapter.ViewHolder> {
 
-    private List<Ingredients> mData;
+    private List<Recipe_Ingredients> mData;
     private Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -43,9 +32,9 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
 
         }
 
-        void onBind(Ingredients ingredients) {
+        void onBind(Recipe_Ingredients ingredients) {
             name.setText(ingredients.getName());
-            String amountstr = String.valueOf(ingredients.getAmmount()) + ingredients.getUnit();
+            String amountstr = String.valueOf(ingredients.getAmount()) + ingredients.getUnit();
             Log.d("amount", "재료 및 양 " + amountstr);
             amount.setText(amountstr);
 
@@ -81,7 +70,7 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
         return vh;
     }
 
-    public void setRecipeIngreList(List<Ingredients> list) {
+    public void setRecipeIngreList(List<Recipe_Ingredients> list) {
         this.mData = list;
         notifyDataSetChanged();
 
