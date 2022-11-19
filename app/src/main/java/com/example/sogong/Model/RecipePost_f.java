@@ -1,10 +1,15 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.navigation.NavType;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RecipePost_f {
+public class RecipePost_f implements Parcelable {
     @SerializedName("post_id")
     private int post_id;
     @SerializedName("nickname")
@@ -45,6 +50,31 @@ public class RecipePost_f {
         this.recipe_ingredients = recipe_ingredients;
         this.comments = comments;
     }
+
+    protected RecipePost_f(Parcel in) {
+        post_id = in.readInt();
+        nickname = in.readString();
+        title = in.readString();
+        category = in.readString();
+        degree_of_spicy = in.readInt();
+        description = in.readString();
+        views = in.readInt();
+        like_count = in.readInt();
+        comment_count = in.readInt();
+        upload_time = in.readString();
+    }
+
+    public static final Creator<RecipePost_f> CREATOR = new Creator<RecipePost_f>() {
+        @Override
+        public RecipePost_f createFromParcel(Parcel in) {
+            return new RecipePost_f(in);
+        }
+
+        @Override
+        public RecipePost_f[] newArray(int size) {
+            return new RecipePost_f[size];
+        }
+    };
 
     public int getPost_id() {
         return post_id;
@@ -159,6 +189,25 @@ public class RecipePost_f {
                 ", comments=" + comments +
                 '}';*/
         return getPost_id() + " ";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(post_id);
+        parcel.writeString(nickname);
+        parcel.writeString(title);
+        parcel.writeString(category);
+        parcel.writeInt(degree_of_spicy);
+        parcel.writeString(description);
+        parcel.writeInt(views);
+        parcel.writeInt(like_count);
+        parcel.writeInt(comment_count);
+        parcel.writeString(upload_time);
     }
 }
 

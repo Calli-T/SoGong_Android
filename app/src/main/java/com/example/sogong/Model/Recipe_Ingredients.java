@@ -1,8 +1,11 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Recipe_Ingredients {
+public class Recipe_Ingredients implements Parcelable {
     @SerializedName("id")
     private int id;
     @SerializedName("name")
@@ -22,6 +25,26 @@ public class Recipe_Ingredients {
         this.post_id = post_id;
         this.amount = amount;
     }
+
+    protected Recipe_Ingredients(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        unit = in.readString();
+        post_id = in.readInt();
+        amount = in.readFloat();
+    }
+
+    public static final Creator<Recipe_Ingredients> CREATOR = new Creator<Recipe_Ingredients>() {
+        @Override
+        public Recipe_Ingredients createFromParcel(Parcel in) {
+            return new Recipe_Ingredients(in);
+        }
+
+        @Override
+        public Recipe_Ingredients[] newArray(int size) {
+            return new Recipe_Ingredients[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -72,5 +95,19 @@ public class Recipe_Ingredients {
                 ", post_id=" + post_id +
                 ", ammount=" + amount +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(unit);
+        parcel.writeInt(post_id);
+        parcel.writeFloat(amount);
     }
 }
