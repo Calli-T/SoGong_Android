@@ -23,12 +23,13 @@ import java.util.List;
 
 public class MyPageFragment extends Fragment {
     Button pwdchange_text, nicknamechange_text, logout_text;
+    ViewGroup rootview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // 프래그먼트에 버튼 두려면 return에 ViewGroup을 바로 박아버리면 안됨
-        ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
+        rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
         pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
         nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
         logout_text = (Button) rootview.findViewById(R.id.logout_text);
@@ -109,7 +110,7 @@ public class MyPageFragment extends Fragment {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
+            View layout = inflater.inflate(R.layout.custom_toast, rootview.findViewById(R.id.toast_layout));
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());

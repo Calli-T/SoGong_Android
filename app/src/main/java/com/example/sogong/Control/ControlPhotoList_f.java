@@ -8,6 +8,7 @@ import com.example.sogong.Model.PhotoList;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.PhotoFragment;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -30,12 +31,19 @@ public class ControlPhotoList_f {
         call.enqueue(new Callback<PhotoList>() {
             @Override
             public void onResponse(@NonNull Call<PhotoList> call, @NonNull Response<PhotoList> response) {
+                // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
+                PhotoFragment.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             photoList = response.body();
                             Log.d("result", photoList.toString());
+
+                            // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
+                            PhotoFragment.list = photoList.getPhotoList();
+                            PhotoFragment.totalpage = photoList.getTotal_page();
                         }
                     }
                 } else { // 500
@@ -64,6 +72,10 @@ public class ControlPhotoList_f {
                         if(response.code() == 200) {
                             photoList.setPhotoList(response.body());
                             Log.d("result", photoList.getPhotoList().toString());
+
+                            // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
+                            PhotoFragment.list = photoList.getPhotoList();
+                            PhotoFragment.responseCode = response.code();
                         }
                     }
                 } else { // 500

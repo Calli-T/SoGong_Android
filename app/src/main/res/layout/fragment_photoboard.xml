@@ -113,10 +113,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!--id를 recipe->photo로 단어 하나를 바꿔놨음-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_add_button"
+        android:id="@+id/photo_add_button"
         android:layout_margin="16dp"
         android:src="@drawable/add_photo_alternate"
         app:fabSize="normal"

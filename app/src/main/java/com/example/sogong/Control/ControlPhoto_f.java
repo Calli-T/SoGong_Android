@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.PhotoList;
 import com.example.sogong.Model.PhotoPost;
+import com.example.sogong.View.PhotoAddActivity;
+import com.example.sogong.View.PhotoFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -53,6 +55,9 @@ public class ControlPhoto_f {
         call.enqueue(new Callback<PhotoPost>() {
             @Override
             public void onResponse(@NonNull Call<PhotoPost> call, @NonNull Response<PhotoPost> response) {
+                // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
+                PhotoAddActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
