@@ -51,6 +51,7 @@ public class RecipePost_f implements Parcelable {
         this.comments = comments;
     }
 
+
     protected RecipePost_f(Parcel in) {
         post_id = in.readInt();
         nickname = in.readString();
@@ -62,6 +63,8 @@ public class RecipePost_f implements Parcelable {
         like_count = in.readInt();
         comment_count = in.readInt();
         upload_time = in.readString();
+        recipe_ingredients = in.createTypedArrayList(Recipe_Ingredients.CREATOR);
+        comments = in.createTypedArrayList(Comment.CREATOR);
     }
 
     public static final Creator<RecipePost_f> CREATOR = new Creator<RecipePost_f>() {
@@ -208,6 +211,8 @@ public class RecipePost_f implements Parcelable {
         parcel.writeInt(like_count);
         parcel.writeInt(comment_count);
         parcel.writeString(upload_time);
+        parcel.writeTypedList(recipe_ingredients);
+        parcel.writeTypedList(comments);
     }
 }
 
