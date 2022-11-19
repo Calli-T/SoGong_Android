@@ -23,6 +23,7 @@ public class ControlPhotoList_f {
     PhotoList photoList = new PhotoList();
 
     public void lookupPhotoList(int page){
+
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoList> call = sv.LookupPhotoList(page);
 
@@ -49,6 +50,7 @@ public class ControlPhotoList_f {
     }
 
     public void sortPhotoList(String sortBy, int page) {
+
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SortInfo sortInfo = new SortInfo(page, sortBy);
         Call<List<PhotoPost>> call = sv.SortPhotoList(sortInfo);

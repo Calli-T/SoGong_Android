@@ -1,7 +1,6 @@
 package com.example.sogong.View;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +8,14 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
-    private List<RecipePost> mData;
+    private List<RecipePost_f> mData;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,16 +39,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             viewcnt = itemView.findViewById(R.id.viewcount_text);
         }
 
-        void onBind(RecipePost recipePost) {
-            title.setText(recipePost.getTitle());
-            spicy.setText("X" + String.valueOf(recipePost.getDegree_of_spicy()));
-            String time = recipePost.getUpload_time();
+        void onBind(RecipePost_f recipePostF) {
+            title.setText(recipePostF.getTitle());
+            spicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
+            String time = recipePostF.getUpload_time();
             String[] time1 = time.split("T");
             date.setText(time1[0]);
-            author.setText(recipePost.getNickname());
-            likecnt.setText(String.valueOf(recipePost.getLike_count()));
-            commentcnt.setText(String.valueOf(recipePost.getComment_count()));
-            viewcnt.setText(String.valueOf(recipePost.getViews()));
+            author.setText(recipePostF.getNickname());
+            likecnt.setText(String.valueOf(recipePostF.getLike_count()));
+            commentcnt.setText(String.valueOf(recipePostF.getComment_count()));
+            viewcnt.setText(String.valueOf(recipePostF.getViews()));
         }
 
         public TextView getTitle() {
@@ -84,7 +80,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         return vh;
     }
 
-    public void setRecipeList(List<RecipePost> list) {
+    public void setRecipeList(List<RecipePost_f> list) {
         this.mData = list;
         notifyDataSetChanged();
     }

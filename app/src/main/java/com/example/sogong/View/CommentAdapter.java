@@ -1,12 +1,10 @@
 package com.example.sogong.View;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,12 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Model.Comment;
-import com.example.sogong.Model.RecipePost;
 import com.example.sogong.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 

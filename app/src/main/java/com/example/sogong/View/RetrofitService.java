@@ -2,29 +2,25 @@ package com.example.sogong.View;
 
 import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.LikeInfo;
-import com.example.sogong.Model.Ingredients;
+import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.PhotoPost;
-import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.RecipeList;
-import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.Report;
+import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
 import com.example.sogong.Model.User;
 import com.example.sogong.Model.PhotoList;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
@@ -64,6 +60,7 @@ public interface RetrofitService {
     Call<String> Logout(@Body User user);
 
     //-----------------------------------------------------------case 17 ~
+
     @GET("photoboard/{page}/")
     Call<PhotoList> LookupPhotoList(@Path("page") int page);
 
@@ -80,47 +77,53 @@ public interface RetrofitService {
     Call<List<PhotoPost>> SortPhotoList(@Body SortInfo sortInfo);
 
     @POST("likephoto/")
-    Call<Integer> UnLikePost(@Body LikeInfo likeInfo);
+    Call<Integer> UnLikePhotoPost(@Body LikeInfo likeInfo);
 
     @POST("likephoto/")
-    Call<Integer> LikePost(@Body LikeInfo likeInfo);
+    Call<Integer> LikePhotoPost(@Body LikeInfo likeInfo);
 
     @POST("reportphoto/")
-    Call<Integer> ReportPost(@Body Report reportInfo);
+    Call<Integer> ReportPhotoPost(@Body Report reportInfo);
 
-    //-----------------------------------------------------------case 23
+    //-----------------------------------------------------------case 23 ~
 
-    // 레시피 한 개 받아오는거 테스트용
-    @GET("recipe/{pid}/")
-    Call<RecipePost> test(@Path("pid") int pid);
-
-    // 레시피 한 개 받아노는거 String 테스트
-    @GET("recipe/{pid}/")
-    Call<String> testString(@Path("pid") int pid);
-
-    // 레시피 게시판 받아오는거 String 테스트
-    @GET("recipeboard/{page}/")
-    Call<String> listString(@Path("page") int page);
-
-    // 레시피 게시판 받아오는거 String 테스트
     @GET("recipeboard/{page}/")
     Call<RecipeList> LookupRecipeList(@Path("page") int page);
 
-    // 레시피 업로드
+    @GET("recipe/{postId}")
+    Call<RecipePost_f> LookupRecipe(@Path("postId") int postId);
+
     @POST("uploadrecipe/")
-    Call<String> AddRecipe(@Body RecipePost recipePost);
+    Call<RecipePost_f> AddRecipe(@Body RecipePost_f recipePostF);
 
-    // 레시피 수정
     @POST("updaterecipe/")
-    Call<String> EditRecipe(@Body RecipePost recipePost);
+    Call<RecipePost_f> EditRecipe(@Body RecipePost_f recipePostF);
 
-    // 레시피 삭젠
     @POST("deleterecipe/")
-    Call<String> DeleteRecipe(@Field("nickname") String nickname, @Field("post_id") int post_id);
+    Call<Integer> DeleteRecipe(@Body RecipePost_f targetPost);
 
-    // 레시피 id로 GET
-    @GET("recipe/{pid}")
-    Call<RecipePost> GetRecipePost(@Path("pid") int pid);
+    @POST("likerecipe/")
+    Call<Integer> LikeRecipePost(@Body LikeInfo likeInfo);
+
+    @POST("likerecipe/")
+    Call<Integer> UnLikeRecipePost(@Body LikeInfo likeInfo);
+
+    @POST("queryrecipe/")
+    Call<RecipeList> SearchRecipeList(@Body SearchInfo searchInfo);
+
+    @POST("sortrecipe/")
+    Call<List<RecipePost_f>> SortRecipeList(@Body SortInfo sortInfo);
+
+    @POST("reportrecipe/")
+    Call<Integer> ReportRecipePost(@Body Report reportInfo);
+
+    @GET("unexistingredients/{nickname}/{post_id}/")
+    Call<List<Recipe_Ingredients>> LookupUnExistIngredients(@Path("nickname") String nickname, @Path("post_id") int post_id);
+
+    @GET("decreaseamount/{nickname}/{post_id}/")
+    Call<Integer> RemainAmmounts(@Path("nickname") String nickname, @Path("post_id") int post_id);
+
+    //------------------------------------------------------------case 33 ~
 
     /*
     {
@@ -138,7 +141,7 @@ public interface RetrofitService {
     //Call<String>
     //사용자 보유 재료 조회
     @GET("/inquiryrefrigerator/{nickname}/")
-    Call<Ingredients> LookupIngredientsList(@Path("nickname") String nickname);
+    Call<Recipe_Ingredients> LookupIngredientsList(@Path("nickname") String nickname);
 
 }
 /*

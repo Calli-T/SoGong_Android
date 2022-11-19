@@ -21,7 +21,9 @@ public class ControlLike_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         LikeInfo likeInfo = new LikeInfo(0, nickname, postType, postId, "등록");
-        Call<Integer> call = sv.LikePost(likeInfo);
+        Call<Integer> call;
+        if(likeInfo.getPostType() == 1) call = sv.LikeRecipePost(likeInfo);
+        else call = sv.LikePhotoPost(likeInfo);
 
         call.enqueue(new Callback<Integer>() {
             @Override
@@ -47,7 +49,9 @@ public class ControlLike_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         LikeInfo likeInfo = new LikeInfo(0, nickname, postType, postId, "취소");
-        Call<Integer> call = sv.UnLikePost(likeInfo);
+        Call<Integer> call;
+        if(likeInfo.getPostType() == 1) call = sv.UnLikeRecipePost(likeInfo);
+        else call = sv.UnLikePhotoPost(likeInfo);
 
         call.enqueue(new Callback<Integer>() {
             @Override

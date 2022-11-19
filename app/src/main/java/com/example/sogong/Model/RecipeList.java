@@ -1,24 +1,20 @@
 package com.example.sogong.Model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class RecipeList {
     @SerializedName("recipeList")
-    @Expose
-    private List<RecipePost> recipeList;
-
+    private List<RecipePost_f> recipeList;
     @SerializedName("total_page")
-    @Expose
     private int total_page;
 
-    public List<RecipePost> getRecipeList() {
+    public List<RecipePost_f> getRecipeList() {
         return recipeList;
     }
 
-    public void setRecipeList(List<RecipePost> recipeList) {
+    public void setRecipeList(List<RecipePost_f> recipeList) {
         this.recipeList = recipeList;
     }
 
@@ -29,38 +25,13 @@ public class RecipeList {
     public void setTotal_page(int total_page) {
         this.total_page = total_page;
     }
+
+    @Override
+    public String toString() {
+        String msg = "";
+        for(int i=0; i<getRecipeList().size(); i++) {
+            msg += (getRecipeList().get(i).toString() + "\n");
+        }
+        return msg;
+    }
 }
-
-
-//public class RecipeList
-//{
-//    private RecipeList[] recipeList;
-//
-//    private String total_page;
-//
-//    public RecipeList[] getRecipeList ()
-//    {
-//        return recipeList;
-//    }
-//
-//    public void setRecipeList (RecipeList[] recipeList)
-//    {
-//        this.recipeList = recipeList;
-//    }
-//
-//    public String getTotal_page ()
-//    {
-//        return total_page;
-//    }
-//
-//    public void setTotal_page (String total_page)
-//    {
-//        this.total_page = total_page;
-//    }
-//
-//    @Override
-//    public String toString()
-//    {
-//        return "ClassPojo [recipeList = "+recipeList+", total_page = "+total_page+"]";
-//    }
-//}

@@ -6,19 +6,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,13 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLogin_f;
-import com.example.sogong.Control.ControlRecipeList_f;
-import com.example.sogong.Control.ControlRecipe_f;
-import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.R;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RecipeLookupActivity extends AppCompatActivity {
@@ -51,7 +43,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public RecyclerView recipeIngreRecyclerView;
 
     public static int responseCode;
-    public static RecipePost recipePost;
+    public static RecipePost_f recipePostF;
 
     PopupMenu dropDownMenu;
     Menu menu;
@@ -59,8 +51,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RecipePost recipePost = getIntent().getParcelableExtra("recipe_post");
-        Log.d("recipe", recipePost.toString());
+        RecipePost_f recipePostF = getIntent().getParcelableExtra("recipe_post");
+        Log.d("recipe", recipePostF.toString());
         setContentView(R.layout.activity_lookuprecipe);
         recipetitle = findViewById(R.id.recipetitle_text1);
         recipecategory = findViewById(R.id.recipecate_text1);
@@ -74,7 +66,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         menubutton = findViewById(R.id.menu_button);
         dropDownMenu = new PopupMenu(this, menubutton);
         menu = dropDownMenu.getMenu();
-        if (ControlLogin_f.userinfo.getNickname().equals(recipePost.getNickname())) {
+        if (ControlLogin_f.userinfo.getNickname().equals(recipePostF.getNickname())) {
             menu.add(0, 0, 0, "삭제하기");
             menu.add(0, 1, 0, "수정하기");
         } else {
@@ -130,13 +122,13 @@ public class RecipeLookupActivity extends AppCompatActivity {
         recipeIngreRecyclerView.setLayoutManager(recipe_ingre_layoutManager);
 
         //넘겨온 값으로 채워넣음
-        recipetitle.setText(recipePost.getTitle());
-        recipecategory.setText(recipePost.getCategory());
-        recipespicy.setText("X" + String.valueOf(recipePost.getDegree_of_spicy()));
-        recipedescription.setText(recipePost.getDescription());
-        recipecomment.setText("댓글 " + String.valueOf(recipePost.getComment_count() + "개"));
-        commentAdapter.setCommentList(recipePost.getComments());
-        recipeIngreAdapter.setRecipeIngreList(recipePost.getRecipe_Ingredients());
+        recipetitle.setText(recipePostF.getTitle());
+        recipecategory.setText(recipePostF.getCategory());
+        recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
+        recipedescription.setText(recipePostF.getDescription());
+        recipecomment.setText("댓글 " + String.valueOf(recipePostF.getComment_count() + "개"));
+        commentAdapter.setCommentList(recipePostF.getComments());
+        recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
         Log.d("recipe", String.valueOf(recipeIngreAdapter.getItemCount()));
 
         //댓글리스트에 있는 버튼들의 클릭 이벤트 처리
