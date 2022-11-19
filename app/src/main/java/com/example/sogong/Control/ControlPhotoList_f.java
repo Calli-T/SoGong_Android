@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.sogong.Model.PhotoList;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipeList;
+import com.example.sogong.Model.SortInfo;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -18,7 +19,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlPhotoList_f {
-    List<PhotoPost> photoList;
+
+    PhotoList photoList = new PhotoList();
+
     public void lookupPhotoList(int page){
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoList> call = sv.LookupPhotoList(page);
@@ -30,23 +33,47 @@ public class ControlPhotoList_f {
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
-                            Log.d("result", response.body().toString());
+                            photoList = response.body();
+                            Log.d("result", photoList.toString());
                         }
-                    } else { // 500
-                        Log.d("result", "디비 오류");
                     }
-                } else { // 502
-                    Log.d("result", "알 수 없는 오류");
+                } else { // 500
+                    Log.d("result", "디비 오류");
                 }
             }
-
             @Override
-            public void onFailure(@NonNull Call<PhotoList> call, @NonNull Throwable t) {
-                //Log.e(TAG, t.getLocalizedMessage());
-                Log.d("result", t.getMessage());
+            public void onFailure(@NonNull Call<PhotoList> call, @NonNull Throwable t) { // 502
+                Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void sortPhotoList(String sortBy, int page){}
+
+    public void sortPhotoList(String sortBy, int page) {
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        SortInfo sortInfo = new SortInfo(page, sortBy);
+        Call<List<PhotoPost>> call = sv.SortPhotoList(sortInfo);
+
+        call.enqueue(new Callback<List<PhotoPost>>() {
+            @Override
+            public void onResponse(Call<List<PhotoPost>> call, Response<List<PhotoPost>> response) {
+                // 200
+                if(response.isSuccessful()) {
+                    if(response.body() != null) {
+                        if(response.code() == 200) {
+                            photoList.setPhotoList(response.body());
+                            Log.d("result", photoList.getPhotoList().toString());
+                        }
+                    }
+                } else { // 500
+                    Log.d("result", "디비 오류");
+                }
+            }
+            @Override
+            public void onFailure(Call<List<PhotoPost>> call, Throwable t) { // 502
+                Log.d("result", "알 수 없는 오류");
+            }
+        });
+    }
+
     public void showList(List<PhotoPost> photoList){}
 }

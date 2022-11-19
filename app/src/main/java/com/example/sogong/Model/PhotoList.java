@@ -1,9 +1,13 @@
 package com.example.sogong.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class PhotoList {
+    @SerializedName("photoList")
     private List<PhotoPost> photoList;
+    @SerializedName("total_page")
     private int total_page;
 
     public List<PhotoPost> getPhotoList() {

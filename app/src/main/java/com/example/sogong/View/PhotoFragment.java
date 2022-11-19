@@ -7,14 +7,20 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlPhotoList_f;
 import com.example.sogong.Control.ControlPhoto_f;
+import com.example.sogong.Control.ControlReport_f;
 import com.example.sogong.Model.PhotoPost;
+import com.example.sogong.Model.Report;
+import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 
 public class PhotoFragment extends Fragment {
     ControlPhotoList_f cplf = new ControlPhotoList_f();
     ControlPhoto_f cpf = new ControlPhoto_f();
+    ControlLike_f clf = new ControlLike_f();
+    ControlReport_f crf = new ControlReport_f();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -30,8 +36,21 @@ public class PhotoFragment extends Fragment {
         //cpf.addPhoto(newPhoto);
 
         /* #19 요리 사진 게시글 삭제 */
-        //PhotoPost targetPhoto = new PhotoPost("test", 9, "test_link", 0, null);
-        //cpf.deletePhoto(targetPhoto.getAuthor(), targetPhoto.getPost_id());
+        //cpf.deletePhoto("test", 9);
+
+        /* #20 요리 사진 게시글 정렬 */
+        //cplf.sortPhotoList("좋아요 순", 1);
+
+        /* #21 요리 사진 게시글 "좋아요" 취소 */
+        //clf.unLikePost("test", -1, 1);
+
+        /* #21 요리 사진 게시글 "좋아요" 등록 */
+        //clf.likePost("test", -1, 1);
+
+        /* #22 요리 사진 게시글 신고 */
+        //Report reportInfo = new Report("test", "android test3", 1, 2);
+        //crf.reportPost(reportInfo);
+
         return view;
     }
 }

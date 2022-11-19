@@ -7,6 +7,8 @@ import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost;
+import com.example.sogong.Model.Report;
+import com.example.sogong.Model.SortInfo;
 import com.example.sogong.Model.User;
 import com.example.sogong.Model.PhotoList;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
@@ -73,6 +75,18 @@ public interface RetrofitService {
 
     @HTTP(method = "DELETE", path = "https://recippe-sg.herokuapp.com/deletephoto/", hasBody = true)
     Call<Integer> DeletePhoto(@Body PhotoPost deletePhoto);
+
+    @POST("sortphoto/")
+    Call<List<PhotoPost>> SortPhotoList(@Body SortInfo sortInfo);
+
+    @POST("likephoto/")
+    Call<Integer> UnLikePost(@Body LikeInfo likeInfo);
+
+    @POST("likephoto/")
+    Call<Integer> LikePost(@Body LikeInfo likeInfo);
+
+    @POST("reportphoto/")
+    Call<Integer> ReportPost(@Body Report reportInfo);
 
     //-----------------------------------------------------------case 23
 

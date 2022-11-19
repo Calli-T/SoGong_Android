@@ -14,6 +14,15 @@ public class LikeInfo {
     @SerializedName("task")
     private String task;
 
+    public LikeInfo() {}
+    public LikeInfo(int like_id, String nickname, int postType, int postId, String task) {
+        this.like_id = like_id;
+        this.nickname = nickname;
+        this.postType = postType;
+        this.postId = postId;
+        this.task = task;
+    }
+
     public int getLike_id() {
         return like_id;
     }
