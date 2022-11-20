@@ -17,11 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlIngredients_f;
 import com.example.sogong.Control.ControlLike_f;
+import com.example.sogong.Control.ControlMailList_f;
+import com.example.sogong.Control.ControlMail_f;
 import com.example.sogong.Control.ControlRecipeList_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Control.ControlReport_f;
+import com.example.sogong.Model.Comment;
+import com.example.sogong.Model.Mail;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.Report;
@@ -43,13 +48,14 @@ public class RecipeFragment extends Fragment {
     public RecipeAdapter recipeAdapter;
     public RecyclerView recipeRecyclerView;
 
-    /*
     ControlRecipeList_f crlf = new ControlRecipeList_f();
     ControlRecipe_f crf = new ControlRecipe_f();
     ControlLike_f clf = new ControlLike_f();
     ControlReport_f cref = new ControlReport_f();
     ControlIngredients_f cif = new ControlIngredients_f();
-    */
+    ControlComment_f ccf = new ControlComment_f();
+    ControlMailList_f cmlf = new ControlMailList_f();
+    ControlMail_f cmf = new ControlMail_f();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -185,6 +191,34 @@ public class RecipeFragment extends Fragment {
 
         /* #32 남은 재료 계산하기 */
         //cif.remainAmmounts("test", 19);
+
+        /* #33 레시피 게시판 댓글 작성 */
+        //Comment comment = new Comment(0, "test", 28, "android test", "");
+        //ccf.writeComment(comment);
+
+        /* #34 레시피 게시판 댓글 수정 */
+        //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
+        //ccf.editComment(comment);
+
+        /* #35 레시피 게시판 댓글 삭제 */
+        //ccf.deleteComment("test", 8);
+
+        /* #36 레시피 게시판 댓글 신고 */
+        //Report reportInfo = new Report("test", "android comment report test", 28, -1);
+        //cref.reportComment(reportInfo);
+
+        /* 추가) 쪽지함 열람 */
+        //cmlf.lookupMailList(1, "test");
+
+        /* #37 쪽지 열람 */
+        //cmf.lookupMail(3);
+
+        /* #38 쪽지 보내기 */
+        //Mail mail = new Mail(0, "test", "test2", "android test", "android test", "", false, false);
+        //cmf.sendMail(mail);
+
+        /* #39 쪽지 삭제하기 */
+        //cmf.deleteMail("test", 13);
         return view;
     }
 

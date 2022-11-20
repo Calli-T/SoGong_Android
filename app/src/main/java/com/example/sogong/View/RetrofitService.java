@@ -1,11 +1,15 @@
 package com.example.sogong.View;
 
 import com.example.sogong.Model.AuthInfo;
+import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.LikeInfo;
+import com.example.sogong.Model.Mail;
+import com.example.sogong.Model.MailList;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost_f;
+import com.example.sogong.Model.Refrigerator;
 import com.example.sogong.Model.Report;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
@@ -13,6 +17,7 @@ import com.example.sogong.Model.User;
 import com.example.sogong.Model.PhotoList;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -35,6 +40,9 @@ public interface RetrofitService {
             @Field("auto_login") boolean auto_login
     );
     */
+
+    //-----------------------------------------------------------case 1 ~
+
     @POST("signup/{post}")
     Call<User> setSignUp(@Body User user);
 
@@ -58,6 +66,41 @@ public interface RetrofitService {
 
     @POST("logout/")
     Call<String> Logout(@Body User user);
+
+    //-----------------------------------------------------------case 6 ~
+
+    @GET("inquiryrefrigerator/{nickname}/")
+    Call<List<Refrigerator>> LookupRefrigerator(@Path("nickname") String nickname);
+
+    @POST("addrefrigerator/")
+    Call<Integer> AddRefrigerator(@Body Refrigerator ingredients);
+
+    @POST("deleterefrigerator/")
+    Call<Integer> DeleteRefrigerator(@Body Map<String, Integer> deleteInfo);
+
+    @POST("updaterefrigerator/")
+    Call<Integer> EditRefrigerator(@Body Refrigerator ingerdient);
+
+    @GET("inquirymyphotoposts/{nickname}/")
+    Call<List<PhotoPost>> LookupMyPhotoList(@Path("nickname") String nickname);
+
+    @GET("inquirymyrecipeposts/{nickname}/")
+    Call<List<RecipePost_f>> LookupMyRecipeList(@Path("nickname") String nickname);
+
+    @POST("querymyrecipeposts/")
+    Call<List<RecipePost_f>> SearchMyRecipeList(@Body SearchInfo searchInfo);
+
+    @POST("arrangemyrecipeposts/")
+    Call<List<RecipePost_f>> SortMyRecipeList(@Body SortInfo sortInfo);
+
+    @GET("inquirymylikeposts/{nickname}/{postType}/")
+    Call<List<RecipePost_f>> LookupMyRecipeLikeList(@Path("nickname") String nickname, @Path("postType") int postType);
+
+    @GET("inquirymylikeposts/{nickname}/{postType}/")
+    Call<List<PhotoPost>> LookupMyPhotoLikeList(@Path("nickname") String nickname, @Path("postType") int postType);
+
+    @GET("inquirymycommentposts/{nickname}/")
+    Call<List<RecipePost_f>> LookupMyCommentList(@Path("nickname") String nickname);
 
     //-----------------------------------------------------------case 17 ~
 
@@ -124,6 +167,34 @@ public interface RetrofitService {
     Call<Integer> RemainAmmounts(@Path("nickname") String nickname, @Path("post_id") int post_id);
 
     //------------------------------------------------------------case 33 ~
+
+    @POST("addcomment/")
+    Call<Integer> WriteComment(@Body Comment comment);
+
+    @POST("updatecomment/")
+    Call<Integer> EditComment(@Body Comment comment);
+
+    @POST("deletecomment/")
+    Call<Integer> DeleteComment(@Body Comment comment);
+
+    @POST("reportcomment/")
+    Call<Integer> ReportComment(@Body Report reportInfo);
+
+    //------------------------------------------------------------case 37 ~
+
+    @GET("inquiremaillist/{nickname}/{page}/")
+    Call<MailList> LookupMailList(@Path("nickname") String nickname, @Path("page") int page);
+
+    @GET("inquiremail/{mail_id}/")
+    Call<Mail> LookupMail(@Path("mail_id") int mail_id);
+
+    @POST("insertmail/")
+    Call<Mail> SendMail(@Body Mail mail);
+
+    @POST("deletemail/")
+    Call<Integer> DeleteMail(@Body Mail mail);
+
+    //-----------------------------------------------------------finish
 
     /*
     {

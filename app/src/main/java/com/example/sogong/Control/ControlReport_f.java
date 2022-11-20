@@ -39,6 +39,30 @@ public class ControlReport_f {
             }
         });
     }
-    public void reportComment(Report reportInfo){}
+    public void reportComment(Report reportInfo){
+
+        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
+        Call<Integer> call = sv.ReportComment(reportInfo);
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                // 200
+                if(response.isSuccessful()) {
+                    if(response.body() != null) {
+                        if(response.code() == 200) {
+                            Log.d("result", ""+response.body());
+                        }
+                    }
+                } else { // 404
+                    Log.d("result", "디비 오류");
+                }
+            }
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) { // 500
+                Log.d("result", "알 수 없는 오류");
+            }
+        });
+    }
 
 }
