@@ -56,7 +56,8 @@ public class RecipeAddActivity extends AppCompatActivity {
     HashMap<String, String> unitmap = new HashMap<>();//재료에 맞는 단위를 위한 map
 
 
-    RecipePost_f newRecipe = new RecipePost_f();//추가될 레시피게시글의 정보를 담을 객체
+    public static int responseCode;
+    public static RecipePost_f newRecipe = new RecipePost_f();//추가될 레시피게시글의 정보를 담을 객체
 
     List<Recipe_Ingredients> recipe_ingredients = new ArrayList<>();//레시피 재료를 담을 객체
 

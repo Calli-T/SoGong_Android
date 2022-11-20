@@ -57,11 +57,12 @@ public class RecipeFragment extends Fragment {
     ControlMailList_f cmlf = new ControlMailList_f();
     ControlMail_f cmf = new ControlMail_f();
 
+    private View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
-
-
+        view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
+        
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
 
         recipeAdapter = new RecipeAdapter();
@@ -77,7 +78,8 @@ public class RecipeFragment extends Fragment {
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
 
-        // t.start까지 코드는 시작하자마자 불러오는 레시피 리스트
+
+        // 추가) 레시피 게시판 조회 호출 코드
         threadFlag = true;
 
         final Runnable runnable = new Runnable() {
@@ -142,7 +144,365 @@ public class RecipeFragment extends Fragment {
         t.start();
 
 
-        /* 추가) 레시피 세기판 조회 */
+
+        // #23 레시피 게시글 열람 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    plu.startToast(RecipeLookupActivity.recipePostF.toString());
+                    responseCode = -1;
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.lookupRecipe(2);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #24 레시피 게시글 등록 호출 코드
+        /*
+        Recipe_Ingredients recipe_ingredients = new Recipe_Ingredients(0, "asparagus", "g", 0, 200); // 레시피의 식재료 추가
+        List<Recipe_Ingredients> recipe_ingredientsList = new ArrayList<Recipe_Ingredients>(); // newRecipe 의 매개변수로
+        recipe_ingredientsList.add(recipe_ingredients); // 위에서 추가한 식재료들 리스트에 추가
+        RecipePost_f newRecipe = new RecipePost_f(0, "test", "Heartaches", "test99", 3, "Heartaches", 0, 0, 0, "", recipe_ingredientsList, null);
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeAddActivity.responseCode == 200) {
+                    plu.startToast(RecipeAddActivity.newRecipe.toString());
+                    RecipeAddActivity.responseCode = -1;
+                } else if (RecipeAddActivity.responseCode == 500) {
+                } else if (responseCode == 502) {
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.addRecipe(newRecipe);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #25 레시피 게시글 수정 호출 코드
+        // 이거 가져온걸 '그대로' 쓰던지, 아니면 테스트용으로 쓸거면 완벽하게 똑같이 만드시오
+        // 이거 약간 버그있음, 레시피 재료 번호 옮기기 가능함
+        /*
+        Recipe_Ingredients recipe_ingredients = new Recipe_Ingredients(33, "asparagus", "g", 42, 200); // 레시피의 식재료 추가
+        List<Recipe_Ingredients> recipe_ingredientsList = new ArrayList<Recipe_Ingredients>(); // newRecipe 의 매개변수로
+        recipe_ingredientsList.add(recipe_ingredients); // 위에서 추가한 식재료들 리스트에 추가
+        RecipePost_f editRecipe = new RecipePost_f(41, "test", "Heartaches", "test99", 3, "I can't believe it's just a burning memory", 0, 0, 0, "2022-11-21T02:34:18.212072+09:00", recipe_ingredientsList, null);
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeAddActivity.responseCode == 200) {
+                    plu.startToast(RecipeAddActivity.newRecipe.toString());
+                    RecipeAddActivity.responseCode = -1;
+                } else if (RecipeAddActivity.responseCode == 500) {
+                } else if (responseCode == 502) {
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.editRecipe(editRecipe);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #26 레시피 게시글 삭제 호출 코드
+        // Lookup 액티비티 보면서 삭제할거라 거기 responseCode씀
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    plu.startToast("삭제완료");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.deleteRecipe("test", 44);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #27 레시피 게시글 "좋아요" 등록/취소 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    plu.startToast("좋아요");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlLike_f clf = new ControlLike_f();
+        clf.unLikePost("test", 1, 42); //실전에서 쓸 때는 userInfo에서 닉하고 가져오셈
+        clf.likePost("test", 1, 42); // 좋아요/취소는 알아서 골라쓰셈
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #28 레시피 게시글 검색 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeFragment.responseCode == 200) {
+                    plu.startToast(RecipeFragment.recipelist.get(0).toString());
+                    RecipeFragment.responseCode = -1;
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipeList_f crlf = new ControlRecipeList_f();
+        crlf.searchRecipeList("타이핑", "", "작성자", "test2", 1);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #29 레시피 게시글 정렬 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeFragment.responseCode == 200) {
+                    plu.startToast(RecipeFragment.recipelist.get(0).toString());
+                    RecipeFragment.responseCode = -1;
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipeList_f crlf = new ControlRecipeList_f();
+        crlf.sortRecipeList("좋아요 순", 1);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #30 레시피 게시글 신고 & #36 레시피 게시글 신고 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    plu.startToast(RecipeLookupActivity.responseCode+"");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        // 댓글 신고는 양식을 -1로, 댓글 id에 맞추고, 함수를 reportComment로 쓰기만 하면 끝!
+        ControlReport_f cref = new ControlReport_f();
+        Report reportInfo_recipe = new Report("test", "What does it matter how my heart breaks", 42, 1);
+        //Report reportInfo_comment = new Report("test", "But my heart aches for you", 37, -1);
+        cref.reportPost(reportInfo_recipe);
+        //cref.reportComment(reportInfo_comment);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        /* 추가) 레시피 게시판 조회 */
         //crlf.lookupRecipeList(1);
 
         /* #23 레시피 게시글 열람 */
@@ -242,7 +602,7 @@ public class RecipeFragment extends Fragment {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
+            View layout = inflater.inflate(R.layout.custom_toast, view.findViewById(R.id.toast_layout));
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());
@@ -265,3 +625,53 @@ public class RecipeFragment extends Fragment {
     }
 
 }
+
+// 0단계: 주석 보고 주석 써놓기
+
+// 1단계
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    rlu.startToast();
+                } else if(responseCode == 500){
+                    
+                }else if(responseCode == 502){
+                    
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.lookupRecipe(2);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
+
+// 2단계: 컨트롤에서 static 건드리기
+
+// 3단계: 테스트
+
+// 4단계: 원래 있어야할 장소에 코드 냅두기

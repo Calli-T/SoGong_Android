@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost_f;
+import com.example.sogong.View.PhotoFragment;
+import com.example.sogong.View.RecipeAddActivity;
 import com.example.sogong.View.RecipeLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -58,12 +60,15 @@ public class ControlRecipe_f {
         call.enqueue(new Callback<RecipePost_f>() {
             @Override
             public void onResponse(@NonNull Call<RecipePost_f> call, @NonNull Response<RecipePost_f> response) {
+                RecipeAddActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
                             recipePostF = response.body();
                             Log.d("result", recipePostF.toString());
+                            RecipeAddActivity.newRecipe = response.body();
                         }
                     }
                 } else { // 500
@@ -86,11 +91,14 @@ public class ControlRecipe_f {
             @Override
             public void onResponse(@NonNull Call<RecipePost_f> call, @NonNull Response<RecipePost_f> response) {
                 // 200
+                RecipeAddActivity.responseCode = response.code();
+
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
                             recipePostF = response.body();
                             Log.d("result", recipePostF.toString());
+                            RecipeAddActivity.newRecipe = response.body();
                         }
                     }
                 } else { // 500
@@ -115,6 +123,8 @@ public class ControlRecipe_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RecipeLookupActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
