@@ -26,7 +26,6 @@ import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.RecipePost_f;
-import com.example.sogong.Model.Report;
 import com.example.sogong.R;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     ImageButton menubutton;
     ImageButton like_btn;
     Button comment_add_btn;
-    EditText writtencomment;
+    EditText comment_edit;
 
     public Recipe_Ingre_Adapter recipeIngreAdapter;
     public RecyclerView recipeIngreRecyclerView;
@@ -66,7 +65,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         recipedescription = findViewById(R.id.recipedescription_text);
         recipecomment = findViewById(R.id.commentcount_text);
         like_btn = findViewById(R.id.like_btn);
-        writtencomment = findViewById(R.id.comment_edit);
+        comment_edit = findViewById(R.id.comment_edit);
         comment_add_btn = findViewById(R.id.comment_add_btn);
 
         //사용자에 따른 옵션 메뉴 로직 시작
@@ -101,8 +100,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         //신고하기 로직 추가
                         Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent.putExtra("recipe_id",recipePostF.getPost_id());
-                        intent.putExtra("report_post_type",1);
+                        intent.putExtra("recipe_id", recipePostF.getPost_id());
+                        intent.putExtra("report_post_type", 1);
                         startActivity(intent);
                         Log.d("recipe", "신고하기 menu click");
                         return true;
@@ -149,6 +148,19 @@ public class RecipeLookupActivity extends AppCompatActivity {
             @Override
             public void onItemLeftButtonClick(View view, int position) {
                 Log.d("recipe", String.valueOf(position) + "left button click");
+                comment_edit.setText(recipePostF.getComments().get(position).getComments());
+                comment_add_btn.setText("수정");
+                comment_add_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Comment comment = new Comment(recipePostF.getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                        comment_add_btn.setText("등록");
+                        comment_edit.setText("");
+                        /* #34 레시피 게시판 댓글 수정 */
+                        //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
+                        //ccf.editComment(comment);
+                    }
+                });
                 /* #34 레시피 게시판 댓글 수정 */
                 //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
                 //ccf.editComment(comment);
@@ -162,11 +174,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 //로그인한 사용자와 댓글을 단 사용자와 같은 경우는 삭제 로직
                 if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getNickname())) {
                     ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getComment_id());
-                }else {//같지 않은 경우는 신고 로직
+                } else {//같지 않은 경우는 신고 로직
                     Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra("comment_id",recipePostF.getComments().get(position).getComment_id());
-                    intent.putExtra("report_post_type",-1);
+                    intent.putExtra("comment_id", recipePostF.getComments().get(position).getComment_id());
+                    intent.putExtra("report_post_type", -1);
                     startActivity(intent);
 
                 }
@@ -183,7 +195,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //좋아요 관련 로직 추가
 
-                //게시글 아이디로 좋아요 판단 여부가 있으면 좋겠습니다.ㅅ
+                //게시글 아이디로 좋아요 판단 여부가 있으면 좋겠습니다.
                 /* #27 레시피 게시글 "좋아요" 등록 */
                 //clf.likePost("test", 1, 28);
 
@@ -198,7 +210,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 //댓글 등록 관련 로직 추가
                 //새로고침필수
                 /* #33 레시피 게시판 댓글 작성 */
-                Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), writtencomment.getText().toString(), "");
+                Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                comment_edit.setText("");
                 //ccf.writeComment(comment);
             }
         });
