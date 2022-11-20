@@ -105,7 +105,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/ingreamount_text"
+                android:id="@+id/recipecate_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -118,12 +118,13 @@
 
             <Spinner
                 android:id="@+id/recipecate_spinner"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/blue"
                 android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/recipecate_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipetitle_text1" />
 
@@ -135,75 +136,95 @@
                 android:text="매운맛 단계"
                 android:textColor="@color/blue"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@id/recipespicy_text1"
+                app:layout_constraintBottom_toBottomOf="@id/recipespicy_spinner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/recipespicy_text1" />
+                app:layout_constraintTop_toTopOf="@id/recipespicy_spinner" />
 
             <Spinner
-                android:id="@+id/recipespicy_text1"
-                android:layout_width="wrap_content"
+                android:id="@+id/recipespicy_spinner"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/blue"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/recipespicy_text"
                 app:layout_constraintTop_toBottomOf="@+id/recipecate_spinner" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ingreinfo"
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/ingreinfo"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/recipespicy_text">-->
+
+
+            <Button
+                android:id="@+id/ingreadd_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="재료추가"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipespicy_spinner" />
+
+            <LinearLayout
+                android:id="@+id/ingre_linear"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipespicy_text">
+                app:layout_constraintTop_toBottomOf="@id/ingreadd_btn">
 
-                <TextView
-                    android:id="@+id/recipeingre_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="재료 및 양"
-                    android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <TextView-->
+<!--                    android:id="@+id/recipeingre_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:text="재료"-->
+<!--                    android:textColor="@color/blue"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />-->
 
-                <Button
-                    android:id="@+id/ingreadd_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="재료추가"
-                    android:textColor="@color/blue"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <Spinner-->
+<!--                    android:id="@+id/recipeingre_spinner"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:textColor="@color/blue"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/recipeamount_text"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/recipeingre_text"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />-->
 
+<!--                <TextView-->
+<!--                    android:id="@+id/recipeamount_text"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:text="양"-->
+<!--                    android:textColor="@color/blue"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/recipeamount_spinner"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/recipeingre_spinner"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />-->
 
-                <Spinner
-                    android:id="@+id/recipeingre_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toStartOf="@id/recipeamount_spinner"
-                    app:layout_constraintStart_toEndOf="@id/recipeingre_text"
-                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />
+<!--                <Spinner-->
+<!--                    android:id="@+id/recipeamount_spinner"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:textColor="@color/blue"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />-->
+            </LinearLayout>
 
-                <Spinner
-                    android:id="@+id/recipeamount_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingreadd_btn" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
             <View
@@ -211,7 +232,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#000000"
-                app:layout_constraintTop_toBottomOf="@id/ingreinfo" />
+                app:layout_constraintTop_toBottomOf="@id/ingre_linear" />
 
             <EditText
                 android:id="@+id/recipedescription_edit"
@@ -219,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:hint="레시피 설명"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ingreinfo"
+                app:layout_constraintTop_toBottomOf="@id/ingre_linear"
                 app:layout_constraintVertical_bias="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

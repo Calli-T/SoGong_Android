@@ -177,7 +177,7 @@ public class RecipePost_f implements Parcelable {
 
     @Override
     public String toString() {
-        /*return "RecipePost{" +
+        return "RecipePost{" +
                 "post_id=" + post_id +
                 ", nickname='" + nickname + '\'' +
                 ", title='" + title + '\'' +
@@ -190,8 +190,8 @@ public class RecipePost_f implements Parcelable {
                 ", upload_time='" + upload_time + '\'' +
                 ", Recipe_Ingredients=" + recipe_ingredients +
                 ", comments=" + comments +
-                '}';*/
-        return getPost_id() + " ";
+                '}';
+        //return getPost_id() + " ";
     }
 
     @Override

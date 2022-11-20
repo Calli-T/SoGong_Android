@@ -98,6 +98,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 return false;
             }
         });
+        //메뉴버튼 클릭 리스너
         menubutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +160,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 //새로고침필수
             }
         });
+
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
 //        final Runnable runnable = new Runnable() {
 //            @Override

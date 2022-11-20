@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.Report;
 import com.example.sogong.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +37,7 @@ public class RecipeFragment extends Fragment {
 
     String[] pagenum;
     public static int totalpage;
-    public static List<RecipePost_f> recipelist = null;
+    public static List<RecipePost_f> recipelist;
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     public RecipeAdapter recipeAdapter;
@@ -62,7 +64,8 @@ public class RecipeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recipeRecyclerView.setLayoutManager(layoutManager);
 
-
+        FloatingActionButton fab = view.findViewById(R.id.recipe_add_button);
+        fab.setOnClickListener(new FABClickListener());
         responseCode = 0;
 
         // UI controller
@@ -97,6 +100,7 @@ public class RecipeFragment extends Fragment {
                             //+조회수 관련 로직 추가할 것
                         }
                     });
+                    Log.d("recipefragment",recipelist.get(0).toString());
 
                 } else if(responseCode == 500){
                     rlu.startDialog(0,"서버 오류","서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
@@ -188,6 +192,16 @@ public class RecipeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         threadFlag = false;
+    }
+
+    class FABClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            // FAB Click 이벤트 처리 구간
+            Intent intent = new Intent(getActivity(), RecipeAddActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        }
     }
 
     class RecipeList_UI implements Control {
