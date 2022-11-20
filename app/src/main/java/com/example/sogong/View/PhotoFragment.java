@@ -18,9 +18,13 @@ import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlPhotoList_f;
 import com.example.sogong.Control.ControlPhoto_f;
+import com.example.sogong.Control.ControlRecipeList_f;
+import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Control.ControlReport_f;
 import com.example.sogong.Model.PhotoList;
 import com.example.sogong.Model.PhotoPost;
+import com.example.sogong.Model.RecipePost_f;
+import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.Report;
 import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
@@ -86,49 +90,51 @@ public class PhotoFragment extends Fragment {
 
         threadFlag = true;
 
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (responseCode == 200) {
-                    responseCode = -1;
 
-                    if (list != null)
-                        plu.startToast(list.toString());
 
-                    // UI 코드 작성해주세요
-
-                } else if (responseCode == 500) {
-                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                } else if (responseCode == 502) {
-                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (threadFlag)
-                        getActivity().runOnUiThread(runnable);
-                    else {
-                        i = 30;
-                    }
-                }
-            }
-        }
-
-        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
+//        final Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                if (responseCode == 200) {
+//                    responseCode = -1;
+//
+//                    if (list != null)
+//                        plu.startToast(list.toString());
+//
+//                    // UI 코드 작성해주세요
+//
+//                } else if (responseCode == 500) {
+//                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+//                } else if (responseCode == 502) {
+//                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+//                }
+//            }
+//        };
+//
+//        class NewRunnable implements Runnable {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 30; i++) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    if (threadFlag)
+//                        getActivity().runOnUiThread(runnable);
+//                    else {
+//                        i = 30;
+//                    }
+//                }
+//            }
+//        }
+//
+//        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
+//
+//        NewRunnable nr = new NewRunnable();
+//        Thread t = new Thread(nr);
+//        t.start();
 
         // #20 요리 사진 게시글 정렬
         // 임시로 플로팅 버튼에다가 걸어 테스트해놨습니다. 나중에 스피너에 대체해서 걸어주세요
