@@ -153,7 +153,7 @@
         app:layout_constraintTop_toBottomOf="@+id/sub_line2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/recipe_add_button"
+        android:id="@+id/mail_send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -79,7 +79,6 @@ public class RecipeFragment extends Fragment {
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
 
-
         // 추가) 레시피 게시판 조회 호출 코드
         threadFlag = true;
         /*
@@ -154,6 +153,7 @@ public class RecipeFragment extends Fragment {
                             //+조회수 관련 로직 추가할 것
                         }
                     });
+
                     Log.d("recipefragment",recipelist.get(0).toString());
 
                 } else if(responseCode == 500){

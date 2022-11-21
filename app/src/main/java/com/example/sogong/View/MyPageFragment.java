@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class MyPageFragment extends Fragment {
     Button pwdchange_text, nicknamechange_text, logout_text;
+    Button writtenRecipe, likedRecipe, commentRecipe, refrigerator, mailbox;
     ViewGroup rootview;
 
     ControlRefrigerator_f crf = new ControlRefrigerator_f();
@@ -43,12 +45,32 @@ public class MyPageFragment extends Fragment {
 
         // 프래그먼트에 버튼 두려면 return에 ViewGroup을 바로 박아버리면 안됨
         rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
+        writtenRecipe = (Button) rootview.findViewById(R.id.writtenrecipe_text);
+        likedRecipe = (Button) rootview.findViewById(R.id.likedrecipe_text);
+        commentRecipe = (Button) rootview.findViewById(R.id.commentrecipe_text);
+        refrigerator = (Button) rootview.findViewById(R.id.refrigerator_text);
+        mailbox = (Button) rootview.findViewById(R.id.mailbox_text);
         pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
         nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
         logout_text = (Button) rootview.findViewById(R.id.logout_text);
 
         MyPage_UI mu = new MyPage_UI();
+        writtenRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("mypagefragment","state = "+ mu.state);
+                mu.startDialog(1,"게시글 종류","보실 게시글 종류를 선택하세요.",new ArrayList<>(Arrays.asList("레시피","사진")));
+                if(mu.state == 0){
+                    Log.d("mypagefragment","게시글을 조회할게요");
+                }
+                else if (mu.state == 1){
+                    Log.d("mypagefragment","사진을 조회할게요");
+                }
+            }
+        });
 
+
+        //비밀번호 변경 버튼 리스너
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +81,8 @@ public class MyPageFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        //닉네임 변경 버튼 리스너
         nicknamechange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,6 +186,7 @@ public class MyPageFragment extends Fragment {
     }
 
     class MyPage_UI implements Control {
+        int state = -1;
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
@@ -180,7 +205,11 @@ public class MyPageFragment extends Fragment {
         @Override
         public void startDialog(int type, String title, String message, List<String> btnTxtList) {
             Custom_Dialog cd = new Custom_Dialog(getActivity());
+
+
             cd.callFunction(title, message, type, btnTxtList);
+
+
         }
 
         @Override
@@ -190,7 +219,6 @@ public class MyPageFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
-
         }
     }
 }
