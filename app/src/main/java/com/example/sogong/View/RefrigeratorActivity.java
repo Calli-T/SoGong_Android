@@ -58,10 +58,12 @@ public class RefrigeratorActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                rfu.startToast("muyaho");
+                
                 if (responseCode == 200) {
                     responseCode = -1;
                     refri_ingre_Adapter.setRefriIngreList(ingreList);
-                    rfu.startToast("muyaho");
+                    rfu.startToast(ingreList.get(1).toString());
 
                     //레시피 리사이클러뷰 클릭 이벤트
                     refri_ingre_Adapter.setOnItemClickListener(new Refri_Ingre_Adapter.OnItemClickListener() {
