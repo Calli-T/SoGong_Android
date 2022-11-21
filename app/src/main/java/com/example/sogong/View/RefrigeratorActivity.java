@@ -45,6 +45,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         // UI controller
         Refrigerator_UI rfu = new Refrigerator_UI();
 
+
         refrigeratorRecyclerview = (RecyclerView) findViewById(R.id.ingredients_recyclerview);
 
         refri_ingre_Adapter = new Refri_Ingre_Adapter();
