@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEdittingInfo_f;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
@@ -58,17 +59,68 @@ public class MyPageFragment extends Fragment {
         writtenRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("mypagefragment","state = "+ mu.state);
-                mu.startDialog(1,"게시글 종류","보실 게시글 종류를 선택하세요.",new ArrayList<>(Arrays.asList("레시피","사진")));
-                if(mu.state == 0){
-                    Log.d("mypagefragment","게시글을 조회할게요");
+                mu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("레시피", "사진")));
+                class NewRunnable implements Runnable {
+                    NewRunnable() {
+                    }
+                    @Override
+                    public void run() {
+                        while(true){
+                            try {
+                                Thread.sleep(100);
+                                if (Custom_Dialog.state == 0) {
+                                    /* #12 사용자 작성 레시피 조회 */
+                                    //cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
+                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+                                    Custom_Dialog.state = -1;
+                                    break;//쓰레드 꺼져
+                                } else if (Custom_Dialog.state == 1) {
+                                    Log.d("mypagefragment", "사진? state = " + Custom_Dialog.state);
+                                    /* #11 사용자 작성 요리사진 조회 */
+                                    //cmpf.lookupMyPhotoList(ControlLogin_f.userinfo.getNickname());
+                                    Custom_Dialog.state = -1;
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
-                else if (mu.state == 1){
-                    Log.d("mypagefragment","사진을 조회할게요");
-                }
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
             }
         });
 
+        likedRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* #15 "좋아요"를 누른 게시글 리스트 조회 */
+                //cpf.lookupMyLikeList("test", 1);
+            }
+        });
+
+        commentRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* #16 댓글을 작성한 게시글들의 리스트 조회 */
+                //cpf.lookupMyCommentList("test");
+            }
+        });
+        refrigerator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RefrigeratorActivity.class);
+                startActivity(intent);
+            }
+        });
+        mailbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MailBoxActivity.class);
+                startActivity(intent);            }
+        });
 
         //비밀번호 변경 버튼 리스너
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
@@ -185,8 +237,22 @@ public class MyPageFragment extends Fragment {
         return rootview;
     }
 
+    private class stateThread extends Thread {
+        private static final String TAG = "ExampleThread";
+
+        public stateThread() {
+
+        }
+
+        public void run() {
+
+        }
+
+    }
+
     class MyPage_UI implements Control {
         int state = -1;
+
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();

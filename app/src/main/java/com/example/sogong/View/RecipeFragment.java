@@ -722,7 +722,7 @@ public class RecipeFragment extends Fragment {
             @Override
             public void run() {
                 if (MailBoxActivity.responseCode == 200) {
-                    rlu.startToast(MailBoxActivity.list.toString());
+                    rlu.startToast(MailBoxActivity.maillist.toString());
                 } else if(responseCode == 500){
 
                 }else if(responseCode == 502){

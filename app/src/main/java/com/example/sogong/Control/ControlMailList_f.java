@@ -38,7 +38,7 @@ public class ControlMailList_f {
                         if(response.code() == 200) {
                             mailList = response.body();
                             Log.d("result", mailList.getMailList().toString());
-                            MailBoxActivity.list = mailList.getMailList();
+                            MailBoxActivity.maillist = mailList.getMailList();
                             MailBoxActivity.totalpage = mailList.getTotal_page();
                         }
                     }

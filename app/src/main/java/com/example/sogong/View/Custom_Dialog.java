@@ -70,9 +70,7 @@ public class Custom_Dialog {
             Button1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("custom_Dialog","state = "+state);
                     state = 0;
-                    Log.d("custom_Dialog","state = "+state);
                     //Toast.makeText(context, "취소했습니다.", Toast.LENGTH_SHORT).show();
                     dlg.dismiss();
                 }
@@ -81,9 +79,7 @@ public class Custom_Dialog {
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(context, "삭제했습니다.", Toast.LENGTH_SHORT).show();
-                    Log.d("custom_Dialog","state = "+state);
                     state = 1;
-                    Log.d("custom_Dialog","state = "+state);
                     // 커스텀 다이얼로그를 종료한다.
                     dlg.dismiss();
                 }

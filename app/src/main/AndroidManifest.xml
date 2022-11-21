@@ -26,6 +26,8 @@
         <activity android:name=".View.RecipeLookupActivity" />
         <activity android:name=".View.ReportActivity" />
         <activity android:name=".View.MailLookupActivity" />
+        <activity android:name=".View.RefrigeratorActivity" />
+        <activity android:name=".View.MailBoxActivity" />
 
         <activity
             android:name=".View.LoginActivity"
