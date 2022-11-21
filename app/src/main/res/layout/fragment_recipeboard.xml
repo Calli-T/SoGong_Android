@@ -15,8 +15,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </ImageButton>
+        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,14 +61,14 @@
         android:id="@+id/sort_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/recipe_sort"
         android:background="@drawable/sort_spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_line"
+        android:entries="@array/recipe_sort"
         app:layout_constraintBottom_toTopOf="@id/sub_line"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_line">
 
     </Spinner>
+
     <View
         android:id="@+id/sub_line"
         android:layout_width="match_parent"
@@ -83,8 +83,8 @@
         android:text="이동할 페이지"
         android:textColor="@color/black"
         android:textSize="17sp"
-        app:layout_constraintTop_toBottomOf="@id/sub_line"
-        app:layout_constraintEnd_toStartOf="@id/recipe_page_spinner"/>
+        app:layout_constraintEnd_toStartOf="@id/recipe_page_spinner"
+        app:layout_constraintTop_toBottomOf="@id/sub_line" />
 
     <Spinner
         android:id="@+id/recipe_page_spinner"
@@ -93,8 +93,7 @@
         android:background="@drawable/sort_spinner"
         android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line">
-    </Spinner>
+        app:layout_constraintTop_toBottomOf="@id/sub_line"/>
 
     <View
         android:id="@+id/sub_line2"
@@ -126,18 +125,18 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/recipe_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_add_button"
         android:layout_margin="16dp"
+        android:contentDescription="TODO"
         android:src="@drawable/edit"
-        app:fabSize="normal"
-        app:elevation="10dp"
         app:backgroundTint="@color/beige"
+        app:elevation="10dp"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
-        android:contentDescription="TODO">
+        app:layout_constraintEnd_toEndOf="parent">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 

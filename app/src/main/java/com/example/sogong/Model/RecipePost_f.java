@@ -3,61 +3,81 @@ package com.example.sogong.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
+import androidx.navigation.NavType;
+
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class RecipePost{
+public class RecipePost_f implements Parcelable {
     @SerializedName("post_id")
-    @Expose
     private int post_id;
-
     @SerializedName("nickname")
-    @Expose
     private String nickname;
-
     @SerializedName("title")
-    @Expose
     private String title;
-
     @SerializedName("category")
-    @Expose
     private String category;
-
     @SerializedName("degree_of_spicy")
-    @Expose
     private int degree_of_spicy;
-
     @SerializedName("description")
-    @Expose
     private String description;
-
     @SerializedName("views")
-    @Expose
     private int views;
-
     @SerializedName("like_count")
-    @Expose
     private int like_count;
-
     @SerializedName("comment_count")
-    @Expose
     private int comment_count;
-
     @SerializedName("upload_time")
-    @Expose
     private String upload_time;
-
     @SerializedName("Recipe_Ingredients")
-    @Expose
-    private List<RecipePost> Recipe_Ingredients;
-
+    private List<Recipe_Ingredients> recipe_ingredients;
     @SerializedName("comments")
-    @Expose
     private List<Comment> comments;
+
+    public RecipePost_f() {}
+    public RecipePost_f(int post_id, String nickname, String title, String cateogry, int degree_of_spicy, String description, int views, int like_count, int comment_count, String upload_time, List<Recipe_Ingredients> recipe_ingredients, List<Comment> comments) {
+        this.post_id = post_id;
+        this.nickname = nickname;
+        this.title = title;
+        this.category = cateogry;
+        this.degree_of_spicy = degree_of_spicy;
+        this.description = description;
+        this.views = views;
+        this.like_count = like_count;
+        this.comment_count = comment_count;
+        this.upload_time = upload_time;
+        this.recipe_ingredients = recipe_ingredients;
+        this.comments = comments;
+    }
+
+
+    protected RecipePost_f(Parcel in) {
+        post_id = in.readInt();
+        nickname = in.readString();
+        title = in.readString();
+        category = in.readString();
+        degree_of_spicy = in.readInt();
+        description = in.readString();
+        views = in.readInt();
+        like_count = in.readInt();
+        comment_count = in.readInt();
+        upload_time = in.readString();
+        recipe_ingredients = in.createTypedArrayList(Recipe_Ingredients.CREATOR);
+        comments = in.createTypedArrayList(Comment.CREATOR);
+    }
+
+    public static final Creator<RecipePost_f> CREATOR = new Creator<RecipePost_f>() {
+        @Override
+        public RecipePost_f createFromParcel(Parcel in) {
+            return new RecipePost_f(in);
+        }
+
+        @Override
+        public RecipePost_f[] newArray(int size) {
+            return new RecipePost_f[size];
+        }
+    };
 
     public int getPost_id() {
         return post_id;
@@ -139,12 +159,12 @@ public class RecipePost{
         this.upload_time = upload_time;
     }
 
-    public List<RecipePost> getRecipe_Ingredients() {
-        return Recipe_Ingredients;
+    public List<Recipe_Ingredients> getRecipe_Ingredients() {
+        return recipe_ingredients;
     }
 
-    public void setRecipe_Ingredients(List<RecipePost> recipe_Ingredients) {
-        Recipe_Ingredients = recipe_Ingredients;
+    public void setRecipe_Ingredients(List<Recipe_Ingredients> recipe_Ingredients) {
+        this.recipe_ingredients = recipe_Ingredients;
     }
 
     public List<Comment> getComments() {
@@ -168,11 +188,32 @@ public class RecipePost{
                 ", like_count=" + like_count +
                 ", comment_count=" + comment_count +
                 ", upload_time='" + upload_time + '\'' +
-                ", Recipe_Ingredients=" + Recipe_Ingredients +
+                ", Recipe_Ingredients=" + recipe_ingredients +
                 ", comments=" + comments +
                 '}';
+        //return getPost_id() + " ";
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(post_id);
+        parcel.writeString(nickname);
+        parcel.writeString(title);
+        parcel.writeString(category);
+        parcel.writeInt(degree_of_spicy);
+        parcel.writeString(description);
+        parcel.writeInt(views);
+        parcel.writeInt(like_count);
+        parcel.writeInt(comment_count);
+        parcel.writeString(upload_time);
+        parcel.writeTypedList(recipe_ingredients);
+        parcel.writeTypedList(comments);
+    }
 }
 
 /*
@@ -214,156 +255,3 @@ public class RecipePost{
 	]
 }
  */
-
-//public class RecipeList
-//{
-//    private String comment_count;
-//
-//    private Recipe_Ingredients[] Recipe_Ingredients;
-//
-//    private String upload_time;
-//
-//    private String like_count;
-//
-//    private Comments[] comments;
-//
-//    private String post_id;
-//
-//    private String nickname;
-//
-//    private String description;
-//
-//    private String degree_of_spicy;
-//
-//    private String title;
-//
-//    private String category;
-//
-//    private String views;
-//
-//    public String getComment_count ()
-//    {
-//        return comment_count;
-//    }
-//
-//    public void setComment_count (String comment_count)
-//    {
-//        this.comment_count = comment_count;
-//    }
-//
-//    public Recipe_Ingredients[] getRecipe_Ingredients ()
-//    {
-//        return Recipe_Ingredients;
-//    }
-//
-//    public void setRecipe_Ingredients (Recipe_Ingredients[] Recipe_Ingredients)
-//    {
-//        this.Recipe_Ingredients = Recipe_Ingredients;
-//    }
-//
-//    public String getUpload_time ()
-//    {
-//        return upload_time;
-//    }
-//
-//    public void setUpload_time (String upload_time)
-//    {
-//        this.upload_time = upload_time;
-//    }
-//
-//    public String getLike_count ()
-//    {
-//        return like_count;
-//    }
-//
-//    public void setLike_count (String like_count)
-//    {
-//        this.like_count = like_count;
-//    }
-//
-//    public Comments[] getComments ()
-//    {
-//        return comments;
-//    }
-//
-//    public void setComments (Comments[] comments)
-//    {
-//        this.comments = comments;
-//    }
-//
-//    public String getPost_id ()
-//    {
-//        return post_id;
-//    }
-//
-//    public void setPost_id (String post_id)
-//    {
-//        this.post_id = post_id;
-//    }
-//
-//    public String getNickname ()
-//    {
-//        return nickname;
-//    }
-//
-//    public void setNickname (String nickname)
-//    {
-//        this.nickname = nickname;
-//    }
-//
-//    public String getDescription ()
-//    {
-//        return description;
-//    }
-//
-//    public void setDescription (String description)
-//    {
-//        this.description = description;
-//    }
-//
-//    public String getDegree_of_spicy ()
-//    {
-//        return degree_of_spicy;
-//    }
-//
-//    public void setDegree_of_spicy (String degree_of_spicy)
-//    {
-//        this.degree_of_spicy = degree_of_spicy;
-//    }
-//
-//    public String getTitle ()
-//    {
-//        return title;
-//    }
-//
-//    public void setTitle (String title)
-//    {
-//        this.title = title;
-//    }
-//
-//    public String getCategory ()
-//    {
-//        return category;
-//    }
-//
-//    public void setCategory (String category)
-//    {
-//        this.category = category;
-//    }
-//
-//    public String getViews ()
-//    {
-//        return views;
-//    }
-//
-//    public void setViews (String views)
-//    {
-//        this.views = views;
-//    }
-//
-//    @Override
-//    public String toString()
-//    {
-//        return "ClassPojo [comment_count = "+comment_count+", Recipe_Ingredients = "+Recipe_Ingredients+", upload_time = "+upload_time+", like_count = "+like_count+", comments = "+comments+", post_id = "+post_id+", nickname = "+nickname+", description = "+description+", degree_of_spicy = "+degree_of_spicy+", title = "+title+", category = "+category+", views = "+views+"]";
-//    }
-//}

@@ -15,20 +15,34 @@ import androidx.fragment.app.Fragment;
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEdittingInfo_f;
 import com.example.sogong.Control.ControlLogout_f;
+import com.example.sogong.Control.ControlMyPhoto_f;
+import com.example.sogong.Control.ControlMyRecipe_f;
+import com.example.sogong.Control.ControlPost_f;
+import com.example.sogong.Control.ControlRefrigerator_f;
+import com.example.sogong.Model.Refrigerator;
+import com.example.sogong.Model.SearchInfo;
+import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MyPageFragment extends Fragment {
     Button pwdchange_text, nicknamechange_text, logout_text;
+    ViewGroup rootview;
+
+    ControlRefrigerator_f crf = new ControlRefrigerator_f();
+    ControlMyPhoto_f cmpf = new ControlMyPhoto_f();
+    ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
+    ControlPost_f cpf = new ControlPost_f();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // 프래그먼트에 버튼 두려면 return에 ViewGroup을 바로 박아버리면 안됨
-        ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
+        rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
         pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
         nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
         logout_text = (Button) rootview.findViewById(R.id.logout_text);
@@ -102,6 +116,48 @@ public class MyPageFragment extends Fragment {
                 t.start();
             }
         });
+
+        /* #6 사용자 보유 재료 조회 */
+        //crf.lookupRefrigerator("test");
+
+        /* #7 사용자 보유 재료 추가 */
+        //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
+        //crf.addRefrigerator(ingredients);
+
+        /* #8 사용자 보유 재료 삭제 */
+        //crf.deleteRefrigerator(15);
+
+        /* #9 사용자 보유 재료 수정 */
+        //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
+        //crf.editRefrigerator(ingredients);
+
+        /* #10 유통기한 표시 */
+        // -> 시각적 표시라 따로 DB와의 처리는 없음
+
+        /* #11 사용자 작성 요리사진 조회 */
+        //cmpf.lookupMyPhotoList("test");
+
+        /* #12 사용자 작성 레시피 조회 */
+        //cmrf.lookupMyRecipeList("test");
+
+        /* #13 사용자 작성 레시피 검색 */
+        /*SearchInfo searchInfo = new SearchInfo();
+        searchInfo.setNickname("test");
+        searchInfo.setKeyword("test");
+        cmrf.searchMyRecipeList(searchInfo);*/
+
+        /* #14 사용자 작성 레시피 정렬 */
+        /*SortInfo sortInfo = new SortInfo();
+        sortInfo.setNickname("test");
+        sortInfo.setArrangeBy("좋아요 순");
+        cmrf.sortMyRecipeList(sortInfo);*/
+
+        /* #15 "좋아요"를 누른 게시글 리스트 조회 */
+        //cpf.lookupMyLikeList("test", 1);
+
+        /* #16 댓글을 작성한 게시글들의 리스트 조회 */
+        //cpf.lookupMyCommentList("test");
+
         return rootview;
     }
 
@@ -109,7 +165,7 @@ public class MyPageFragment extends Fragment {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.toast_layout));
+            View layout = inflater.inflate(R.layout.custom_toast, rootview.findViewById(R.id.toast_layout));
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());
