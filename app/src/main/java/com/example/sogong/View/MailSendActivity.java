@@ -26,11 +26,11 @@ import java.util.List;
 
 public class MailSendActivity extends AppCompatActivity {
 
-    public static int responseCode = 0;
+    public static int responseCode;
+
     EditText mailReceiver;
     EditText mailTitle;
     EditText mailDescription;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -675,7 +675,7 @@ public class RecipeFragment extends Fragment {
         t.start();
          */
         
-        // 추가) 쪽지함 열람 호출 코드
+        // 추가) 쪽지함 조회 호출 코드
         /*
         final Runnable runnable = new Runnable() {
             @Override
@@ -718,11 +718,11 @@ public class RecipeFragment extends Fragment {
         */
         
         // #37 쪽지 열람 호출 코드
-        final Runnable runnable = new Runnable() {
+        /*final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (MailBoxActivity.responseCode == 200) {
-                    rlu.startToast(MailBoxActivity.maillist.toString());
+                if (MailLookupActivity.responseCode == 200) {
+                    rlu.startToast(MailLookupActivity.mail.toString());
                 } else if(responseCode == 500){
 
                 }else if(responseCode == 502){
@@ -750,12 +750,97 @@ public class RecipeFragment extends Fragment {
             }
         }
 
-        ControlMailList_f cmlf = new ControlMailList_f();
-        cmlf.lookupMailList(1, "jin92");
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.lookupMail(36);
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
+        */
+
+        // #38 쪽지 보내기 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (MailSendActivity.responseCode == 200) {
+                    rlu.startToast(MailSendActivity.responseCode+"");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.sendMail(new Mail(0,"test", "jin92", "지중해", "죽음보다 더 깊은", "", false, false));
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+        
+        // #39 쪽지 삭제하기 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.deleteMail("jin92", 36);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
         
         /* 추가) 레시피 게시판 조회 */
         //crlf.lookupRecipeList(1);
