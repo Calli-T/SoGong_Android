@@ -197,13 +197,6 @@ public class PhotoFragment extends Fragment {
         });
         */
 
-        addPhotoBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent intent new Intent(getActivity(), )
-            }
-        });
-
         return view;
     }
 
