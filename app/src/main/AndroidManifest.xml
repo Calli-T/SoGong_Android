@@ -28,7 +28,7 @@
         <activity android:name=".View.MailLookupActivity" />
         <activity android:name=".View.RefrigeratorActivity" />
         <activity android:name=".View.MailBoxActivity" />
-
+        <activity android:name=".View.PhotoAddActivity" />
         <activity
             android:name=".View.LoginActivity"
             android:exported="true"

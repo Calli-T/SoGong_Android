@@ -210,7 +210,9 @@ public class PhotoFragment extends Fragment {
         @Override
         public void onClick(View v) {
 //            FAB Click 이벤트 처리 구간
-
+            Intent intent = new Intent(getActivity(), PhotoAddActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
         }
     }
 
