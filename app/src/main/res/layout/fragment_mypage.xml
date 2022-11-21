@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="내가 쓴 레시피"
+        android:text="내가 쓴 게시글"
         android:textColor="@color/blue"
         android:textSize="18sp"
         android:background="@drawable/visibility"
@@ -141,14 +141,15 @@
         android:id="@+id/mailbox_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/visibility"
         android:text="쪽지함"
         android:textColor="@color/blue"
         android:textSize="18sp"
-        android:background="@drawable/visibility"
+        app:layout_constraintBottom_toBottomOf="@id/mailbox"
         app:layout_constraintStart_toStartOf="@id/mailbox"
         app:layout_constraintTop_toTopOf="@id/mailbox"
-        app:layout_constraintBottom_toBottomOf="@id/mailbox" />
+        app:layout_constraintVertical_bias="0.588" />
 
     <View
         android:id="@+id/changebox"

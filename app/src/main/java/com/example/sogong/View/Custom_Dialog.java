@@ -3,8 +3,10 @@ package com.example.sogong.View;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -21,13 +23,15 @@ public class Custom_Dialog {
 
     private Context context;
 
+    public static int state = -1;
+
     public Custom_Dialog(Context context) {
         this.context = context;
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
     public void callFunction(String title, String msg, int type, List<String> btnTxtList) {
-
+        state = -1;
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
         final Dialog dlg = new Dialog(context);
 
@@ -66,7 +70,9 @@ public class Custom_Dialog {
             Button1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Log.d("custom_Dialog","state = "+state);
+                    state = 0;
+                    Log.d("custom_Dialog","state = "+state);
                     //Toast.makeText(context, "취소했습니다.", Toast.LENGTH_SHORT).show();
                     dlg.dismiss();
                 }
@@ -75,7 +81,9 @@ public class Custom_Dialog {
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(context, "삭제했습니다.", Toast.LENGTH_SHORT).show();
-
+                    Log.d("custom_Dialog","state = "+state);
+                    state = 1;
+                    Log.d("custom_Dialog","state = "+state);
                     // 커스텀 다이얼로그를 종료한다.
                     dlg.dismiss();
                 }

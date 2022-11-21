@@ -94,6 +94,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         return true;
                     case 2:
                         //쪽지보내기 로직 추가
+                        Intent intent1 = new Intent(RecipeLookupActivity.this, MailSendActivity.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        intent1.putExtra("mail_receiver", recipePostF.getNickname());
+                        startActivity(intent1);
                         Log.d("recipe", "쪽지 보내기 menu click");
                         return true;
                     case 3:
