@@ -13,7 +13,7 @@
         android:roundIcon="@drawable/recipebook"
         android:supportsRtl="true"
         android:theme="@style/Theme.SoGong"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity android:name=".View.ChangeNicknameActivity" />
         <activity android:name=".View.ChangePasswordActivity" />
         <activity android:name=".View.SignupActivity" />

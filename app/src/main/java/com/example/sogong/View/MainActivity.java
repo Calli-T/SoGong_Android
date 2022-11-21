@@ -1,6 +1,8 @@
 package com.example.sogong.View;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -143,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     // 프래그먼트에 넣어둠
     /*
