@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class RecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
-        
+
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
 
         recipeAdapter = new RecipeAdapter();
@@ -93,11 +94,56 @@ public class RecipeFragment extends Fragment {
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
                     }
-                    Spinner spinner1 = view.findViewById(R.id.recipe_page_spinner);
+                    //페이지 수 스피너 설정
+                    Spinner pagespinner = view.findViewById(R.id.recipe_page_spinner);
                     ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
                     adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner1.setAdapter(adapter1);
-                    spinner1.setPrompt("이동할 페이지");
+                    pagespinner.setAdapter(adapter1);
+                    pagespinner.setPrompt("이동할 페이지");
+                    pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                            //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
+//                            crlf.lookupRecipeList(position+1);
+//                            //업데이트된 레시피 리스트로 전환
+//                            recipeAdapter.setRecipeList(recipelist);
+//                            //레시피 리사이클러뷰 클릭 이벤트
+//                            recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+//                                @Override
+//                                public void onItemClicked(int position, String data) {
+//                                    Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    intent.putExtra("recipe_post", recipelist.get(position));
+//                                    startActivity(intent);
+//                                    //+조회수 관련 로직 추가할 것
+//                                }
+//                            });
+                            Log.d("recipefragment","page spinner "+position+" 클릭");
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    Spinner sortspinner = view.findViewById(R.id.sort_spinner);
+                    sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("recipefragment","sort spinner "+sortspinner.getSelectedItem().toString()+" 클릭");
+                            String sort_str = sortspinner.getSelectedItem().toString();
+                            /* #29 레시피 게시글 정렬 */
+                            //crlf.sortRecipeList(sort_str, 1);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    //레시피 리사이클러뷰 클릭 이벤트
                     recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClicked(int position, String data) {
@@ -636,9 +682,9 @@ final Runnable runnable = new Runnable() {
                 if (responseCode == 200) {
                     rlu.startToast();
                 } else if(responseCode == 500){
-                    
+
                 }else if(responseCode == 502){
-                    
+
                 }
             }
         };
