@@ -1,7 +1,11 @@
 package com.example.sogong.View;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.example.sogong.Control.Control;
@@ -41,12 +48,13 @@ public class PhotoFragment extends Fragment {
     ControlPhoto_f cpf = new ControlPhoto_f();
     ControlLike_f clf = new ControlLike_f();
     ControlReport_f crf = new ControlReport_f();
-
+    public int requestCode;
+    private Uri mImageCaptureUri;
     public static int totalpage;
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     public static List<PhotoPost> list;
-
+    private ActivityResultLauncher<PickVisualMediaRequest> pickVisualMediaActivityResultLauncher;
     private View view;
 
     @Override
@@ -84,12 +92,11 @@ public class PhotoFragment extends Fragment {
         PhotoList_UI plu = new PhotoList_UI();
 
         // 사용할 컴포넌트 초기화
-        addPhotoBtn = (FloatingActionButton) view.findViewById(R.id.photo_add_button);
-
+        FloatingActionButton fab = view.findViewById(R.id.photo_add_button);
+        fab.setOnClickListener(new FABClickListener());
         // 추가) 요리 사진 게시판
 
         threadFlag = true;
-
 
 
 //        final Runnable runnable = new Runnable() {
@@ -206,6 +213,24 @@ public class PhotoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         threadFlag = false;
+    }
+
+    class FABClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+//            FAB Click 이벤트 처리 구간
+            ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+                    registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                        // Callback is invoked after the user selects a media item or closes the
+                        // photo picker.
+                        if (uri != null) {
+                            Log.d("PhotoPicker", "Selected URI: " + uri);
+                        } else {
+                            Log.d("PhotoPicker", "No media selected");
+                        }
+                    });
+            pickMedia.launch(new PickVisualMediaRequest());
+        }
     }
 
     class PhotoList_UI implements Control {

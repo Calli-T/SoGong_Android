@@ -90,8 +90,8 @@
         android:id="@+id/sub_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000"
         android:layout_marginTop="10dp"
+        android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ingretitle_text" />
@@ -108,22 +108,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sub_line" />
 
-    <Spinner
-        android:id="@+id/ingreamount_spinner"
+    <EditText
+        android:id="@+id/ingreamount_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:hint="숫자 입력"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/ingreamount_text"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ingretitle_text"
+        app:layout_constraintTop_toTopOf="@id/ingreamount_text" />
+
+    <TextView
+        android:id="@+id/ingre_unit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:text="단위"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/ingreamount_text"
+        app:layout_constraintStart_toEndOf="@id/ingreamount_edit"
+        app:layout_constraintTop_toTopOf="@id/ingreamount_text" />
+    <Spinner
+        android:id="@+id/ingre_unit_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:textColor="@color/blue"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sub_line" />
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/ingre_unit_text"
+        app:layout_constraintTop_toTopOf="@id/ingreamount_text"
+        app:layout_constraintBottom_toBottomOf="@id/ingreamount_text"/>
+
     <View
         android:id="@+id/sub_line2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000"
         android:layout_marginTop="10dp"
+        android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ingreamount_text" />
@@ -140,25 +168,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sub_line2" />
 
-    <Spinner
-        android:id="@+id/ingre_expiredate_spinner"
+    <EditText
+        android:id="@+id/ingre_expiredate_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:hint="YYYY/MM/DD 형식으로 입력"
         android:textColor="@color/blue"
         android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ingre_expiredate_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line2" />
+        app:layout_constraintBottom_toBottomOf="@id/ingre_expiredate_text"
+        app:layout_constraintTop_toTopOf="@id/ingre_expiredate_text"
+        />
 
     <View
         android:id="@+id/sub_line3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000"
         android:layout_marginTop="10dp"
+        android:background="#000000"
         app:layout_constraintTop_toBottomOf="@id/ingre_expiredate_text" />
-=
+    =
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recipe_add_button"
