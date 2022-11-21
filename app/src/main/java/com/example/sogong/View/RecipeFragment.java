@@ -89,6 +89,7 @@ public class RecipeFragment extends Fragment {
                 if (responseCode == 200) {
                     responseCode = -1;
                     recipeAdapter.setRecipeList(recipelist);
+
                     pagenum = new String[totalpage];
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
@@ -148,7 +149,7 @@ public class RecipeFragment extends Fragment {
                         public void onItemClicked(int position, String data) {
                             Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipe_post", recipelist.get(position));
+                            intent.putExtra("recipe_post", ""+recipelist.get(position));
                             startActivity(intent);
                             //+조회수 관련 로직 추가할 것
                         }
