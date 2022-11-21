@@ -5,6 +5,7 @@ import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.LikeInfo;
 import com.example.sogong.Model.Mail;
 import com.example.sogong.Model.MailList;
+import com.example.sogong.Model.RecipePostLookUp;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipeList;
@@ -133,8 +134,8 @@ public interface RetrofitService {
     @GET("recipeboard/{page}/")
     Call<RecipeList> LookupRecipeList(@Path("page") int page);
 
-    @GET("recipe/{postId}")
-    Call<RecipePost_f> LookupRecipe(@Path("postId") int postId);
+    @GET("recipe/{postId}/{nickname}/")
+    Call<RecipePostLookUp> LookupRecipe(@Path("postId") int postId, @Path("nickname") String nickname);
 
     @POST("uploadrecipe/")
     Call<RecipePost_f> AddRecipe(@Body RecipePost_f recipePostF);

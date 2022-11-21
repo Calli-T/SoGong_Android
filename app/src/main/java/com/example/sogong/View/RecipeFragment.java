@@ -81,7 +81,7 @@ public class RecipeFragment extends Fragment {
 
         // 추가) 레시피 게시판 조회 호출 코드
         threadFlag = true;
-        /*
+
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -188,7 +188,7 @@ public class RecipeFragment extends Fragment {
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-        */
+
 
         // #23 레시피 게시글 열람 호출 코드
         /*
