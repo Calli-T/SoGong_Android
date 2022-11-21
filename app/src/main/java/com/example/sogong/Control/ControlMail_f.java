@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.Mail;
 import com.example.sogong.Model.MailList;
+import com.example.sogong.View.MailLookupActivity;
+import com.example.sogong.View.MailSendActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -25,12 +27,14 @@ public class ControlMail_f {
         call.enqueue(new Callback<Mail>() {
             @Override
             public void onResponse(@NonNull Call<Mail> call, @NonNull Response<Mail> response) {
+                MailLookupActivity.responseCode = response.code();
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             mail = response.body();
                             Log.d("result", mail.toString());
+                            MailLookupActivity.mail = response.body();
                         }
                     }
                 } else { // 404
@@ -51,6 +55,8 @@ public class ControlMail_f {
         call.enqueue(new Callback<Mail>() {
             @Override
             public void onResponse(@NonNull Call<Mail> call, @NonNull Response<Mail> response) {
+                MailSendActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {

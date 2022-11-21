@@ -26,6 +26,8 @@ public class MailLookupActivity extends AppCompatActivity {
 
 
     public static int responseCode = 0;
+    public static Mail mail;
+
     TextView mailTitle;
     TextView mailAuthor;
     TextView mailDate;
