@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
@@ -54,7 +53,6 @@ public class PhotoFragment extends Fragment {
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     public static List<PhotoPost> list;
-    private ActivityResultLauncher<PickVisualMediaRequest> pickVisualMediaActivityResultLauncher;
     private View view;
 
     @Override
@@ -219,17 +217,7 @@ public class PhotoFragment extends Fragment {
         @Override
         public void onClick(View v) {
 //            FAB Click 이벤트 처리 구간
-            ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-                    registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                        // Callback is invoked after the user selects a media item or closes the
-                        // photo picker.
-                        if (uri != null) {
-                            Log.d("PhotoPicker", "Selected URI: " + uri);
-                        } else {
-                            Log.d("PhotoPicker", "No media selected");
-                        }
-                    });
-            pickMedia.launch(new PickVisualMediaRequest());
+
         }
     }
 
