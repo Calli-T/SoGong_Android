@@ -7,13 +7,21 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.Model.Mail;
+import com.example.sogong.Model.MailList;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 public class MailBoxActivity extends AppCompatActivity {
 
     TextView send;
     TextView receive;
+
+    public static int responseCode;
+    public static List<Mail> list;
+    public static int totalpage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

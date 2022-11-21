@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.Comment;
+import com.example.sogong.View.RecipeLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -21,10 +22,13 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RecipeLookupActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
+                            RecipeLookupActivity.commentResult = response.body();
                             Log.d("result", ""+response.body());
                         }
                     }
@@ -47,10 +51,13 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RecipeLookupActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
+                            RecipeLookupActivity.commentResult = response.body();
                             Log.d("result", ""+response.body());
                         }
                     }
@@ -75,10 +82,13 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RecipeLookupActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
+                            RecipeLookupActivity.commentResult = response.body();
                             Log.d("result", ""+response.body());
                         }
                     }

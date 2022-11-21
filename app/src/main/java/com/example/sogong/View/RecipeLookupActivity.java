@@ -49,6 +49,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
     public static int responseCode;
     public static RecipePost_f recipePostF;
+    public static int commentResult;
 
     PopupMenu dropDownMenu;
     Menu menu;
