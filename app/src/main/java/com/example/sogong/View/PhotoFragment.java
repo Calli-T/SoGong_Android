@@ -2,16 +2,22 @@ package com.example.sogong.View;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +42,7 @@ import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,12 +59,26 @@ public class PhotoFragment extends Fragment {
     public static int totalpage;
     public static int responseCode = 0;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
-    public static List<PhotoPost> list;
+    public static List<PhotoPost> photoList;
     private View view;
+    private GridView gridview = null;
+    private PhotoAdapter photoAdapter = null;
+
+
+    String tempPhotoLink1;
+    String tempPhotoLink2;
+    String tempPhotoLink3;
+    String tempPhotoLink4;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_photoboard, container, false);
+
+
+        gridview = (GridView) view.findViewById(R.id.photo_grid);
+        photoAdapter = new PhotoAdapter();
+        gridview.setAdapter(photoAdapter);
+
         /* 추가) 요리 사진 게시판 */
         //cplf.lookupPhotoList(1);
 
@@ -97,49 +118,82 @@ public class PhotoFragment extends Fragment {
         threadFlag = true;
 
 
-//        final Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                if (responseCode == 200) {
-//                    responseCode = -1;
-//
-//                    if (list != null)
-//                        plu.startToast(list.toString());
-//
-//                    // UI 코드 작성해주세요
-//
-//                } else if (responseCode == 500) {
-//                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-//                } else if (responseCode == 502) {
-//                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-//                }
-//            }
-//        };
-//
-//        class NewRunnable implements Runnable {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 30; i++) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    if (threadFlag)
-//                        getActivity().runOnUiThread(runnable);
-//                    else {
-//                        i = 30;
-//                    }
-//                }
-//            }
-//        }
-//
-//        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
-//
-//        NewRunnable nr = new NewRunnable();
-//        Thread t = new Thread(nr);
-//        t.start();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    responseCode = -1;
+
+                    if (photoList != null) {
+                        plu.startToast(photoList.get(0).toString());
+//                        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.lenna);
+//                        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.ramyen);
+//                        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.pizza);
+//                        Bitmap bitmap4 = BitmapFactory.decodeResource(getResources(), R.drawable.chicken);
+//                        tempPhotoLink1 = BitmapToString(bitmap1);
+//                        tempPhotoLink2 = BitmapToString(bitmap2);
+//                        tempPhotoLink3 = BitmapToString(bitmap3);
+//                        tempPhotoLink4 = BitmapToString(bitmap4);
+//                        Log.d("사진","레나사이즈 = "+tempPhotoLink1.length());
+//                        PhotoPost tempPhoto1 = new PhotoPost("test", 1, tempPhotoLink1, 0, "2022/11/11");
+//                        PhotoPost tempPhoto2 = new PhotoPost("test", 2, tempPhotoLink2, 0, "2022/11/11");
+//                        PhotoPost tempPhoto3 = new PhotoPost("test2", 3, tempPhotoLink3, 0, "2022/11/11");
+//                        PhotoPost tempPhoto4 = new PhotoPost("test2", 4, tempPhotoLink4, 0, "2022/11/11");
+//                        List<PhotoPost> templist = new ArrayList<>();
+//                        templist.add(tempPhoto1);
+//                        templist.add(tempPhoto2);
+//                        templist.add(tempPhoto3);
+//                        templist.add(tempPhoto4);
+
+
+//                        photoAdapter.setPhotoList(photoList);
+
+                        photoAdapter.addItem(photoList.get(0));
+                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("사진", "position = " + position + " id = " + id);
+                                Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("photo_post", photoList.get(position));
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                    // UI 코드 작성해주세요
+
+                } else if (responseCode == 500) {
+                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 502) {
+                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
 
         // #20 요리 사진 게시글 정렬
         // 임시로 플로팅 버튼에다가 걸어 테스트해놨습니다. 나중에 스피너에 대체해서 걸어주세요
@@ -198,6 +252,14 @@ public class PhotoFragment extends Fragment {
         */
 
         return view;
+    }
+
+    public static String BitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+        byte[] bytes = baos.toByteArray();
+        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return temp;
     }
 
     @Override
