@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,8 +64,10 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     ControlComment_f ccf = new ControlComment_f();
     ControlMailList_f cmlf = new ControlMailList_f();
     ControlMail_f cmf = new ControlMail_f();
+
     Spinner pagespinner;
     Spinner sortspinner;
+    ImageButton searchButton;
     private View view;
     Boolean firstpage;
 
@@ -72,10 +75,9 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
 
+        searchButton = view.findViewById(R.id.search_button);
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
-
         recipeAdapter = new RecipeAdapter();
-
         recipeRecyclerView.setAdapter(recipeAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recipeRecyclerView.setLayoutManager(layoutManager);
@@ -94,6 +96,15 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
 
+        //검색화면으로 이동
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RecipeSearchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
 
         // 추가) 레시피 게시판 조회 호출 코드
         threadFlag.set(true);
