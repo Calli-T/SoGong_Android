@@ -24,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.Comment;
+import com.example.sogong.Model.RecipePostLookUp;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.R;
 
@@ -48,7 +50,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public RecyclerView recipeIngreRecyclerView;
 
     public static int responseCode;
-    public static RecipePost_f recipePostF;
+    public static RecipePostLookUp recipePostLookUp;
+    public static int commentResult;
 
     PopupMenu dropDownMenu;
     Menu menu;
@@ -57,6 +60,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RecipePost_f recipePostF = getIntent().getParcelableExtra("recipe_post");
+
+        responseCode = 0;
+
+        RecipeLookup_UI rlu = new RecipeLookup_UI();
+
         Log.d("recipe", recipePostF.toString());
         setContentView(R.layout.activity_lookuprecipe);
         recipetitle = findViewById(R.id.recipetitle_text1);
@@ -94,6 +102,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         return true;
                     case 2:
                         //쪽지보내기 로직 추가
+                        Intent intent1 = new Intent(RecipeLookupActivity.this, MailSendActivity.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        intent1.putExtra("mail_receiver", recipePostF.getNickname());
+                        startActivity(intent1);
                         Log.d("recipe", "쪽지 보내기 menu click");
                         return true;
                     case 3:
@@ -218,42 +230,49 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
 
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
-//        final Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                if (responseCode == 200) {
-//                    responseCode = -1;
-//                    recipetitle.setText(recipePost.getTitle());
-//                    recipecategory.setText(recipePost.getCategory());
-//                    recipespicy.setText("X" + String.valueOf(recipePost.getDegree_of_spicy()));
-//                    recipedescription.setText(recipePost.getDescription());
-//
-//                } else if (responseCode == 500) {
-////                    rlu.startDialog(0,"서버 오류","서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
-//                } else if (responseCode == 502) {
-////                    rlu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-//                }
-//            }
-//        };
-//
-//        class NewRunnable implements Runnable {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 30; i++) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    runOnUiThread(runnable);
-//                }
-//            }
-//        }
-//        ControlRecipe_f crf = new ControlRecipe_f();
-//        crf.lookupRecipe(recipePost.getPost_id());
-//        NewRunnable nr = new NewRunnable();
-//        Thread t = new Thread(nr);
-//        t.start();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    responseCode = -1;
+                    rlu.startToast(recipePostLookUp.toString());
+                    /*
+                    recipetitle.setText(recipePostF.getTitle());
+                    recipecategory.setText(recipePostF.getCategory());
+                    recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
+                    recipedescription.setText(recipePostF.getDescription());
+                     */
+
+                } else if (responseCode == 500) {
+                    //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 502) {
+                    //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(runnable);
+                }
+            }
+        }
+        //ControlRecipe_f crf = new ControlRecipe_f();
+        //crf.lookupRecipe(recipePost.getPost_id());
+
+        ControlRecipe_f crf = new ControlRecipe_f();
+        crf.lookupRecipe(42, "test");
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
     }
 
     class RecipeLookup_UI implements Control {

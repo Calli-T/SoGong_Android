@@ -15,7 +15,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sort_spinner"
         android:entries="@array/recipe_sort"
+        android:paddingEnd="20dp"
         app:layout_constraintBottom_toTopOf="@id/sub_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_line">
@@ -93,7 +94,7 @@
         android:background="@drawable/sort_spinner"
         android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line"/>
+        app:layout_constraintTop_toBottomOf="@id/sub_line" />
 
     <View
         android:id="@+id/sub_line2"
@@ -102,27 +103,35 @@
         android:background="#808080"
         app:layout_constraintTop_toBottomOf="@id/recipe_page_spinner" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/recipe_scrollview"
-        android:layout_width="0dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line2">
+        app:layout_constraintTop_toBottomOf="@id/sub_line2"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipe_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
-            app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"
-            app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"
-            app:layout_constraintStart_toStartOf="@id/recipe_scrollview"
-            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/recipe_scrollview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sub_line2">
 
-    </androidx.core.widget.NestedScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipe_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"
+                app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"
+                app:layout_constraintStart_toStartOf="@id/recipe_scrollview"
+                app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recipe_add_button"

@@ -135,9 +135,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/recipebook"
+                android:src="@drawable/chicken"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.3"
+                app:layout_constraintHeight_percent="0.6"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/photodate_text1" />
 
@@ -167,16 +167,16 @@
                 app:layout_constraintStart_toEndOf="@id/photolike_text"
                 app:layout_constraintTop_toBottomOf="@id/photopost" />
 
-            <ImageButton
-                android:id="@+id/report_btn"
-                android:layout_width="24dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/report"
-                app:layout_constraintBottom_toBottomOf="@id/like_btn"
-                app:layout_constraintEnd_toStartOf="@id/like_btn"
-                app:layout_constraintTop_toBottomOf="@id/photopost" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/report_btn"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:background="@drawable/report"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/like_btn"-->
+<!--                app:layout_constraintEnd_toStartOf="@id/like_btn"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/photopost" />-->
 
             <ImageButton
                 android:id="@+id/like_btn"

@@ -75,4 +75,11 @@ dependencies {
     //material 라이브러리
     implementation 'com.google.android.material:material:1.7.0'
 
+    //gif사용
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+
+    //당겨서 새로고침
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+
 }

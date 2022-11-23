@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEdittingInfo_f;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
@@ -31,6 +33,7 @@ import java.util.List;
 
 public class MyPageFragment extends Fragment {
     Button pwdchange_text, nicknamechange_text, logout_text;
+    Button writtenRecipe, likedRecipe, commentRecipe, refrigerator, mailbox;
     ViewGroup rootview;
 
     ControlRefrigerator_f crf = new ControlRefrigerator_f();
@@ -43,12 +46,83 @@ public class MyPageFragment extends Fragment {
 
         // 프래그먼트에 버튼 두려면 return에 ViewGroup을 바로 박아버리면 안됨
         rootview = (ViewGroup) inflater.inflate(R.layout.fragment_mypage, container, false);
+        writtenRecipe = (Button) rootview.findViewById(R.id.writtenrecipe_text);
+        likedRecipe = (Button) rootview.findViewById(R.id.likedrecipe_text);
+        commentRecipe = (Button) rootview.findViewById(R.id.commentrecipe_text);
+        refrigerator = (Button) rootview.findViewById(R.id.refrigerator_text);
+        mailbox = (Button) rootview.findViewById(R.id.mailbox_text);
         pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
         nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
         logout_text = (Button) rootview.findViewById(R.id.logout_text);
 
         MyPage_UI mu = new MyPage_UI();
+        writtenRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("레시피", "사진")));
+                class NewRunnable implements Runnable {
+                    NewRunnable() {
+                    }
+                    @Override
+                    public void run() {
+                        while(true){
+                            try {
+                                Thread.sleep(100);
+                                if (Custom_Dialog.state == 0) {
+                                    /* #12 사용자 작성 레시피 조회 */
+                                    //cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
+                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+                                    Custom_Dialog.state = -1;
+                                    break;//쓰레드 꺼져
+                                } else if (Custom_Dialog.state == 1) {
+                                    Log.d("mypagefragment", "사진? state = " + Custom_Dialog.state);
+                                    /* #11 사용자 작성 요리사진 조회 */
+                                    //cmpf.lookupMyPhotoList(ControlLogin_f.userinfo.getNickname());
+                                    Custom_Dialog.state = -1;
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+            }
+        });
 
+        likedRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* #15 "좋아요"를 누른 게시글 리스트 조회 */
+                //cpf.lookupMyLikeList("test", 1);
+            }
+        });
+
+        commentRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* #16 댓글을 작성한 게시글들의 리스트 조회 */
+                //cpf.lookupMyCommentList("test");
+            }
+        });
+        refrigerator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RefrigeratorActivity.class);
+                startActivity(intent);
+            }
+        });
+        mailbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MailBoxActivity.class);
+                startActivity(intent);            }
+        });
+
+        //비밀번호 변경 버튼 리스너
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +133,8 @@ public class MyPageFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        //닉네임 변경 버튼 리스너
         nicknamechange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +237,22 @@ public class MyPageFragment extends Fragment {
         return rootview;
     }
 
+    private class stateThread extends Thread {
+        private static final String TAG = "ExampleThread";
+
+        public stateThread() {
+
+        }
+
+        public void run() {
+
+        }
+
+    }
+
     class MyPage_UI implements Control {
+        int state = -1;
+
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
@@ -180,7 +271,11 @@ public class MyPageFragment extends Fragment {
         @Override
         public void startDialog(int type, String title, String message, List<String> btnTxtList) {
             Custom_Dialog cd = new Custom_Dialog(getActivity());
+
+
             cd.callFunction(title, message, type, btnTxtList);
+
+
         }
 
         @Override
@@ -190,7 +285,6 @@ public class MyPageFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
-
         }
     }
 }

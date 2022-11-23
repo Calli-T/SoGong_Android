@@ -15,13 +15,13 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="쪽지함"
+        android:text="요리 사진 등록"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
@@ -75,69 +75,44 @@
     <!--        android:background="#808080"-->
     <!--        app:layout_constraintTop_toBottomOf="@id/sort_spinner" />-->
 
-    <TextView
-        android:id="@+id/movingpage_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이동할 페이지"
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toStartOf="@id/mailbox_page_spinner"
-        app:layout_constraintTop_toBottomOf="@id/main_line" />
-
-    <Spinner
-        android:id="@+id/mailbox_page_spinner"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/sort_spinner"
-        android:spinnerMode="dialog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_line" />
-
-    <View
-        android:id="@+id/sub_line2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#808080"
-        app:layout_constraintTop_toBottomOf="@id/mailbox_page_spinner" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/mailbox_scrollview"
+    <ImageView
+        android:id="@+id/photo_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/add_photo_alternate"
+        app:layout_constraintBottom_toTopOf="@id/reselect_photo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_line2">
+        app:layout_constraintTop_toBottomOf="@id/main_line"
+        app:layout_constraintVertical_bias="0" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mail_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
-            app:layout_constraintBottom_toBottomOf="@id/mailbox_scrollview"
-            app:layout_constraintEnd_toEndOf="@id/mailbox_scrollview"
-            app:layout_constraintStart_toStartOf="@id/mailbox_scrollview"
-            app:layout_constraintTop_toTopOf="@id/mailbox_scrollview" />
-
-    </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/mail_add_button"
+    <android.widget.Button
+        android:id="@+id/reselect_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/add_img"
-        app:backgroundTint="@color/beige"
-        app:elevation="10dp"
-        app:fabSize="normal"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/roundedrectangle"
+        android:text="다시 선택"
+        android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/photo_add_button"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        app:layout_constraintEnd_toEndOf="parent">
-
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+    <android.widget.Button
+        android:id="@+id/photo_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/roundedrectangle"
+        android:text="등록하기"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/reselect_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

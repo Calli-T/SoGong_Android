@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.RecipeList;
+import com.example.sogong.Model.RecipePostLookUp;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.View.PhotoFragment;
 import com.example.sogong.View.RecipeAddActivity;
@@ -20,33 +21,33 @@ import retrofit2.Response;
 public class ControlRecipe_f {
 
     RecipePost_f recipePostF;
+    RecipePostLookUp recipePostLookUp;
 
-    public void lookupRecipe(int postId) {
+    public void lookupRecipe(int postId, String nickname) {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
-        Call<RecipePost_f> call = sv.LookupRecipe(postId);
+        Call<RecipePostLookUp> call = sv.LookupRecipe(postId, nickname);
 
-        call.enqueue(new Callback<RecipePost_f>() {
+        call.enqueue(new Callback<RecipePostLookUp>() {
             @Override
-            public void onResponse(@NonNull Call<RecipePost_f> call, @NonNull Response<RecipePost_f> response) {
+            public void onResponse(@NonNull Call<RecipePostLookUp> call, @NonNull Response<RecipePostLookUp> response) {
+                RecipeLookupActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
-                            RecipeLookupActivity.responseCode = response.code();
-                            RecipeLookupActivity.recipePostF = response.body();
-
-                            recipePostF = response.body();
-                            Log.d("result", recipePostF.toString());
+                            RecipeLookupActivity.recipePostLookUp = response.body();
+                            recipePostLookUp = response.body();
+                            Log.d("result", recipePostLookUp.toString());
                         }
                     }
                 } else { // 500
-                    RecipeLookupActivity.responseCode = response.code();
                     Log.d("result", "디비 오류");
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<RecipePost_f> call, @NonNull Throwable t) { // 502
+            public void onFailure(@NonNull Call<RecipePostLookUp> call, @NonNull Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });

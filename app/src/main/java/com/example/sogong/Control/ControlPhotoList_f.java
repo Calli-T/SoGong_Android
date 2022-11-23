@@ -42,7 +42,7 @@ public class ControlPhotoList_f {
                             Log.d("result", photoList.toString());
 
                             // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
-                            PhotoFragment.list = photoList.getPhotoList();
+                            PhotoFragment.photoList = photoList.getPhotoList();
                             PhotoFragment.totalpage = photoList.getTotal_page();
                         }
                     }
@@ -74,7 +74,7 @@ public class ControlPhotoList_f {
                             Log.d("result", photoList.getPhotoList().toString());
 
                             // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
-                            PhotoFragment.list = photoList.getPhotoList();
+                            PhotoFragment.photoList = photoList.getPhotoList();
                             PhotoFragment.responseCode = response.code();
                         }
                     }

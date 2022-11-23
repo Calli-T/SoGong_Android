@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.sogong.Model.Mail;
 import com.example.sogong.Model.MailList;
 import com.example.sogong.Model.RecipeList;
+import com.example.sogong.View.MailBoxActivity;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -29,12 +30,16 @@ public class ControlMailList_f {
         call.enqueue(new Callback<MailList>() {
             @Override
             public void onResponse(@NonNull Call<MailList> call, @NonNull Response<MailList> response) {
+                MailBoxActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             mailList = response.body();
                             Log.d("result", mailList.getMailList().toString());
+                            MailBoxActivity.maillist = mailList.getMailList();
+                            MailBoxActivity.totalpage = mailList.getTotal_page();
                         }
                     }
                 } else { // 404

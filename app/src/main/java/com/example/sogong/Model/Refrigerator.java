@@ -1,10 +1,13 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Ref;
 
-public class Refrigerator {
+public class Refrigerator implements Parcelable {
     @SerializedName("id")
     private int refrigerator_id;
     @SerializedName("name")
@@ -27,6 +30,42 @@ public class Refrigerator {
         this.ammount = ammount;
         this.expiry_date = expiry_date;
     }
+
+    protected Refrigerator(Parcel in) {
+        refrigerator_id = in.readInt();
+        name = in.readString();
+        nickname = in.readString();
+        unit = in.readString();
+        ammount = in.readFloat();
+        expiry_date = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(refrigerator_id);
+        dest.writeString(name);
+        dest.writeString(nickname);
+        dest.writeString(unit);
+        dest.writeFloat(ammount);
+        dest.writeString(expiry_date);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Refrigerator> CREATOR = new Creator<Refrigerator>() {
+        @Override
+        public Refrigerator createFromParcel(Parcel in) {
+            return new Refrigerator(in);
+        }
+
+        @Override
+        public Refrigerator[] newArray(int size) {
+            return new Refrigerator[size];
+        }
+    };
 
     public int getRefrigerator_id() {
         return refrigerator_id;
@@ -78,6 +117,13 @@ public class Refrigerator {
 
     @Override
     public String toString() {
-        return getName() + " " + getExpiry_date();
+        return "Refrigerator{" +
+                "refrigerator_id=" + refrigerator_id +
+                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", unit='" + unit + '\'' +
+                ", ammount=" + ammount +
+                ", expiry_date='" + expiry_date + '\'' +
+                '}';
     }
 }

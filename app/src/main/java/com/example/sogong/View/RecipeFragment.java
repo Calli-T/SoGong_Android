@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
@@ -37,8 +38,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     String[] pagenum;
@@ -48,7 +50,8 @@ public class RecipeFragment extends Fragment {
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     public RecipeAdapter recipeAdapter;
     public RecyclerView recipeRecyclerView;
-
+    Custon_ProgressDialog custon_progressDialog;
+    SwipeRefreshLayout swipeRefreshLayout;
     ControlRecipeList_f crlf = new ControlRecipeList_f();
     ControlRecipe_f crf = new ControlRecipe_f();
     ControlLike_f clf = new ControlLike_f();
@@ -57,7 +60,8 @@ public class RecipeFragment extends Fragment {
     ControlComment_f ccf = new ControlComment_f();
     ControlMailList_f cmlf = new ControlMailList_f();
     ControlMail_f cmf = new ControlMail_f();
-
+    Spinner pagespinner;
+    Spinner sortspinner;
     private View view;
 
     @Override
@@ -76,8 +80,15 @@ public class RecipeFragment extends Fragment {
         fab.setOnClickListener(new FABClickListener());
         responseCode = 0;
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
+
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(requireActivity());
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
 
 
         // 추가) 레시피 게시판 조회 호출 코드
@@ -89,13 +100,12 @@ public class RecipeFragment extends Fragment {
                 if (responseCode == 200) {
                     responseCode = -1;
                     recipeAdapter.setRecipeList(recipelist);
-
                     pagenum = new String[totalpage];
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
                     }
                     //페이지 수 스피너 설정
-                    Spinner pagespinner = view.findViewById(R.id.recipe_page_spinner);
+                    pagespinner = view.findViewById(R.id.recipe_page_spinner);
                     ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
                     adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     pagespinner.setAdapter(adapter1);
@@ -103,22 +113,66 @@ public class RecipeFragment extends Fragment {
                     pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                            //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-//                            crlf.lookupRecipeList(position+1);
-//                            //업데이트된 레시피 리스트로 전환
-//                            recipeAdapter.setRecipeList(recipelist);
-//                            //레시피 리사이클러뷰 클릭 이벤트
-//                            recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-//                                @Override
-//                                public void onItemClicked(int position, String data) {
-//                                    Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
-//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    intent.putExtra("recipe_post", recipelist.get(position));
-//                                    startActivity(intent);
-//                                    //+조회수 관련 로직 추가할 것
-//                                }
-//                            });
-                            Log.d("recipefragment","page spinner "+position+" 클릭");
+                            //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
+                            crlf.lookupRecipeList(position + 1);
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(responseCode == 200){
+                                        responseCode = -1;
+                                        //업데이트된 레시피 리스트로 전환
+                                        recipeAdapter.setRecipeList(recipelist);
+                                        //레시피 리사이클러뷰 클릭 이벤트
+                                        recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClicked(int position, String data) {
+                                                Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                intent.putExtra("recipe_post", recipelist.get(position));
+                                                startActivity(intent);
+                                                //+조회수 관련 로직 추가할 것
+                                            }
+                                        });
+
+                                    }
+
+                                }
+                            };
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (threadFlag)
+                                            getActivity().runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
+                            //업데이트된 레시피 리스트로 전환
+                            recipeAdapter.setRecipeList(recipelist);
+                            //레시피 리사이클러뷰 클릭 이벤트
+                            recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClicked(int position, String data) {
+                                    Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("recipe_post", recipelist.get(position));
+                                    startActivity(intent);
+                                    //+조회수 관련 로직 추가할 것
+                                }
+                            });
+                            Log.d("recipefragment", "page spinner " + position + " 클릭");
                         }
 
                         @Override
@@ -127,13 +181,13 @@ public class RecipeFragment extends Fragment {
                         }
                     });
 
-                    Spinner sortspinner = view.findViewById(R.id.sort_spinner);
+                    sortspinner = view.findViewById(R.id.sort_spinner);
                     sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            Log.d("recipefragment","sort spinner "+sortspinner.getSelectedItem().toString()+" 클릭");
+                            Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
                             String sort_str = sortspinner.getSelectedItem().toString();
-                            /* #29 레시피 게시글 정렬 */
+                            // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
                             //crlf.sortRecipeList(sort_str, 1);
                         }
 
@@ -149,17 +203,22 @@ public class RecipeFragment extends Fragment {
                         public void onItemClicked(int position, String data) {
                             Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipe_post", ""+recipelist.get(position));
+                            intent.putExtra("recipe_post", recipelist.get(position));
                             startActivity(intent);
                             //+조회수 관련 로직 추가할 것
                         }
                     });
-                    Log.d("recipefragment",recipelist.get(0).toString());
 
-                } else if(responseCode == 500){
-                    rlu.startDialog(0,"서버 오류","서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
-                }else if(responseCode == 502){
-                    rlu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                    custon_progressDialog.dismiss();//로딩창 종료
+
+                    Log.d("recipefragment", recipelist.get(0).toString());
+
+                } else if (responseCode == 500) {
+                    custon_progressDialog.dismiss();//로딩창 종료
+                    rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 502) {
+                    custon_progressDialog.dismiss();//로딩창 종료
+                    rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
         };
@@ -188,7 +247,6 @@ public class RecipeFragment extends Fragment {
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-
 
 
         // #23 레시피 게시글 열람 호출 코드
@@ -548,6 +606,301 @@ public class RecipeFragment extends Fragment {
         t.start();
          */
 
+        // #33 레시피 게시판 댓글 작성 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    rlu.startToast("댓글 작성 완료");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlComment_f ccf = new ControlComment_f();
+        Comment newComment = new Comment(0, "test", 42, "Heartaches, heartaches", "");
+        ccf.writeComment(newComment);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // #34 레시피 게시판 댓글 수정 호출 코드
+        /*final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    rlu.startToast("댓글 수정 완료");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlComment_f ccf = new ControlComment_f();
+        Comment newComment = new Comment(12, "test", 42, "지친 어깰 돌아서", "2022-11-21T19:33:51.863823+09:00");
+        ccf.editComment(newComment);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #35 레시피 게시판 댓글 삭제 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (RecipeLookupActivity.responseCode == 200) {
+                    rlu.startToast("댓글 삭제 완료");
+                    RecipeLookupActivity.responseCode = -1;
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlComment_f ccf = new ControlComment_f();
+        ccf.deleteComment("test", 9);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+         */
+
+        // 추가) 쪽지함 조회 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (MailBoxActivity.responseCode == 200) {
+                    rlu.startToast(MailBoxActivity.list.toString());
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMailList_f cmlf = new ControlMailList_f();
+        cmlf.lookupMailList(1, "jin92");
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #37 쪽지 열람 호출 코드
+        /*final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (MailLookupActivity.responseCode == 200) {
+                    rlu.startToast(MailLookupActivity.mail.toString());
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.lookupMail(36);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #38 쪽지 보내기 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (MailSendActivity.responseCode == 200) {
+                    rlu.startToast(MailSendActivity.responseCode+"");
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.sendMail(new Mail(0,"test", "jin92", "지중해", "죽음보다 더 깊은", "", false, false));
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
+        // #39 쪽지 삭제하기 호출 코드
+        /*
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+
+                } else if(responseCode == 500){
+
+                }else if(responseCode == 502){
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlMail_f cmf = new ControlMail_f();
+        cmf.deleteMail("jin92", 36);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+        */
+
         /* 추가) 레시피 게시판 조회 */
         //crlf.lookupRecipeList(1);
 
@@ -634,7 +987,169 @@ public class RecipeFragment extends Fragment {
         threadFlag = false;
     }
 
-    class FABClickListener implements View.OnClickListener{
+    @Override
+    public void onRefresh() {
+
+        //새로 고침 코드
+        updateLayoutView();
+        //새로 고침 완료
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+    // 당겨서 새로고침 했을 때 뷰 변경 메서드
+    public void updateLayoutView() {
+        RecipeList_UI rlu = new RecipeList_UI();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    responseCode = -1;
+                    recipeAdapter.setRecipeList(recipelist);
+
+                    pagenum = new String[totalpage];
+                    for (int i = 1; i <= totalpage; i++) {
+                        pagenum[i - 1] = String.valueOf(i);
+                    }
+                    //페이지 수 스피너 설정
+                    pagespinner = view.findViewById(R.id.recipe_page_spinner);
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    pagespinner.setAdapter(adapter1);
+                    pagespinner.setPrompt("이동할 페이지");
+                    pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
+                            crlf.lookupRecipeList(position + 1);
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(responseCode == 200){
+                                        responseCode = -1;
+                                        //업데이트된 레시피 리스트로 전환
+                                        recipeAdapter.setRecipeList(recipelist);
+                                        //레시피 리사이클러뷰 클릭 이벤트
+                                        recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClicked(int position, String data) {
+                                                Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                intent.putExtra("recipe_post", recipelist.get(position));
+                                                startActivity(intent);
+                                                //+조회수 관련 로직 추가할 것
+                                            }
+                                        });
+                                    }
+                                }
+                            };
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (threadFlag)
+                                            getActivity().runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
+                            //업데이트된 레시피 리스트로 전환
+                            recipeAdapter.setRecipeList(recipelist);
+                            //레시피 리사이클러뷰 클릭 이벤트
+                            recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClicked(int position, String data) {
+                                    Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("recipe_post", recipelist.get(position));
+                                    startActivity(intent);
+                                    //+조회수 관련 로직 추가할 것
+                                }
+                            });
+                            Log.d("recipefragment", "page spinner " + position + " 클릭");
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    sortspinner = view.findViewById(R.id.sort_spinner);
+                    sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
+                            String sort_str = sortspinner.getSelectedItem().toString();
+                            // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
+                            //crlf.sortRecipeList(sort_str, 1);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    //레시피 리사이클러뷰 클릭 이벤트
+                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClicked(int position, String data) {
+                            Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("recipe_post", recipelist.get(position));
+                            startActivity(intent);
+                            //+조회수 관련 로직 추가할 것
+                        }
+                    });
+
+                    custon_progressDialog.dismiss();//로딩창 종료
+
+                    Log.d("recipefragment", recipelist.get(0).toString());
+
+                } else if (responseCode == 500) {
+                    custon_progressDialog.dismiss();//로딩창 종료
+                    rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 502) {
+                    custon_progressDialog.dismiss();//로딩창 종료
+                    rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        getActivity().runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+    }
+
+    class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             // FAB Click 이벤트 처리 구간

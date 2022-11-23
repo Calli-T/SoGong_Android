@@ -1,8 +1,11 @@
 package com.example.sogong.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class PhotoPost {
+public class PhotoPost implements Parcelable {
     @SerializedName("nickname")
     private String author;
     @SerializedName("post_id")
@@ -25,6 +28,40 @@ public class PhotoPost {
         this.like_count = like_count;
         this.upload_time = upload_time;
     }
+
+    protected PhotoPost(Parcel in) {
+        author = in.readString();
+        post_id = in.readInt();
+        photo_link = in.readString();
+        like_count = in.readInt();
+        upload_time = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(author);
+        dest.writeInt(post_id);
+        dest.writeString(photo_link);
+        dest.writeInt(like_count);
+        dest.writeString(upload_time);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<PhotoPost> CREATOR = new Creator<PhotoPost>() {
+        @Override
+        public PhotoPost createFromParcel(Parcel in) {
+            return new PhotoPost(in);
+        }
+
+        @Override
+        public PhotoPost[] newArray(int size) {
+            return new PhotoPost[size];
+        }
+    };
 
     public String getAuthor() {
         return author;
@@ -68,6 +105,12 @@ public class PhotoPost {
 
     @Override
     public String toString() {
-        return getAuthor() + " " + getPhoto_link();
+        return "PhotoPost{" +
+                "author='" + author + '\'' +
+                ", post_id=" + post_id +
+                ", photo_link='" + photo_link + '\'' +
+                ", like_count=" + like_count +
+                ", upload_time='" + upload_time + '\'' +
+                '}';
     }
 }
