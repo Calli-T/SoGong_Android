@@ -41,7 +41,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <View
         android:id="@+id/main_line"
         android:layout_width="match_parent"
@@ -78,6 +77,7 @@
         app:layout_constraintBottom_toBottomOf="@id/search_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_line" />
+
     <View
         android:id="@+id/sub_line"
         android:layout_width="match_parent"
@@ -85,16 +85,250 @@
         android:layout_marginTop="5dp"
         android:background="#000000"
         app:layout_constraintTop_toBottomOf="@id/search_edit" />
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/category_viewpager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+
+    <TextView
+        android:id="@+id/ingre_cate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="종류별"
+        android:textColor="@color/blue"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_line" />
+
+    <!--    <HorizontalScrollView-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/ingre_cate_text"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/ingre_cate_text"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/ingre_cate_text">-->
+
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent">-->
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/jokbo_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="족발 보쌈"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ingre_cate_text" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/soup_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="찜탕찌개"
+        app:layout_constraintBottom_toBottomOf="@id/jokbo_button"
+        app:layout_constraintEnd_toStartOf="@id/cutlet_button"
+        app:layout_constraintStart_toEndOf="@id/jokbo_button"
+        app:layout_constraintTop_toTopOf="@id/jokbo_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/cutlet_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="돈까스"
+        app:layout_constraintBottom_toBottomOf="@id/soup_button"
+        app:layout_constraintEnd_toStartOf="@id/sushi_button"
+        app:layout_constraintStart_toEndOf="@id/soup_button"
+        app:layout_constraintTop_toTopOf="@id/soup_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/sushi_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회"
+        app:layout_constraintBottom_toBottomOf="@id/cutlet_button"
+        app:layout_constraintEnd_toStartOf="@id/japanese_button"
+        app:layout_constraintStart_toEndOf="@id/cutlet_button"
+        app:layout_constraintTop_toTopOf="@id/cutlet_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/japanese_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/sub_line"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:text="일식"
+        app:layout_constraintBottom_toBottomOf="@id/sushi_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sushi_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/pizza_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="피자"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/jokbo_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/meat_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="고기구이"
+        app:layout_constraintBottom_toBottomOf="@id/pizza_button"
+        app:layout_constraintEnd_toStartOf="@id/nightfood_button"
+        app:layout_constraintStart_toEndOf="@id/pizza_button"
+        app:layout_constraintTop_toTopOf="@id/pizza_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/nightfood_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="야식"
+        app:layout_constraintBottom_toBottomOf="@id/meat_button"
+        app:layout_constraintEnd_toStartOf="@id/western_button"
+        app:layout_constraintStart_toEndOf="@id/meat_button"
+        app:layout_constraintTop_toTopOf="@id/meat_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/western_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="양식"
+        app:layout_constraintBottom_toBottomOf="@id/nightfood_button"
+        app:layout_constraintEnd_toStartOf="@id/chicken_button"
+        app:layout_constraintStart_toEndOf="@id/nightfood_button"
+        app:layout_constraintTop_toTopOf="@id/nightfood_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chicken_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="치킨"
+        app:layout_constraintBottom_toBottomOf="@id/western_button"
+        app:layout_constraintEnd_toStartOf="@id/chinese_button"
+        app:layout_constraintStart_toEndOf="@id/western_button"
+        app:layout_constraintTop_toTopOf="@id/western_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chinese_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="중식"
+        app:layout_constraintBottom_toBottomOf="@id/chicken_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chicken_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/asian_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="아시안"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pizza_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/white_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="백반"
+        app:layout_constraintBottom_toBottomOf="@id/asian_button"
+        app:layout_constraintEnd_toStartOf="@id/juk_button"
+        app:layout_constraintStart_toEndOf="@id/asian_button"
+        app:layout_constraintTop_toTopOf="@id/asian_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/juk_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="죽"
+        app:layout_constraintBottom_toBottomOf="@id/white_button"
+        app:layout_constraintEnd_toStartOf="@id/noodle_button"
+        app:layout_constraintStart_toEndOf="@id/white_button"
+        app:layout_constraintTop_toTopOf="@id/white_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/noodle_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="국수"
+        app:layout_constraintBottom_toBottomOf="@id/juk_button"
+        app:layout_constraintEnd_toStartOf="@id/lunchbox_button"
+        app:layout_constraintStart_toEndOf="@id/juk_button"
+        app:layout_constraintTop_toTopOf="@id/juk_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/lunchbox_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="도시락"
+        app:layout_constraintBottom_toBottomOf="@id/noodle_button"
+        app:layout_constraintEnd_toStartOf="@id/kimbapchunguk_button"
+        app:layout_constraintStart_toEndOf="@id/noodle_button"
+        app:layout_constraintTop_toTopOf="@id/noodle_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/kimbapchunguk_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="분식"
+        app:layout_constraintBottom_toBottomOf="@id/lunchbox_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/lunchbox_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/cafe_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="카페 디저트"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/asian_button" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/fastfood_button"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="패스트 푸드"
+        app:layout_constraintBottom_toBottomOf="@id/cafe_button"
+        app:layout_constraintStart_toEndOf="@id/cafe_button"
+        app:layout_constraintTop_toTopOf="@id/cafe_button" />
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--    </HorizontalScrollView>-->
+
+
+    <!--    <androidx.viewpager.widget.ViewPager-->
+    <!--        android:id="@+id/category_viewpager"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_marginStart="10dp"-->
+    <!--        android:layout_marginEnd="10dp"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        app:layout_constraintHeight_percent="0.5"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/sub_line"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

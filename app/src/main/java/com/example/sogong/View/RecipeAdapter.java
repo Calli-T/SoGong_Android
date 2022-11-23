@@ -1,9 +1,11 @@
 package com.example.sogong.View;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +22,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView spicy;
+        ImageView pepper1;
+        ImageView pepper2;
+        ImageView pepper3;
+        ImageView pepper4;
+        ImageView pepper5;
         TextView date;
         TextView author;
         TextView likecnt;
@@ -31,7 +37,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
             title = itemView.findViewById(R.id.title);
-            spicy = itemView.findViewById(R.id.spicy);
+            pepper1 = itemView.findViewById(R.id.pepper_1);
+            pepper2 = itemView.findViewById(R.id.pepper_2);
+            pepper3 = itemView.findViewById(R.id.pepper_3);
+            pepper4 = itemView.findViewById(R.id.pepper_4);
+            pepper5 = itemView.findViewById(R.id.pepper_5);
             date = itemView.findViewById(R.id.date);
             author = itemView.findViewById(R.id.author);
             likecnt = itemView.findViewById(R.id.likecount_text);
@@ -41,7 +51,51 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         void onBind(RecipePost_f recipePostF) {
             title.setText(recipePostF.getTitle());
-            spicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
+            switch (recipePostF.getDegree_of_spicy()) {
+                case 0:
+                    pepper1.setVisibility(View.INVISIBLE);
+                    pepper2.setVisibility(View.INVISIBLE);
+                    pepper3.setVisibility(View.INVISIBLE);
+                    pepper4.setVisibility(View.INVISIBLE);
+                    pepper5.setVisibility(View.INVISIBLE);
+                    break;
+                case 1:
+                    pepper1.setVisibility(View.VISIBLE);
+                    pepper2.setVisibility(View.INVISIBLE);
+                    pepper3.setVisibility(View.INVISIBLE);
+                    pepper4.setVisibility(View.INVISIBLE);
+                    pepper5.setVisibility(View.INVISIBLE);
+                    break;
+                case 2:
+                    pepper1.setVisibility(View.VISIBLE);
+                    pepper2.setVisibility(View.VISIBLE);
+                    pepper3.setVisibility(View.INVISIBLE);
+                    pepper4.setVisibility(View.INVISIBLE);
+                    pepper5.setVisibility(View.INVISIBLE);
+                    break;
+                case 3:
+                    pepper1.setVisibility(View.VISIBLE);
+                    pepper2.setVisibility(View.VISIBLE);
+                    pepper3.setVisibility(View.VISIBLE);
+                    pepper4.setVisibility(View.INVISIBLE);
+                    pepper5.setVisibility(View.INVISIBLE);
+                    break;
+                case 4:
+                    pepper1.setVisibility(View.VISIBLE);
+                    pepper2.setVisibility(View.VISIBLE);
+                    pepper3.setVisibility(View.VISIBLE);
+                    pepper4.setVisibility(View.VISIBLE);
+                    pepper5.setVisibility(View.INVISIBLE);
+                    break;
+                case 5:
+                    pepper1.setVisibility(View.VISIBLE);
+                    pepper2.setVisibility(View.VISIBLE);
+                    pepper3.setVisibility(View.VISIBLE);
+                    pepper4.setVisibility(View.VISIBLE);
+                    pepper5.setVisibility(View.VISIBLE);
+                    break;
+
+            }
             String time = recipePostF.getUpload_time();
             String[] time1 = time.split("T");
             date.setText(time1[0]);

@@ -19,15 +19,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/spicy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/pepper_resize"
-        android:text="x5"
+    <ImageView
+        android:id="@+id/pepper_1"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_2"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_1"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_3"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_2"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_4"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_3"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_5"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_4"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/spicy"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:drawableStart="@drawable/pepper_resize"-->
+    <!--        android:text="x5"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/title"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/title"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/title" />-->
 
     <TextView
         android:id="@+id/date"
