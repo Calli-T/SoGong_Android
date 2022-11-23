@@ -195,6 +195,7 @@ public class PhotoFragment extends Fragment {
         Thread t = new Thread(nr);
         t.start();
 
+
         // #20 요리 사진 게시글 정렬
         // 임시로 플로팅 버튼에다가 걸어 테스트해놨습니다. 나중에 스피너에 대체해서 걸어주세요
         /*
