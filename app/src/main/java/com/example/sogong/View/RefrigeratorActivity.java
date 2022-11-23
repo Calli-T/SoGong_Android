@@ -21,6 +21,7 @@ import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
+import com.example.sogong.Control.ControlPhoto_f;
 import com.example.sogong.Control.ControlPost_f;
 import com.example.sogong.Control.ControlRefrigerator_f;
 import com.example.sogong.Model.Comment;
@@ -67,7 +68,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.ingre_add_button);
         fab.setOnClickListener(new FABClickListener());
 
-        // 원래 있던 요리 재료 가져오는 코드
+        // #6
         /*
         final Runnable runnable = new Runnable() {
             @Override
@@ -143,44 +144,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         t.start();
         */
 
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (responseCode == 200) {
 
-                } else if (responseCode == 500) {
-
-                } else if (responseCode == 502) {
-
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (threadFlag)
-                        runOnUiThread(runnable);
-                    else {
-                        i = 30;
-                    }
-                }
-            }
-        }
-
-        ControlPost_f cpf = new ControlPost_f();
-        cpf.lookupMyCommentList("test");
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
     }
 
     @Override
@@ -574,6 +538,124 @@ final Runnable runnable = new Runnable() {
         Thread t = new Thread(nr);
         t.start();
  */
+
+// #17
+// LookUp에는 새로운 DTO가 필요하다, 레트로핏 서비스와 컨트롤러를 모두 수정해둠.
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+
+                } else if (responseCode == 500) {
+
+                } else if (responseCode == 502) {
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlPhoto_f cpf = new ControlPhoto_f();
+        cpf.lookupPhoto(13, "test");
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
+
+// 추가) 사진 게시판 조회
+
+// #18은 PhotoAddActivity에 존재
+
+// #19
+// 삭제 불가, Integer로 반환안함, 삭제가 아닌 보낸 객체를 복사해서 id만 다르게 하여 생성하는 버그 존재
+/* 테스트에서 삭제할 객체는(=미리 등록한 객체)는 아래와같음, 삭제할 객체를 받은(#17) 그대로 보내면 가능함
+{
+	"post_id": 13,
+	"photo_link": "Jupiter and Mars",
+	"like_count": 4,
+	"upload_time": "2022-11-19T20:57:58.036452+09:00",
+	"nickname": "test"
+}
+*/
+
+// #20 요리 사진 게시글 정렬
+/*
+        addPhotoBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -2;
+
+                            if (list != null)
+                                plu.startToast(list.toString());
+
+                            // UI 코드 작성해주세요
+
+                        } else if (responseCode == 500) {
+                            plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        } else if (responseCode == 502) {
+                            plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            getActivity().runOnUiThread(runnable);
+                        }
+                    }
+                }
+
+                // responseCode가 -1일 때, 즉 최초 사진 불러오기가 있고난 다음에야 가능함
+                if (responseCode == -1) {
+                    responseCode = -2;
+
+                    cplf.sortPhotoList("좋아요 순", 1); // 정렬기준, 페이지
+                }
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+
+            }
+        });
+        */
+
+// #21은 RecipeFragment에 작성된 #27을 그대로 활용하시면됩니다
+
+// #22은 RecipeFragment에 작성된 #30을 그대로 활용하시면됩니다
 
 // 0단계: 주석 보고 주석 써놓기
 

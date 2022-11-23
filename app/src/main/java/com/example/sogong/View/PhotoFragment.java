@@ -195,63 +195,6 @@ public class PhotoFragment extends Fragment {
         Thread t = new Thread(nr);
         t.start();
 
-
-        // #20 요리 사진 게시글 정렬
-        // 임시로 플로팅 버튼에다가 걸어 테스트해놨습니다. 나중에 스피너에 대체해서 걸어주세요
-        /*
-        addPhotoBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -2;
-
-                            if (list != null)
-                                plu.startToast(list.toString());
-
-                            // UI 코드 작성해주세요
-
-                        } else if (responseCode == 500) {
-                            plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                        } else if (responseCode == 502) {
-                            plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
-
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            getActivity().runOnUiThread(runnable);
-                        }
-                    }
-                }
-
-                // responseCode가 -1일 때, 즉 최초 사진 불러오기가 있고난 다음에야 가능함
-                if (responseCode == -1) {
-                    responseCode = -2;
-
-                    cplf.sortPhotoList("좋아요 순", 1); // 정렬기준, 페이지
-                }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
-
-            }
-        });
-        */
-
         return view;
     }
 

@@ -66,6 +66,8 @@ public class ControlPhotoList_f {
         call.enqueue(new Callback<List<PhotoPost>>() {
             @Override
             public void onResponse(Call<List<PhotoPost>> call, Response<List<PhotoPost>> response) {
+                PhotoFragment.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
@@ -75,7 +77,6 @@ public class ControlPhotoList_f {
 
                             // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
                             PhotoFragment.photoList = photoList.getPhotoList();
-                            PhotoFragment.responseCode = response.code();
                         }
                     }
                 } else { // 500

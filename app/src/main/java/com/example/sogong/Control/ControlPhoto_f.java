@@ -5,9 +5,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.PhotoList;
+import com.example.sogong.Model.PhotoLookUp;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.View.PhotoAddActivity;
 import com.example.sogong.View.PhotoFragment;
+import com.example.sogong.View.PhotoLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -21,20 +23,25 @@ import retrofit2.Response;
 public class ControlPhoto_f {
 
     PhotoPost photoPost;
+    PhotoLookUp photoLookUp;
 
-    public void lookupPhoto(int postId){
+    public void lookupPhoto(int postId, String nickname){
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<PhotoPost> call = sv.LookupPhoto(postId);
+        Call<PhotoLookUp> call = sv.LookupPhoto(postId, nickname);
 
-        call.enqueue(new Callback<PhotoPost>() {
+        call.enqueue(new Callback<PhotoLookUp>() {
             @Override
-            public void onResponse(@NonNull Call<PhotoPost> call, @NonNull Response<PhotoPost> response) {
+            public void onResponse(@NonNull Call<PhotoLookUp> call, @NonNull Response<PhotoLookUp> response) {
+                PhotoLookupActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
-                            photoPost = response.body();
-                            Log.d("result", photoPost.toString());
+                            photoLookUp = response.body();
+                            Log.d("result", photoLookUp.toString());
+
+                            PhotoLookupActivity.photoLookUp = response.body();
                         }
                     }
                 } else { // 500
@@ -43,7 +50,7 @@ public class ControlPhoto_f {
             }
 
             @Override
-            public void onFailure(@NonNull Call<PhotoPost> call, @NonNull Throwable t) { // 502
+            public void onFailure(@NonNull Call<PhotoLookUp> call, @NonNull Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -87,6 +94,8 @@ public class ControlPhoto_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                PhotoLookupActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
