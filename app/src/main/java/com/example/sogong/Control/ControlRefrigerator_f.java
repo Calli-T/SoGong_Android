@@ -38,7 +38,6 @@ public class ControlRefrigerator_f {
                         if (response.code() == 200) {
                             refrigerator = response.body();
                             RefrigeratorActivity.ingreList = response.body();
-
                             Log.d("result", refrigerator.toString());
                         }
                     } else { // 404
@@ -64,10 +63,13 @@ public class ControlRefrigerator_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RefrigeratorActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
+                            RefrigeratorActivity.responseResult = response.body();
                             Log.d("result", "" + response.body());
                         }
                     }
@@ -120,6 +122,8 @@ public class ControlRefrigerator_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RefrigeratorActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {

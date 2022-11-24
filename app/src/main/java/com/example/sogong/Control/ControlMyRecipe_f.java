@@ -8,6 +8,7 @@ import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -28,12 +29,16 @@ public class ControlMyRecipe_f {
         call.enqueue(new Callback<List<RecipePost_f>>() {
             @Override
             public void onResponse(@NonNull Call<List<RecipePost_f>> call, @NonNull Response<List<RecipePost_f>> response) {
+                RecipeFragment.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             recipeList = response.body();
                             Log.d("result", recipeList.toString());
+
+                            RecipeFragment.recipelist = response.body();
                         }
                     }
                 } else { // 400
@@ -60,6 +65,8 @@ public class ControlMyRecipe_f {
                         if(response.code() == 200) {
                             recipeList = response.body();
                             Log.d("result", recipeList.toString());
+
+                            RecipeFragment.recipelist = response.body();
                         }
                     }
                 } else { // 400
@@ -80,12 +87,16 @@ public class ControlMyRecipe_f {
         call.enqueue(new Callback<List<RecipePost_f>>() {
             @Override
             public void onResponse(@NonNull Call<List<RecipePost_f>> call, @NonNull Response<List<RecipePost_f>> response) {
+                RecipeFragment.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             recipeList = response.body();
                             Log.d("result", recipeList.toString());
+
+                            RecipeFragment.recipelist = response.body();
                         }
                     }
                 } else { // 404

@@ -30,6 +30,7 @@ import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.Comment;
+import com.example.sogong.Model.PhotoLookUp;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipePostLookUp;
 import com.example.sogong.Model.RecipePost_f;
@@ -48,6 +49,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
     ImageButton like_btn;
 
     public static int responseCode;
+    public static PhotoLookUp photoLookUp;
 
     PopupMenu dropDownMenu;
     Menu menu;
