@@ -1,6 +1,8 @@
 package com.example.sogong.View;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -164,9 +166,10 @@ public class MyPageFragment extends Fragment {
                     public void run() {
                         if (MainActivity.responseCode == 200) {
                             MainActivity.responseCode = -1;
+
                             mu.startToast("로그아웃");
                             mu.changePage(0);
-//                            getActivity().finish();
+                            MainActivity.isLogout = true;
 
                         } else if (MainActivity.responseCode == 500) {
                             MainActivity.responseCode = 0;
@@ -250,19 +253,6 @@ public class MyPageFragment extends Fragment {
         return rootview;
     }
 
-    private class stateThread extends Thread {
-        private static final String TAG = "ExampleThread";
-
-        public stateThread() {
-
-        }
-
-        public void run() {
-
-        }
-
-    }
-
     class MyPage_UI implements Control {
         int state = -1;
 
@@ -287,8 +277,6 @@ public class MyPageFragment extends Fragment {
 
 
             cd.callFunction(title, message, type, btnTxtList);
-
-
         }
 
         @Override

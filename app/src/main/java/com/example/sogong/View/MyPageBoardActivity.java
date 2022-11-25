@@ -22,7 +22,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
@@ -60,7 +59,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
     public RecipeAdapter recipeAdapter;
     public RecyclerView recipeRecyclerView;
     Custon_ProgressDialog custon_progressDialog;
-    SwipeRefreshLayout swipeRefreshLayout;
     ControlRecipeList_f crlf = new ControlRecipeList_f();
     ControlRecipe_f crf = new ControlRecipe_f();
     ControlLike_f clf = new ControlLike_f();

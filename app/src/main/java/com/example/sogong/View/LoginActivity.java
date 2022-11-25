@@ -1,7 +1,10 @@
 package com.example.sogong.View;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Model.User;
 import com.example.sogong.R;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -81,6 +85,18 @@ public class LoginActivity extends AppCompatActivity {
                             responseCode = 0;
                             custon_progressDialog.dismiss();
                             lu.startToast("로그인 성공");
+
+                            if (auto_login) {
+                                SharedPreferences auto = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
+                                SharedPreferences.Editor autoLoginEdit = auto.edit();
+                                autoLoginEdit.putString("uid", id);
+                                autoLoginEdit.putString("password", pw);
+                                autoLoginEdit.putString("nickname", ControlLogin_f.userinfo.getNickname());
+                                autoLoginEdit.putString("email", ControlLogin_f.userinfo.getEmail());
+                                autoLoginEdit.putBoolean("auto_login", true);
+                                autoLoginEdit.apply();
+                            }
+
                             lu.changePage(0);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
                             responseCode = 0;
@@ -89,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else if (responseCode == 500) {
                             responseCode = 0;
                             custon_progressDialog.dismiss();
-                            lu.startDialog(0,"서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                            lu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -169,6 +185,34 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences sp = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
+        boolean isAuto = sp.getBoolean("auto_login", false);
+        Log.d("test auto", isAuto+"");
+
+        if(isAuto && !MainActivity.isLogout){
+            String nickname = sp.getString("nickname", "default");
+            String email = sp.getString("email", "default");
+            String uid = sp.getString("uid", "default");
+            String password =sp.getString("password", "default");
+
+            ControlLogin_f.userinfo = new User(nickname, uid, password, email, true);
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+
+            Log.d("test auto", ControlLogin_f.userinfo.toString());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
 
 // 위는 UI controler, 아래는 Dialog코드

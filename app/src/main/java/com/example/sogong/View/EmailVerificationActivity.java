@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,13 @@ import com.example.sogong.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EmailVerificationActivity extends AppCompatActivity {
 
     EditText email_at, code_at;
     Button sendcode_button, check_button;
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
 
     public static int responseCode;
     public static int destination = 0; // 액티비티 이동 분기, 회원가입으로 or 닉네임 변경으로
@@ -36,7 +39,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailverification);
 
-        //responseCode = 0;
+        // flags
+        responseCode = 0;
+        threadFlag.set(true);
 
         //UI controller
         EV_UI eu = new EV_UI();
@@ -64,9 +69,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
                             } else if (responseCode == 404) {
                                 responseCode = 0;
                                 eu.startToast("존재하지 않는 이메일입니다.");
-                            }  else if (responseCode == 501) {
+                            } else if (responseCode == 501) {
                                 responseCode = 0;
-                                eu.startDialog(0,"서버 오류","서버 연결에 실패했습니다.",new ArrayList<String>(Arrays.asList("확인")));
+                                eu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                             }
                         }
                     }
@@ -75,17 +80,20 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        int i = 30;
-                        while (i > 0) {
-                            i--;
-
+                        for (int i = 0; i < 30; i++) {
                             try {
                                 Thread.sleep(1000);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-                            runOnUiThread(runnable);
+                            if (threadFlag.get()) {
+                                runOnUiThread(runnable);
+                                Log.d("Verification thread", "working");
+                            } else {
+                                i = 30;
+                                Log.d("Verification thread", "down");
+                            }
                         }
                     }
                 }
@@ -96,12 +104,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
                     // 비밀변경에는 사용자의 email과 대조하는 과정이 추가로 필요하다.
                     // 아예 자동으로 userinfo에서 꺼내와서 code 전송하고 잠궈라
-                    if(destination == 0){
+                    if (destination == 0) {
                         cef.authStart(email);
-                    } else if(destination == 1){
+                    } else if (destination == 1) {
                         eu.startToast("코드 전송");
                         //if(ControlLogin_f.userinfo.getEmail() == email)
-                            cef.authStart(email);
+                        cef.authStart(email);
                         //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
                     }
 
@@ -132,19 +140,19 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 if (destination == 0) {
                                     SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
                                     eu.changePage(0);
-                                } else if(destination == 1){
+                                } else if (destination == 1) {
                                     eu.changePage(1);
                                 }
-                                
+
                             } else if (responseCode == 400) {
                                 responseCode = 0;
                                 eu.startToast("잘못된 인증코드입니다.");
                             } else if (responseCode == 500) {
                                 responseCode = 0;
-                                eu.startDialog(0,"서버 오류","이메일 등록에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                eu.startDialog(0, "서버 오류", "이메일 등록에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
-                                eu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                eu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
                     }
@@ -182,6 +190,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        threadFlag.set(false);
+        isFinish = false;
+    }
+
     class EV_UI implements Control {
 
         @Override
@@ -212,7 +227,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 Intent intent = new Intent(EmailVerificationActivity.this, SignupActivity.class);
                 startActivity(intent);
                 // stack식 액티비티 천환 해결방식을 생각해둘것
-            } else if (dest == 1){
+            } else if (dest == 1) {
                 Intent intent = new Intent(EmailVerificationActivity.this, ChangePasswordActivity.class);
                 startActivity(intent);
             }
