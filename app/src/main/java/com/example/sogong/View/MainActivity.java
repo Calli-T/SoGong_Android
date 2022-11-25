@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Model.Post;
 import com.example.sogong.Model.PostObject;
 import com.example.sogong.R;
@@ -66,10 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
     //------------------------------------------------------------
     public static int responseCode;
+    public static boolean isLogout = false;
     //------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_postlist);
         setContentView(R.layout.activity_main);
@@ -144,6 +148,18 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences auto = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
+        if(isLogout) {
+            SharedPreferences.Editor autoLoginEdit = auto.edit();
+            autoLoginEdit.clear();
+            autoLoginEdit.commit();
+            isLogout = false;
+        }
     }
 
     // 프래그먼트에 넣어둠
@@ -293,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
             return "success";
         }
     }
+
 }
 // 이하 onCreate 아래, GetBoard 위에 있던 코드
 //        recyclerView = findViewById(R.id.recyclerView);
