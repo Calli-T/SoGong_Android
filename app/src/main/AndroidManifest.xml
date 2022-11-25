@@ -24,18 +24,18 @@
         <activity android:name=".View.EmailVerificationActivity" />
         <activity android:name=".View.RecipeAddActivity" />
         <activity android:name=".View.RecipeLookupActivity" />
-        <activity android:name=".View.PhotoLookupActivity" />
-        <activity android:name=".View.ReportActivity" />
         <activity android:name=".View.RecipeSearchActivity" />
+        <activity android:name=".View.ReportActivity" />
+        <activity android:name=".View.RefrigeratorActivity" />
         <activity android:name=".View.MailBoxActivity" />
         <activity android:name=".View.MailSendActivity" />
         <activity android:name=".View.MailLookupActivity" />
         <activity android:name=".View.PhotoAddActivity" />
-        <activity android:name=".View.LoginActivity" />
-
+        <activity android:name=".View.PhotoLookupActivity" />
+        <activity android:name=".View.MyPageBoardActivity" />
 
         <activity
-            android:name=".View.RefrigeratorActivity"
+            android:name=".View.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.SoGong.NoActionBar">
             <intent-filter>
