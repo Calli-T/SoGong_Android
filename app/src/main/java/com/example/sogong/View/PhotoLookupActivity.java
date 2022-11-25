@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.ControlPhoto_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.PhotoLookUp;
@@ -180,8 +181,10 @@ public class PhotoLookupActivity extends AppCompatActivity {
         //ControlRecipe_f crf = new ControlRecipe_f();
         //crf.lookupRecipe(recipePost.getPost_id());
 
-        ControlRecipe_f crf = new ControlRecipe_f();
-        crf.lookupRecipe(42, "test");
+       // ControlRecipe_f crf = new ControlRecipe_f();
+        //crf.lookupRecipe(42, "test");
+        //ControlPhoto_f cpf = new ControlPhoto_f();
+        //cpf.deletePhoto("test", 23);
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);

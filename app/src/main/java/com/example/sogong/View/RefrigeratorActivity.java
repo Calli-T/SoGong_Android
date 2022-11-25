@@ -144,7 +144,6 @@ public class RefrigeratorActivity extends AppCompatActivity {
         t.start();
         */
 
-
     }
 
     @Override
@@ -241,7 +240,46 @@ final Runnable runnable = new Runnable() {
  */
 
 // #8
-// 작동 안됨, 500
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+
+                } else if (responseCode == 500) {
+
+                } else if (responseCode == 502) {
+
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (threadFlag)
+                        runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
+                }
+            }
+        }
+
+        ControlRefrigerator_f crff = new ControlRefrigerator_f();
+        crff.deleteRefrigerator(23);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
 
 // #9
 /*
@@ -587,16 +625,42 @@ final Runnable runnable = new Runnable() {
 // #18은 PhotoAddActivity에 존재
 
 // #19
-// 삭제 불가, Integer로 반환안함, 삭제가 아닌 보낸 객체를 복사해서 id만 다르게 하여 생성하는 버그 존재
-/* 테스트에서 삭제할 객체는(=미리 등록한 객체)는 아래와같음, 삭제할 객체를 받은(#17) 그대로 보내면 가능함
-{
-	"post_id": 13,
-	"photo_link": "Jupiter and Mars",
-	"like_count": 4,
-	"upload_time": "2022-11-19T20:57:58.036452+09:00",
-	"nickname": "test"
-}
-*/
+/*
+final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (responseCode == 200) {
+                    responseCode = -1;
+
+
+                } else if (responseCode == 500) {
+                    //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 502) {
+                    //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                }
+            }
+        };
+
+        class NewRunnable implements Runnable {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(runnable);
+                }
+            }
+        }
+        ControlPhoto_f cpf = new ControlPhoto_f();
+        cpf.deletePhoto("test", 24);
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+ */
 
 // #20 요리 사진 게시글 정렬
 /*
