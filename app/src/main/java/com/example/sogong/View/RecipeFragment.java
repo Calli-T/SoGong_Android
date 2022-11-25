@@ -44,7 +44,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-
     String[] pagenum;
     public static int totalpage;
     public static List<RecipePost_f> recipelist;
@@ -75,17 +74,18 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
 
-        searchButton = view.findViewById(R.id.search_button);
+        searchButton = view.findViewById(R.id.search_button);//검색 버튼
+        //레시피 게시글 리스트 리사이클러뷰
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
         recipeAdapter = new RecipeAdapter();
         recipeRecyclerView.setAdapter(recipeAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recipeRecyclerView.setLayoutManager(layoutManager);
-
+        //플로팅 버튼
         FloatingActionButton fab = view.findViewById(R.id.recipe_add_button);
         fab.setOnClickListener(new FABClickListener());
         responseCode = 0;
-
+        //swipe레이아웃
         swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         // UI controller
@@ -130,7 +130,6 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-
                             Log.d("recipefragment", firstpage.toString());
                             if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
                                 crlf.lookupRecipeList(position + 1);
@@ -258,16 +257,19 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     try {
                         Thread.sleep(1000);
                         Log.d("thread1", "thread2");
-                    } catch (Exception e) {
+                    } catch (InterruptedException  e) {
                         e.printStackTrace();
+                        Log.d("thread1", "thread5");
                     }
 
                     if (threadFlag.get()) {
                         getActivity().runOnUiThread(runnable);
                         Log.d("thread1", "thread3");
+                        Thread.currentThread().interrupt();
                     } else {
                         i = 30;
                         Log.d("thread1", "thread4");
+                        Thread.currentThread().interrupt();
                     }
                 }
                 Log.d("thread1", "thread1");
