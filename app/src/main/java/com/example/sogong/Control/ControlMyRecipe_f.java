@@ -5,9 +5,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.PhotoPost;
+import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.MyPageBoardActivity;
+import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -32,8 +35,9 @@ public class ControlMyRecipe_f {
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
-                            recipeList = response.body();
-                            Log.d("result", recipeList.toString());
+                            MyPageBoardActivity.recipelist = response.body();
+                            //Log.d("result", recipeList.toString());
+                            MyPageBoardActivity.responseCode = response.code();
                         }
                     }
                 } else { // 400

@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login_button, join_button;
     CheckBox checkbox;
     TextInputLayout textInputLayout2;
+    Custon_ProgressDialog custon_progressDialog;
 
     public static int responseCode;
 
@@ -42,6 +43,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+
 
         //UI controller
         Login_UI lu = new Login_UI();
@@ -59,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 lu.startToast("로그인 중");
+                custon_progressDialog.show();
                 String id = userid_et.getText().toString();
                 String pw = passwd_et.getText().toString();
                 boolean auto_login = checkbox.isChecked();
@@ -73,13 +79,16 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = 0;
+                            custon_progressDialog.dismiss();
                             lu.startToast("로그인 성공");
                             lu.changePage(0);
                         } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
                             responseCode = 0;
+                            custon_progressDialog.dismiss();
                             lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
+                            custon_progressDialog.dismiss();
                             lu.startDialog(0,"서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }

@@ -1,5 +1,7 @@
 package com.example.sogong.View;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -42,8 +45,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+public class RecipeFragment extends Fragment implements  SwipeRefreshLayout.OnRefreshListener{
 
     String[] pagenum;
     public static int totalpage;
@@ -74,20 +76,23 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recipeboard, container, false);
-
-        searchButton = view.findViewById(R.id.search_button);
+Log.d("recipefragment","시작");
+        searchButton = view.findViewById(R.id.search_button);//검색 버튼
+        //레시피 게시글 리스트 리사이클러뷰
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recipe_recyclerview);
         recipeAdapter = new RecipeAdapter();
         recipeRecyclerView.setAdapter(recipeAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recipeRecyclerView.setLayoutManager(layoutManager);
-
+        //플로팅 버튼
         FloatingActionButton fab = view.findViewById(R.id.recipe_add_button);
         fab.setOnClickListener(new FABClickListener());
         responseCode = 0;
 
+        //swipe레이아웃
         swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
 
@@ -130,8 +135,6 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-
-                            Log.d("recipefragment", firstpage.toString());
                             if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
                                 crlf.lookupRecipeList(position + 1);
                                 custon_progressDialog.show();
@@ -164,7 +167,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                     public void run() {
                                         for (int i = 0; i < 30; i++) {
                                             try {
-                                                Thread.sleep(1000);
+                                                sleep(1000);
                                                 Log.d("thread2", "thread2");
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -184,6 +187,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                 NewRunnable nr = new NewRunnable();
                                 Thread t = new Thread(nr);
                                 pagethreadFlag.set(true);
+                                threadFlag.set(true);
                                 t.start();
                                 //업데이트된 레시피 리스트로 전환
                                 recipeAdapter.setRecipeList(recipelist);
@@ -238,9 +242,8 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     });
 
                     custon_progressDialog.dismiss();//로딩창 종료
-
                     Log.d("recipefragment", recipelist.get(0).toString());
-
+                    Thread.currentThread().interrupt();
                 } else if (responseCode == 500) {
                     custon_progressDialog.dismiss();//로딩창 종료
                     rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
@@ -258,16 +261,19 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     try {
                         Thread.sleep(1000);
                         Log.d("thread1", "thread2");
-                    } catch (Exception e) {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Log.d("thread1", "thread5");
                     }
 
                     if (threadFlag.get()) {
                         getActivity().runOnUiThread(runnable);
                         Log.d("thread1", "thread3");
+
                     } else {
                         i = 30;
                         Log.d("thread1", "thread4");
+                        Thread.currentThread().interrupt();
                     }
                 }
                 Log.d("thread1", "thread1");
@@ -1031,6 +1037,9 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     // 당겨서 새로고침 했을 때 뷰 변경 메서드
     public void updateLayoutView() {
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.detach(this).attach(this).commit();
+        Log.d("recipefragment", "새로고침");
 //        custon_progressDialog = new Custon_ProgressDialog(requireActivity());
 //        custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
@@ -1092,7 +1101,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                     public void run() {
                                         for (int i = 0; i < 30; i++) {
                                             try {
-                                                Thread.sleep(1000);
+                                                sleep(1000);
                                                 Log.d("thread3", "thread2");
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -1184,7 +1193,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public void run() {
                 for (int i = 0; i < 30; i++) {
                     try {
-                        Thread.sleep(1000);
+                        sleep(1000);
                         Log.d("thread4", "thread2");
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1209,6 +1218,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         t.start();
 
     }
+
 
     class FABClickListener implements View.OnClickListener {
         @Override
