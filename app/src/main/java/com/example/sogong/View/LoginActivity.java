@@ -208,6 +208,11 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("test auto", ControlLogin_f.userinfo.toString());
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
 
 // 위는 UI controler, 아래는 Dialog코드

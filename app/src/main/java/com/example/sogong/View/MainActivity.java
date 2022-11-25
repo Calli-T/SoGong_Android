@@ -310,6 +310,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
 // 이하 onCreate 아래, GetBoard 위에 있던 코드
 //        recyclerView = findViewById(R.id.recyclerView);
