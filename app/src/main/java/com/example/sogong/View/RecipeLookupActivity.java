@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
+import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.Comment;
@@ -36,7 +38,7 @@ import java.util.Objects;
 public class RecipeLookupActivity extends AppCompatActivity {
     TextView recipetitle;
     TextView recipecategory;
-    TextView recipespicy;
+    ImageView[] pepper;
     TextView recipedescription;
     TextView recipecomment;
     public CommentAdapter commentAdapter;
@@ -48,6 +50,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
     public Recipe_Ingre_Adapter recipeIngreAdapter;
     public RecyclerView recipeIngreRecyclerView;
+    Custon_ProgressDialog custon_progressDialog;
 
     public static int responseCode;
     public static RecipePostLookUp recipePostLookUp;
@@ -69,7 +72,12 @@ public class RecipeLookupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lookuprecipe);
         recipetitle = findViewById(R.id.recipetitle_text1);
         recipecategory = findViewById(R.id.recipecate_text1);
-        recipespicy = findViewById(R.id.recipespicy_text1);
+        pepper = new ImageView[5];
+        pepper[0] = findViewById(R.id.pepper_1);
+        pepper[1] = findViewById(R.id.pepper_2);
+        pepper[2] = findViewById(R.id.pepper_3);
+        pepper[3] = findViewById(R.id.pepper_4);
+        pepper[4] = findViewById(R.id.pepper_5);
         recipedescription = findViewById(R.id.recipedescription_text);
         recipecomment = findViewById(R.id.commentcount_text);
         like_btn = findViewById(R.id.like_btn);
@@ -148,8 +156,51 @@ public class RecipeLookupActivity extends AppCompatActivity {
         //넘겨온 값으로 채워넣음
         recipetitle.setText(recipePostF.getTitle());
         recipecategory.setText(recipePostF.getCategory());
-        recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
         recipedescription.setText(recipePostF.getDescription());
+        switch (recipePostF.getDegree_of_spicy()) {
+            case 0:
+                pepper[0].setVisibility(View.INVISIBLE);
+                pepper[1].setVisibility(View.INVISIBLE);
+                pepper[2].setVisibility(View.INVISIBLE);
+                pepper[3].setVisibility(View.INVISIBLE);
+                pepper[4].setVisibility(View.INVISIBLE);
+                break;
+            case 1:
+                pepper[0].setVisibility(View.VISIBLE);
+                pepper[1].setVisibility(View.INVISIBLE);
+                pepper[2].setVisibility(View.INVISIBLE);
+                pepper[3].setVisibility(View.INVISIBLE);
+                pepper[4].setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                pepper[0].setVisibility(View.VISIBLE);
+                pepper[1].setVisibility(View.VISIBLE);
+                pepper[2].setVisibility(View.INVISIBLE);
+                pepper[3].setVisibility(View.INVISIBLE);
+                pepper[4].setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                pepper[0].setVisibility(View.VISIBLE);
+                pepper[1].setVisibility(View.VISIBLE);
+                pepper[2].setVisibility(View.VISIBLE);
+                pepper[3].setVisibility(View.INVISIBLE);
+                pepper[4].setVisibility(View.INVISIBLE);
+                break;
+            case 4:
+                pepper[0].setVisibility(View.VISIBLE);
+                pepper[1].setVisibility(View.VISIBLE);
+                pepper[2].setVisibility(View.VISIBLE);
+                pepper[3].setVisibility(View.VISIBLE);
+                pepper[4].setVisibility(View.INVISIBLE);
+                break;
+            case 5:
+                pepper[0].setVisibility(View.VISIBLE);
+                pepper[1].setVisibility(View.VISIBLE);
+                pepper[2].setVisibility(View.VISIBLE);
+                pepper[3].setVisibility(View.VISIBLE);
+                pepper[4].setVisibility(View.VISIBLE);
+                break;
+        }
         recipecomment.setText("댓글 " + String.valueOf(recipePostF.getComment_count() + "개"));
         commentAdapter.setCommentList(recipePostF.getComments());
         recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
@@ -227,6 +278,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 //ccf.writeComment(comment);
             }
         });
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
@@ -249,13 +304,56 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     recipeIngreRecyclerView.setLayoutManager(recipe_ingre_layoutManager);
 
                     //넘겨온 값으로 채워넣음
-                    recipetitle.setText(recipePostF.getTitle());
-                    recipecategory.setText(recipePostF.getCategory());
-                    recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
-                    recipedescription.setText(recipePostF.getDescription());
-                    recipecomment.setText("댓글 " + String.valueOf(recipePostF.getComment_count() + "개"));
-                    commentAdapter.setCommentList(recipePostF.getComments());
-                    recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
+                    recipetitle.setText(recipePostLookUp.getRecipeInfo().getTitle());
+                    recipecategory.setText(recipePostLookUp.getRecipeInfo().getCategory());
+                    switch (recipePostLookUp.getRecipeInfo().getDegree_of_spicy()) {
+                        case 0:
+                            pepper[0].setVisibility(View.INVISIBLE);
+                            pepper[1].setVisibility(View.INVISIBLE);
+                            pepper[2].setVisibility(View.INVISIBLE);
+                            pepper[3].setVisibility(View.INVISIBLE);
+                            pepper[4].setVisibility(View.INVISIBLE);
+                            break;
+                        case 1:
+                            pepper[0].setVisibility(View.VISIBLE);
+                            pepper[1].setVisibility(View.INVISIBLE);
+                            pepper[2].setVisibility(View.INVISIBLE);
+                            pepper[3].setVisibility(View.INVISIBLE);
+                            pepper[4].setVisibility(View.INVISIBLE);
+                            break;
+                        case 2:
+                            pepper[0].setVisibility(View.VISIBLE);
+                            pepper[1].setVisibility(View.VISIBLE);
+                            pepper[2].setVisibility(View.INVISIBLE);
+                            pepper[3].setVisibility(View.INVISIBLE);
+                            pepper[4].setVisibility(View.INVISIBLE);
+                            break;
+                        case 3:
+                            pepper[0].setVisibility(View.VISIBLE);
+                            pepper[1].setVisibility(View.VISIBLE);
+                            pepper[2].setVisibility(View.VISIBLE);
+                            pepper[3].setVisibility(View.INVISIBLE);
+                            pepper[4].setVisibility(View.INVISIBLE);
+                            break;
+                        case 4:
+                            pepper[0].setVisibility(View.VISIBLE);
+                            pepper[1].setVisibility(View.VISIBLE);
+                            pepper[2].setVisibility(View.VISIBLE);
+                            pepper[3].setVisibility(View.VISIBLE);
+                            pepper[4].setVisibility(View.INVISIBLE);
+                            break;
+                        case 5:
+                            pepper[0].setVisibility(View.VISIBLE);
+                            pepper[1].setVisibility(View.VISIBLE);
+                            pepper[2].setVisibility(View.VISIBLE);
+                            pepper[3].setVisibility(View.VISIBLE);
+                            pepper[4].setVisibility(View.VISIBLE);
+                            break;
+                    }
+                    recipedescription.setText(recipePostLookUp.getRecipeInfo().getDescription());
+                    recipecomment.setText("댓글 " + String.valueOf(recipePostLookUp.getRecipeInfo().getComment_count() + "개"));
+                    commentAdapter.setCommentList(recipePostLookUp.getRecipeInfo().getComments());
+                    recipeIngreAdapter.setRecipeIngreList(recipePostLookUp.getRecipeInfo().getRecipe_Ingredients());
                     Log.d("recipe", String.valueOf(recipeIngreAdapter.getItemCount()));
 
                     //댓글리스트에 있는 버튼들의 클릭 이벤트 처리
@@ -263,12 +361,12 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         @Override
                         public void onItemLeftButtonClick(View view, int position) {
                             Log.d("recipe", String.valueOf(position) + "left button click");
-                            comment_edit.setText(recipePostF.getComments().get(position).getComments());
+                            comment_edit.setText(recipePostLookUp.getRecipeInfo().getComments().get(position).getComments());
                             comment_add_btn.setText("수정");
                             comment_add_btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Comment comment = new Comment(recipePostF.getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                                    Comment comment = new Comment(recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
                                     comment_add_btn.setText("등록");
                                     comment_edit.setText("");
                                     /* #34 레시피 게시판 댓글 수정 */
@@ -287,12 +385,12 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             Log.d("recipe", String.valueOf(position) + "right button click");
                             ControlComment_f ccf = new ControlComment_f();
                             //로그인한 사용자와 댓글을 단 사용자와 같은 경우는 삭제 로직
-                            if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getNickname())) {
-                                ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getComment_id());
+                            if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getNickname())) {
+                                ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());
                             } else {//같지 않은 경우는 신고 로직
                                 Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                intent.putExtra("comment_id", recipePostF.getComments().get(position).getComment_id());
+                                intent.putExtra("comment_id", recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());
                                 intent.putExtra("report_post_type", -1);
                                 startActivity(intent);
 
@@ -304,29 +402,18 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //cref.reportComment(reportInfo);
                         }
                     });
-                    if(recipePostLookUp.isLikeInfo()){
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
-                        like_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                /* #27 레시피 게시글 "좋아요" 취소 */
-                                //clf.unLikePost("test", 1, 28);
+                    like_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(recipePostLookUp.isLikeInfo()){
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
-                            }
-                        });
-
-
-                    }else {
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
-                        like_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                /* #27 레시피 게시글 "좋아요" 등록 */
-                                //clf.likePost("test", 1, 28);
+                                recipePostLookUp.setLikeInfo(false);//좋아요 취소로 수정
+                            }else{
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                                recipePostLookUp.setLikeInfo(true);//좋아요 취소로 수정
                             }
-                        });
-                    }
+                        }
+                    });
 
                     comment_add_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -334,7 +421,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //댓글 등록 관련 로직 추가
                             //새로고침필수
                             /* #33 레시피 게시판 댓글 작성 */
-                            Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                            Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getPost_id(), comment_edit.getText().toString(), "");
                             comment_edit.setText("");
                             //ccf.writeComment(comment);
                         }
@@ -346,10 +433,13 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
                     recipedescription.setText(recipePostF.getDescription());
                      */
+                    custon_progressDialog.dismiss();
 
                 } else if (responseCode == 500) {
+                    custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 502) {
+                    custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
@@ -372,11 +462,23 @@ public class RecipeLookupActivity extends AppCompatActivity {
         //crf.lookupRecipe(recipePost.getPost_id());
 
         ControlRecipe_f crf = new ControlRecipe_f();
-        crf.lookupRecipe(42, "test");
+        crf.lookupRecipe(recipePostF.getPost_id(), ControlLogin_f.userinfo.getNickname());
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
+    }
+    @Override
+    public void onBackPressed(){
+        ControlLike_f clf = new ControlLike_f();
+        if(recipePostLookUp.isLikeInfo()){
+            Log.d("like","좋아요 누른 거 서버로 보내요");
+            clf.likePost(ControlLogin_f.userinfo.getNickname(), 1,recipePostLookUp.getRecipeInfo().getPost_id());
+        } else {
+            Log.d("like","좋아요 취소한 거 서버로 보내요");
+            clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 1,recipePostLookUp.getRecipeInfo().getPost_id());
+        }
+        this.finish();
     }
 
     class RecipeLookup_UI implements Control {

@@ -101,6 +101,10 @@ public class MyPageFragment extends Fragment {
             public void onClick(View view) {
                 /* #15 "좋아요"를 누른 게시글 리스트 조회 */
                 //cpf.lookupMyLikeList("test", 1);
+                Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("post_type",2);
+                startActivity(intent);
             }
         });
 
@@ -109,6 +113,10 @@ public class MyPageFragment extends Fragment {
             public void onClick(View view) {
                 /* #16 댓글을 작성한 게시글들의 리스트 조회 */
                 //cpf.lookupMyCommentList("test");
+                Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("post_type",3);
+                startActivity(intent);
             }
         });
         refrigerator.setOnClickListener(new View.OnClickListener() {

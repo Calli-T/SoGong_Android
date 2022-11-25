@@ -74,7 +74,6 @@ public class PhotoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_photoboard, container, false);
 
-
         gridview = (GridView) view.findViewById(R.id.photo_grid);
         photoAdapter = new PhotoAdapter();
         gridview.setAdapter(photoAdapter);
@@ -146,9 +145,8 @@ public class PhotoFragment extends Fragment {
 //                        templist.add(tempPhoto4);
 
 
-//                        photoAdapter.setPhotoList(photoList);
+                        photoAdapter.setPhotoList(photoList);
                         //아직 디비에 base64아이템만 다 들어있는게 아니라서 임시로 이렇게 함. 최종본에서는  photoAdapter.setPhotoList(photoList); <-이 코드 사용
-                        photoAdapter.addItem(photoList.get(1));
                         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
