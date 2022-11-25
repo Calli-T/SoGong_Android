@@ -147,8 +147,8 @@ public class PhotoFragment extends Fragment {
 
 
 //                        photoAdapter.setPhotoList(photoList);
-
-                        photoAdapter.addItem(photoList.get(0));
+                        //아직 디비에 base64아이템만 다 들어있는게 아니라서 임시로 이렇게 함. 최종본에서는  photoAdapter.setPhotoList(photoList); <-이 코드 사용
+                        photoAdapter.addItem(photoList.get(1));
                         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

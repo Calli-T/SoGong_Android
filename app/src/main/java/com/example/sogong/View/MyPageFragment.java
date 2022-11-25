@@ -14,19 +14,14 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.sogong.Control.Control;
-import com.example.sogong.Control.ControlEdittingInfo_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
 import com.example.sogong.Control.ControlPost_f;
 import com.example.sogong.Control.ControlRefrigerator_f;
-import com.example.sogong.Model.Refrigerator;
-import com.example.sogong.Model.SearchInfo;
-import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,16 +64,24 @@ public class MyPageFragment extends Fragment {
                             try {
                                 Thread.sleep(100);
                                 if (Custom_Dialog.state == 0) {
-                                    /* #12 사용자 작성 레시피 조회 */
-                                    //cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
-                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
                                     Custom_Dialog.state = -1;
-                                    break;//쓰레드 꺼져
+                                    /* #12 사용자 작성 레시피 조회 */
+                                    cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
+                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+                                    Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("post_type",0);
+                                    startActivity(intent);
+                                    break;
                                 } else if (Custom_Dialog.state == 1) {
                                     Log.d("mypagefragment", "사진? state = " + Custom_Dialog.state);
                                     /* #11 사용자 작성 요리사진 조회 */
                                     //cmpf.lookupMyPhotoList(ControlLogin_f.userinfo.getNickname());
                                     Custom_Dialog.state = -1;
+                                    Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("post_type",1);
+                                    startActivity(intent);
                                     break;
                                 }
                             } catch (Exception e) {

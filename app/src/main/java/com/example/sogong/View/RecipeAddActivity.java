@@ -13,12 +13,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -39,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class RecipeAddActivity extends AppCompatActivity {
     Context context;
@@ -271,7 +274,24 @@ public class RecipeAddActivity extends AppCompatActivity {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        linearlayout1 = new LinearLayout(context);
+                        View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item,null);
+                        TextView name = view.findViewById(R.id.name);
+                        TextView selectName = view.findViewById(R.id.writtenname);
+                        TextView amount = view.findViewById(R.id.amount);
+                        TextView editAmount = view.findViewById(R.id.writtenamount);
+                        TextView unit =  view.findViewById(R.id.unit);
+                        ImageButton removeButton= view.findViewById(R.id.minus_button);
+                        selectName.setText(editText.getText().toString());
+                        editAmount.setText(editText1.getText().toString());
+                        removeButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                linearlayout.removeView(view);
+                            }
+                        });
+                        linearlayout.addView(view);
+
+                        /*linearlayout1 = new LinearLayout(context);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         linearlayout1.setOrientation(LinearLayout.HORIZONTAL);
                         layoutParams.setMargins(30, 0, 0, 0);
@@ -348,7 +368,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         linearlayout1.addView(ingreamount);
                         linearlayout1.addView(ingreamount_text);
                         linearlayout1.addView(ingreunit);
-                        linearlayout.addView(linearlayout1);
+                        linearlayout.addView(linearlayout1);*/
                         ingreSelectDialog.dismiss();
                     }
                 });
@@ -483,23 +503,37 @@ public class RecipeAddActivity extends AppCompatActivity {
             newRecipe.setCategory(recipecate.getSelectedItem().toString());
             newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
             newRecipe.setDescription(recipedescription.getText().toString());
-            //Arraylist사이즈만큼 반복해서 재료와 양의 리스트 만들기
-            for (int i = 0; i < namespinner_id.size(); i++) {
-                //Spinner spinnertemp;
-                TextView texttemp;
-                EditText editTexttemp;
+            for (int i = 0; i<linearlayout.getChildCount(); i++){
+                View tempview = linearlayout.getChildAt(i);
+                TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                String temp_ingrename = nameTemp.getText().toString();
+                float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+
                 Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                //spinnertemp = findViewById(namespinner_id.get(i));
-                texttemp = findViewById(namespinner_id.get(i));
-                editTexttemp = findViewById(amountedit_id.get(i));
-                //String temp_ingrename = spinnertemp.getSelectedItem().toString();
-                String temp_ingrename = texttemp.getText().toString();
-                float temp_amount = Float.parseFloat(editTexttemp.getText().toString());
                 tempingredients.setName(temp_ingrename);
                 tempingredients.setAmount(temp_amount);
                 tempingredients.setUnit(unitmap.get(temp_ingrename));
+
                 recipe_ingredients.add(tempingredients);
             }
+            //Arraylist사이즈만큼 반복해서 재료와 양의 리스트 만들기
+//            for (int i = 0; i < namespinner_id.size(); i++) {
+//                //Spinner spinnertemp;
+//                TextView texttemp;
+//                EditText editTexttemp;
+//                Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+//                //spinnertemp = findViewById(namespinner_id.get(i));
+//                texttemp = findViewById(namespinner_id.get(i));
+//                editTexttemp = findViewById(amountedit_id.get(i));
+//                //String temp_ingrename = spinnertemp.getSelectedItem().toString();
+//                String temp_ingrename = texttemp.getText().toString();
+//                float temp_amount = Float.parseFloat(editTexttemp.getText().toString());
+//                tempingredients.setName(temp_ingrename);
+//                tempingredients.setAmount(temp_amount);
+//                tempingredients.setUnit(unitmap.get(temp_ingrename));
+//                recipe_ingredients.add(tempingredients);
+//            }
             newRecipe.setRecipe_Ingredients(recipe_ingredients);
 
             Log.d("recipe", newRecipe.toString());

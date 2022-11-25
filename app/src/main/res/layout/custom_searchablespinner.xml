@@ -71,7 +71,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/editbox_background"
-        android:hint="Search..."
+        android:hint="숫자 입력"
         android:padding="12dp"
         android:singleLine="true"
         app:layout_constraintTop_toBottomOf="@id/amount_text" />

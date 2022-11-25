@@ -202,19 +202,19 @@ public class RecipeLookupActivity extends AppCompatActivity {
             }
         });
 
-        like_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //좋아요 관련 로직 추가
-
-                //게시글 아이디로 좋아요 판단 여부가 있으면 좋겠습니다.
-                /* #27 레시피 게시글 "좋아요" 등록 */
-                //clf.likePost("test", 1, 28);
-
-                /* #27 레시피 게시글 "좋아요" 취소 */
-                //clf.unLikePost("test", 1, 28);
-            }
-        });
+//        like_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //좋아요 관련 로직 추가
+//
+//                //게시글 아이디로 좋아요 판단 여부가 있으면 좋겠습니다.
+//                /* #27 레시피 게시글 "좋아요" 등록 */
+//                //clf.likePost("test", 1, 28);
+//
+//                /* #27 레시피 게시글 "좋아요" 취소 */
+//                //clf.unLikePost("test", 1, 28);
+//            }
+//        });
 
         comment_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,8 +227,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 //ccf.writeComment(comment);
             }
         });
-
-
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
@@ -236,6 +234,112 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 if (responseCode == 200) {
                     responseCode = -1;
                     rlu.startToast(recipePostLookUp.toString());
+                    //댓글 리사이클러뷰 구현
+                    commentRecyclerView = (RecyclerView) findViewById(R.id.recipe_comment_recyclerview);
+                    commentAdapter = new CommentAdapter();
+                    commentRecyclerView.setAdapter(commentAdapter);
+                    RecyclerView.LayoutManager commentlayoutManager = new LinearLayoutManager(RecipeLookupActivity.this);
+                    commentRecyclerView.setLayoutManager(commentlayoutManager);
+
+                    //재료 리사이클러뷰 구현
+                    recipeIngreRecyclerView = (RecyclerView) findViewById(R.id.recipe_ingre_recyclerview);
+                    recipeIngreAdapter = new Recipe_Ingre_Adapter();
+                    recipeIngreRecyclerView.setAdapter(recipeIngreAdapter);
+                    RecyclerView.LayoutManager recipe_ingre_layoutManager = new LinearLayoutManager(RecipeLookupActivity.this, RecyclerView.VERTICAL, false);
+                    recipeIngreRecyclerView.setLayoutManager(recipe_ingre_layoutManager);
+
+                    //넘겨온 값으로 채워넣음
+                    recipetitle.setText(recipePostF.getTitle());
+                    recipecategory.setText(recipePostF.getCategory());
+                    recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
+                    recipedescription.setText(recipePostF.getDescription());
+                    recipecomment.setText("댓글 " + String.valueOf(recipePostF.getComment_count() + "개"));
+                    commentAdapter.setCommentList(recipePostF.getComments());
+                    recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
+                    Log.d("recipe", String.valueOf(recipeIngreAdapter.getItemCount()));
+
+                    //댓글리스트에 있는 버튼들의 클릭 이벤트 처리
+                    commentAdapter.setOnItemLeftButtonClickListener(new CommentAdapter.OnItemLeftButtonClickListener() {
+                        @Override
+                        public void onItemLeftButtonClick(View view, int position) {
+                            Log.d("recipe", String.valueOf(position) + "left button click");
+                            comment_edit.setText(recipePostF.getComments().get(position).getComments());
+                            comment_add_btn.setText("수정");
+                            comment_add_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Comment comment = new Comment(recipePostF.getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                                    comment_add_btn.setText("등록");
+                                    comment_edit.setText("");
+                                    /* #34 레시피 게시판 댓글 수정 */
+                                    //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
+                                    //ccf.editComment(comment);
+                                }
+                            });
+                            /* #34 레시피 게시판 댓글 수정 */
+                            //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
+                            //ccf.editComment(comment);
+                        }
+                    });
+                    commentAdapter.setOnItemRightButtonClickListener(new CommentAdapter.OnItemRightButtonClickListener() {
+                        @Override
+                        public void onItemRightButtonClick(View view, int position) {
+                            Log.d("recipe", String.valueOf(position) + "right button click");
+                            ControlComment_f ccf = new ControlComment_f();
+                            //로그인한 사용자와 댓글을 단 사용자와 같은 경우는 삭제 로직
+                            if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getNickname())) {
+                                ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getComment_id());
+                            } else {//같지 않은 경우는 신고 로직
+                                Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("comment_id", recipePostF.getComments().get(position).getComment_id());
+                                intent.putExtra("report_post_type", -1);
+                                startActivity(intent);
+
+                            }
+                            /* #35 레시피 게시판 댓글 삭제 */
+                            //ccf.deleteComment("test", 8);
+                            /* #36 레시피 게시판 댓글 신고 */
+                            //Report reportInfo = new Report("test", "android comment report test", 28, -1);
+                            //cref.reportComment(reportInfo);
+                        }
+                    });
+                    if(recipePostLookUp.isLikeInfo()){
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                        like_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                /* #27 레시피 게시글 "좋아요" 취소 */
+                                //clf.unLikePost("test", 1, 28);
+                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                            }
+                        });
+
+
+                    }else {
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                        like_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                /* #27 레시피 게시글 "좋아요" 등록 */
+                                //clf.likePost("test", 1, 28);
+                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                            }
+                        });
+                    }
+
+                    comment_add_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //댓글 등록 관련 로직 추가
+                            //새로고침필수
+                            /* #33 레시피 게시판 댓글 작성 */
+                            Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                            comment_edit.setText("");
+                            //ccf.writeComment(comment);
+                        }
+                    });
+
                     /*
                     recipetitle.setText(recipePostF.getTitle());
                     recipecategory.setText(recipePostF.getCategory());
