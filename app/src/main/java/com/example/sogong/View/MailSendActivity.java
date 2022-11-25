@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.ControlMail_f;
 import com.example.sogong.Model.Mail;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.R;
@@ -23,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MailSendActivity extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class MailSendActivity extends AppCompatActivity {
     EditText mailReceiver;
     EditText mailTitle;
     EditText mailDescription;
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,36 +51,6 @@ public class MailSendActivity extends AppCompatActivity {
         if (receiver != null) {
             mailReceiver.setText(receiver);
         }
-
-
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (responseCode == 200) {
-
-
-                } else if (responseCode == 500) {
-                } else if (responseCode == 502) {
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    i = 30;
-
-                }
-            }
-        }
     }
 
     class FABClickListener implements View.OnClickListener {
@@ -85,10 +58,48 @@ public class MailSendActivity extends AppCompatActivity {
         public void onClick(View v) {
             // FAB Click 이벤트 처리 구간
             Mail mail = new Mail(0, ControlLogin_f.userinfo.getNickname(), mailReceiver.getText().toString(), mailTitle.getText().toString(), mailDescription.getText().toString(), "", false, false);
-            /* #38 쪽지 보내기 */
-            //cmf.sendMail(mail);
-            onBackPressed();
+            threadFlag.set(true);
+            // #38 쪽지 보내기 호출 코드
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (responseCode == 200) {
+                        responseCode = -1;
+                        threadFlag.set(false);
+                        Log.d("send","성공적으로 보냄");
+                        onBackPressed();
+                    } else if (responseCode == 500) {
+
+                    } else if (responseCode == 502) {
+
+                    }
+                }
+            };
+
+            class NewRunnable implements Runnable {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 30; i++) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (threadFlag.get())
+                            runOnUiThread(runnable);
+                        else {
+                            i = 30;
+                        }
+                    }
+                }
+            }
+
+            ControlMail_f cmf = new ControlMail_f();
+            cmf.sendMail(mail);
+            NewRunnable nr = new NewRunnable();
+            Thread t = new Thread(nr);
+            t.start();
         }
     }
-
 }

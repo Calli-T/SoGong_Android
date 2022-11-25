@@ -23,7 +23,7 @@ public class ControlPhotoList_f {
 
     PhotoList photoList = new PhotoList();
 
-    public void lookupPhotoList(int page){
+    public void lookupPhotoList(int page) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoList> call = sv.LookupPhotoList(page);
@@ -33,11 +33,10 @@ public class ControlPhotoList_f {
             public void onResponse(@NonNull Call<PhotoList> call, @NonNull Response<PhotoList> response) {
                 // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
                 PhotoFragment.responseCode = response.code();
-
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             photoList = response.body();
                             Log.d("result", photoList.toString());
 
@@ -50,6 +49,7 @@ public class ControlPhotoList_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<PhotoList> call, @NonNull Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
@@ -61,34 +61,35 @@ public class ControlPhotoList_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SortInfo sortInfo = new SortInfo(page, sortBy);
-        Call<List<PhotoPost>> call = sv.SortPhotoList(sortInfo);
+        Call<PhotoList> call = sv.SortPhotoList(sortInfo);
 
-        call.enqueue(new Callback<List<PhotoPost>>() {
+        call.enqueue(new Callback<PhotoList>() {
             @Override
-            public void onResponse(Call<List<PhotoPost>> call, Response<List<PhotoPost>> response) {
+            public void onResponse(Call<PhotoList> call, Response<PhotoList> response) {
                 PhotoFragment.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
-                            photoList.setPhotoList(response.body());
-                            Log.d("result", photoList.getPhotoList().toString());
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
 
+                            PhotoFragment.totalpage = response.body().getTotal_page();
                             // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
-                            PhotoFragment.photoList = photoList.getPhotoList();
+                            PhotoFragment.photoList = response.body().getPhotoList();
                         }
                     }
                 } else { // 500
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
-            public void onFailure(Call<List<PhotoPost>> call, Throwable t) { // 502
+            public void onFailure(Call<PhotoList> call, Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
 
-    public void showList(List<PhotoPost> photoList){}
+    public void showList(List<PhotoPost> photoList) {
+    }
 }

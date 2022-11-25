@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.Post;
 import com.example.sogong.Model.RecipePost_f;
+import com.example.sogong.View.MyPageBoardActivity;
 import com.example.sogong.View.PhotoFragment;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
@@ -33,16 +34,13 @@ public class ControlPost_f {
             callr.enqueue(new Callback<List<RecipePost_f>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<RecipePost_f>> call, @NonNull Response<List<RecipePost_f>> response) {
-                    RecipeFragment.responseCode = response.code();
+                    MyPageBoardActivity.responseCode = response.code();
 
                     // 200
                     if(response.isSuccessful()) {
                         if(response.body() != null) {
                             if(response.code() == 200) {
-                                recipeList = response.body();
-                                Log.d("result", recipeList.toString());
-
-                                RecipeFragment.recipelist = response.body();
+                                MyPageBoardActivity.recipelist = response.body();
                             }
                         }
                     } else { // 405
@@ -60,13 +58,13 @@ public class ControlPost_f {
             callp.enqueue(new Callback<List<PhotoPost>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<PhotoPost>> call, @NonNull Response<List<PhotoPost>> response) {
-                    PhotoFragment.responseCode = response.code();
+                    MyPageBoardActivity.responseCode = response.code();
 
                     // 200
                     if(response.isSuccessful()) {
                         if(response.body() != null) {
                             if(response.code() == 200) {
-                                PhotoFragment.photoList = response.body();
+                                MyPageBoardActivity.photolist = response.body();
 
                                 photoList = response.body();
                                 Log.d("result", photoList.toString());
@@ -91,16 +89,14 @@ public class ControlPost_f {
         call.enqueue(new Callback<List<RecipePost_f>>() {
             @Override
             public void onResponse(@NonNull Call<List<RecipePost_f>> call, @NonNull Response<List<RecipePost_f>> response) {
-                RecipeFragment.responseCode = response.code();
+                MyPageBoardActivity.responseCode = response.code();
 
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             recipeList = response.body();
-                            Log.d("result", recipeList.toString());
-
-                            RecipeFragment.recipelist = response.body();
+                            MyPageBoardActivity.recipelist = response.body();
                         }
                     }
                 } else { // 400

@@ -402,6 +402,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //cref.reportComment(reportInfo);
                         }
                     });
+                    if(recipePostLookUp.isLikeInfo()){
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                    }else {
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                    }
                     like_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

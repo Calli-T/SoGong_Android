@@ -119,7 +119,7 @@ public interface RetrofitService {
     Call<Integer> DeletePhoto(@Body PhotoPost deletePhoto);
 
     @POST("sortphoto/")
-    Call<List<PhotoPost>> SortPhotoList(@Body SortInfo sortInfo);
+    Call<PhotoList> SortPhotoList(@Body SortInfo sortInfo);
 
     @POST("likephoto/")
     Call<Integer> UnLikePhotoPost(@Body LikeInfo likeInfo);
@@ -157,7 +157,7 @@ public interface RetrofitService {
     Call<RecipeList> SearchRecipeList(@Body SearchInfo searchInfo);
 
     @POST("sortrecipe/")
-    Call<List<RecipePost_f>> SortRecipeList(@Body SortInfo sortInfo);
+    Call<RecipeList> SortRecipeList(@Body SortInfo sortInfo);
 
     @POST("reportrecipe/")
     Call<Integer> ReportRecipePost(@Body Report reportInfo);

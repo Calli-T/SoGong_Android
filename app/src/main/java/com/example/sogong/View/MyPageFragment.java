@@ -58,9 +58,10 @@ public class MyPageFragment extends Fragment {
                 class NewRunnable implements Runnable {
                     NewRunnable() {
                     }
+
                     @Override
                     public void run() {
-                        while(true){
+                        while (true) {
                             try {
                                 Thread.sleep(100);
                                 if (Custom_Dialog.state == 0) {
@@ -70,7 +71,7 @@ public class MyPageFragment extends Fragment {
                                     Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    intent.putExtra("post_type",0);
+                                    intent.putExtra("post_type", 0);
                                     startActivity(intent);
                                     break;
                                 } else if (Custom_Dialog.state == 1) {
@@ -80,7 +81,7 @@ public class MyPageFragment extends Fragment {
                                     Custom_Dialog.state = -1;
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    intent.putExtra("post_type",1);
+                                    intent.putExtra("post_type", 1);
                                     startActivity(intent);
                                     break;
                                 }
@@ -103,7 +104,7 @@ public class MyPageFragment extends Fragment {
                 //cpf.lookupMyLikeList("test", 1);
                 Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("post_type",2);
+                intent.putExtra("post_type", 2);
                 startActivity(intent);
             }
         });
@@ -115,7 +116,7 @@ public class MyPageFragment extends Fragment {
                 //cpf.lookupMyCommentList("test");
                 Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("post_type",3);
+                intent.putExtra("post_type", 3);
                 startActivity(intent);
             }
         });
@@ -130,7 +131,8 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MailBoxActivity.class);
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
 
         //비밀번호 변경 버튼 리스너

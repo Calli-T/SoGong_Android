@@ -69,7 +69,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         fab.setOnClickListener(new FABClickListener());
 
         // #6
-        /*
+
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -137,12 +137,12 @@ public class RefrigeratorActivity extends AppCompatActivity {
         }
 
         ControlRefrigerator_f crff = new ControlRefrigerator_f();
-        crff.lookupRefrigerator("test");
+        crff.lookupRefrigerator(ControlLogin_f.userinfo.getNickname());
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-        */
+
 
 
     }
@@ -157,7 +157,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             // FAB Click 이벤트 처리 구간
-            Intent intent = new Intent(RefrigeratorActivity.this, RecipeAddActivity.class);
+            Intent intent = new Intent(RefrigeratorActivity.this, Refri_AddIngredientActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
         }
