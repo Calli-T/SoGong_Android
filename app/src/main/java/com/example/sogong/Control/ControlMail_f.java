@@ -86,6 +86,7 @@ public class ControlMail_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                MailLookupActivity.responseCode = response.code();
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {

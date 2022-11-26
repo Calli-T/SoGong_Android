@@ -31,13 +31,13 @@ public class ControlMyRecipe_f {
         call.enqueue(new Callback<List<RecipePost_f>>() {
             @Override
             public void onResponse(@NonNull Call<List<RecipePost_f>> call, @NonNull Response<List<RecipePost_f>> response) {
+                MyPageBoardActivity.responseCode = response.code();
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             MyPageBoardActivity.recipelist = response.body();
                             //Log.d("result", recipeList.toString());
-                            MyPageBoardActivity.responseCode = response.code();
                         }
                     }
                 } else { // 400

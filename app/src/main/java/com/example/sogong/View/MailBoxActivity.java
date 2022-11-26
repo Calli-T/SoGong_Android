@@ -55,7 +55,11 @@ public class MailBoxActivity extends AppCompatActivity {
         mailRecyclerView.setAdapter(mailAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MailBoxActivity.this);
         mailRecyclerView.setLayoutManager(layoutManager);
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(MailBoxActivity.this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
@@ -221,9 +225,7 @@ public class MailBoxActivity extends AppCompatActivity {
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-
     }
-
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {

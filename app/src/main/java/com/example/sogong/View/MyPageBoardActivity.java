@@ -30,6 +30,7 @@ import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlMailList_f;
 import com.example.sogong.Control.ControlMail_f;
+import com.example.sogong.Control.ControlMyRecipe_f;
 import com.example.sogong.Control.ControlPost_f;
 import com.example.sogong.Control.ControlRecipeList_f;
 import com.example.sogong.Control.ControlRecipe_f;
@@ -65,7 +66,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
     ControlReport_f cref = new ControlReport_f();
     ControlIngredients_f cif = new ControlIngredients_f();
     ControlComment_f ccf = new ControlComment_f();
-    ControlMailList_f cmlf = new ControlMailList_f();
     ControlMail_f cmf = new ControlMail_f();
 
     Spinner pagespinner;
@@ -78,6 +78,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("post_type", -1);
+        Log.d("type","type = "+type);
 
         if (type == 0) {//레시피 게시판
             Log.d("mypageRecipe", "시작");
@@ -93,13 +94,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
             FloatingActionButton fab = findViewById(R.id.recipe_add_button);
             fab.setVisibility(View.INVISIBLE);
             responseCode = 0;
-
-//                //swipe레이아웃
-//                swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
-//                swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
-            // UI controller
-//                RecipeList_UI rlu = new RecipeFragment.RecipeList_UI();
 
             //로딩창 구현
             custon_progressDialog = new Custon_ProgressDialog(this);
@@ -126,7 +120,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         recipeAdapter.setRecipeList(recipelist);
-                        pagenum = new String[totalpage];
+                        /*pagenum = new String[totalpage];
                         for (int i = 1; i <= totalpage; i++) {
                             pagenum[i - 1] = String.valueOf(i);
                         }
@@ -216,7 +210,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                         sortspinner = findViewById(R.id.sort_spinner);
                         sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -247,7 +241,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         });
 
                         custon_progressDialog.dismiss();//로딩창 종료
-                        Log.d("recipefragment", recipelist.get(0).toString());
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
                         custon_progressDialog.dismiss();//로딩창 종료
@@ -284,8 +277,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     Log.d("thread1", "thread1");
                 }
             }
-            ControlRecipeList_f crlf = new ControlRecipeList_f();
-            crlf.lookupRecipeList(1);
+            ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
+            cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
 
             NewRunnable nr = new NewRunnable();
             Thread t = new Thread(nr);

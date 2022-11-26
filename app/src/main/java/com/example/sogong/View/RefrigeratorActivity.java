@@ -42,7 +42,9 @@ public class RefrigeratorActivity extends AppCompatActivity {
     public static List<Refrigerator> ingreList;
     public static int responseCode;
     private boolean threadFlag;
+    private boolean deletethreadFlag;
     public static int responseResult;
+    Custon_ProgressDialog custon_progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,16 @@ public class RefrigeratorActivity extends AppCompatActivity {
 
         // UI controller
         Refrigerator_UI rfu = new Refrigerator_UI();
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
 
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
         refrigeratorRecyclerview = (RecyclerView) findViewById(R.id.ingredients_recyclerview);
 
         refri_ingre_Adapter = new Refri_Ingre_Adapter();
@@ -73,12 +83,10 @@ public class RefrigeratorActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                rfu.startToast("muyaho");
-                
                 if (responseCode == 200) {
                     responseCode = -1;
                     refri_ingre_Adapter.setRefriIngreList(ingreList);
-                    rfu.startToast(ingreList.get(1).toString());
+                    threadFlag = false;
 
                     //레시피 리사이클러뷰 클릭 이벤트
                     refri_ingre_Adapter.setOnItemClickListener(new Refri_Ingre_Adapter.OnItemClickListener() {
@@ -96,7 +104,11 @@ public class RefrigeratorActivity extends AppCompatActivity {
                         @Override
                         public void onItemLeftButtonClick(View view, int position) {
                             Log.d("recipe", String.valueOf(position) + "left button click");
-
+                            Intent intent = new Intent(RefrigeratorActivity.this, Refri_AddIngredientActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("ingredient", ingreList.get(position));
+                            intent.putExtra("edit", 1);
+                            startActivity(intent);
                         }
                     });
                     //재료 삭제
@@ -104,14 +116,63 @@ public class RefrigeratorActivity extends AppCompatActivity {
                         @Override
                         public void onItemRightButtonClick(View view, int position) {
                             Log.d("recipe", String.valueOf(position) + "right button click");
+                            /* #8 사용자 보유 재료 삭제 */
+                            deletethreadFlag = true;
+                            custon_progressDialog.show();
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode == 200) {
+                                        responseCode = -1;
+                                        deletethreadFlag = false;
+                                        Intent intent = getIntent();
+                                        finish(); //현재 액티비티 종료 실시
+                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                        startActivity(intent); //현재 액티비티 재실행 실시
+                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                        custon_progressDialog.dismiss();
 
+                                    } else if (responseCode == 500) {
+                                        responseCode = -1;
+                                        deletethreadFlag = false;
+                                    } else if (responseCode == 502) {
+                                        responseCode = -1;
+                                        deletethreadFlag = false;
+                                    }
+                                }
+                            };
+
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (deletethreadFlag)
+                                            runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+                            deletethreadFlag = true;
+                            ControlRefrigerator_f crff = new ControlRefrigerator_f();
+                            crff.deleteRefrigerator(ingreList.get(position).getRefrigerator_id());
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
                         }
                     });
+                    custon_progressDialog.dismiss();
 
+                } else if (responseCode == 500) {
 
-                } else if(responseCode == 500){
-
-                }else if(responseCode == 502){
+                } else if (responseCode == 502) {
 
                 }
             }
@@ -138,13 +199,10 @@ public class RefrigeratorActivity extends AppCompatActivity {
 
         ControlRefrigerator_f crff = new ControlRefrigerator_f();
         crff.lookupRefrigerator(ControlLogin_f.userinfo.getNickname());
-
+        threadFlag = true;
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-
-
-
     }
 
     @Override

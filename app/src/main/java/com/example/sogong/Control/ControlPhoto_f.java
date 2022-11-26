@@ -25,22 +25,23 @@ public class ControlPhoto_f {
     PhotoPost photoPost;
     PhotoLookUp photoLookUp;
 
-    public void lookupPhoto(int postId, String nickname){
+    public void lookupPhoto(int postId, String nickname) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoLookUp> call = sv.LookupPhoto(postId, nickname);
 
         call.enqueue(new Callback<PhotoLookUp>() {
             @Override
             public void onResponse(@NonNull Call<PhotoLookUp> call, @NonNull Response<PhotoLookUp> response) {
+                Log.d("사진 열람", "responsecode" + PhotoLookupActivity.responseCode);
                 PhotoLookupActivity.responseCode = response.code();
-
+                Log.d("사진 열람", "responsecode" + PhotoLookupActivity.responseCode);
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             photoLookUp = response.body();
-                            Log.d("result", photoLookUp.toString());
-
+                            // Log.d("result", photoLookUp.toString());
+                            PhotoLookupActivity.responseCode = response.code();
                             PhotoLookupActivity.photoLookUp = response.body();
                         }
                     }
@@ -55,7 +56,8 @@ public class ControlPhoto_f {
             }
         });
     }
-    public void addPhoto(PhotoPost newPhoto){
+
+    public void addPhoto(PhotoPost newPhoto) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoPost> call = sv.AddPhoto(newPhoto);
 
@@ -66,11 +68,10 @@ public class ControlPhoto_f {
                 PhotoAddActivity.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             photoPost = response.body();
-                            Log.d("result", photoPost.toString());
                         }
                     }
                 } else { // 500
@@ -84,7 +85,8 @@ public class ControlPhoto_f {
             }
         });
     }
-    public void deletePhoto(String nickname, int postId){
+
+    public void deletePhoto(String nickname, int postId) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         PhotoPost deleteTarget = new PhotoPost();
         deleteTarget.setAuthor(nickname);
@@ -97,10 +99,10 @@ public class ControlPhoto_f {
                 PhotoLookupActivity.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
-                            Log.d("result", ""+response.body());
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
+                            Log.d("result", "" + response.body());
                         }
                     }
                 } else { // 500
@@ -114,8 +116,11 @@ public class ControlPhoto_f {
             }
         });
     }
-    public void showPhoto(PhotoPost photoPost){}
-    public Boolean isMine(String nickname){
+
+    public void showPhoto(PhotoPost photoPost) {
+    }
+
+    public Boolean isMine(String nickname) {
         Boolean result = true;
         return result;
     }

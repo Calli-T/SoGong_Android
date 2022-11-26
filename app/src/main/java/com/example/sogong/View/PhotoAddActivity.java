@@ -77,60 +77,66 @@ public class PhotoAddActivity extends AppCompatActivity {
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                threadFlag = true;
                 if (state == 1) {
                     Log.d("photoadd", "이미지 있는 상태");
                     Log.d("photoadd",""+base64Img.length());
                     Log.d("photoadd",""+base64Img.substring(0,100));
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -1;
+                                threadFlag = false;
+                                Log.d("photoadd","responseCode = "+responseCode );
+                                onBackPressed();
+                            }else if(responseCode == 500){
+                                responseCode = -1;
+                                threadFlag = false;
+                                Log.d("photoadd","responseCode = "+responseCode );
+                            }else if(responseCode == 502){
+                                responseCode = -1;
+                                threadFlag = false;
+                                Log.d("photoadd","responseCode = "+responseCode );
+                            }else {
+                                responseCode = -1;
+                                threadFlag = false;
+                                Log.d("photoadd","responseCode = "+responseCode );
+                            }
+                            // UI 코드 작성해주세요
 
+                        }
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (threadFlag)
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
+                            }
+                        }
+                    }
                     PhotoPost newPhoto = new PhotoPost(ControlLogin_f.userinfo.getNickname(), 0, base64Img, 0, "");
                     ControlPhoto_f cpf = new ControlPhoto_f();
                     cpf.addPhoto(newPhoto);
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
+
                 } else Log.d("photoadd", "이미지 없는 상태");
             }
         });
 
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (responseCode == 200) {
-                    responseCode = -1;
-                    Log.d("photoadd","responseCode = "+responseCode );
-                }else if(responseCode == 500){
-                    Log.d("photoadd","responseCode = "+responseCode );
-                }else if(responseCode == 502){
-                    Log.d("photoadd","responseCode = "+responseCode );
-                }else {
-                    Log.d("photoadd","responseCode = "+responseCode );
-                }
-                // UI 코드 작성해주세요
 
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (threadFlag)
-                      runOnUiThread(runnable);
-                    else {
-                        i = 30;
-                    }
-                }
-
-
-            }
-        }
-
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
     }
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(

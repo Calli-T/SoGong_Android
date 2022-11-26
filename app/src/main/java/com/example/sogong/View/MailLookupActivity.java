@@ -38,7 +38,7 @@ public class MailLookupActivity extends AppCompatActivity {
     TextView mailDescription;
     Button deleteMail_Button;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
-
+    Custon_ProgressDialog custon_progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,17 +54,23 @@ public class MailLookupActivity extends AppCompatActivity {
         String date = mail.getSend_time().split("T")[0];
         mailDate.setText(date);
         mailDescription.setText(mail.getContents());
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(MailLookupActivity.this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         deleteMail_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // #39 쪽지 삭제하기 호출 코드
-
+                custon_progressDialog.show();
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         if (responseCode == 200) {
-
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            onBackPressed();
                         } else if (responseCode == 500) {
 
                         } else if (responseCode == 502) {
@@ -94,7 +100,7 @@ public class MailLookupActivity extends AppCompatActivity {
 
                 ControlMail_f cmf = new ControlMail_f();
                 cmf.deleteMail(ControlLogin_f.userinfo.getNickname(), mail.getMail_id());
-
+                threadFlag.set(true);
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
                 t.start();

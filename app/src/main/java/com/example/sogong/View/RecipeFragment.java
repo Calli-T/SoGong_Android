@@ -1118,7 +1118,6 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                         intent.putExtra("recipe_post", recipelist.get(position));
                                         startActivity(intent);
-                                        //+조회수 관련 로직 추가할 것
                                     }
                                 });
                                 Log.d("recipefragment", "page spinner " + position + " 클릭");

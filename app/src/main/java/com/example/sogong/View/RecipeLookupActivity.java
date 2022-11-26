@@ -34,6 +34,8 @@ import com.example.sogong.R;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecipeLookupActivity extends AppCompatActivity {
     TextView recipetitle;
@@ -52,9 +54,15 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public RecyclerView recipeIngreRecyclerView;
     Custon_ProgressDialog custon_progressDialog;
 
-    public static int responseCode;
+    //public static int responseCode;
+    public static AtomicInteger responseCode = new AtomicInteger();
     public static RecipePostLookUp recipePostLookUp;
     public static int commentResult;
+
+    private AtomicBoolean threadFlag = new AtomicBoolean();
+    private AtomicBoolean commentthreadFlag = new AtomicBoolean();
+    private AtomicBoolean commenteditthreadFlag = new AtomicBoolean();
+    private AtomicBoolean commentdeletethreadFlag = new AtomicBoolean();
 
     PopupMenu dropDownMenu;
     Menu menu;
@@ -64,7 +72,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         RecipePost_f recipePostF = getIntent().getParcelableExtra("recipe_post");
 
-        responseCode = 0;
+        responseCode.set(0);
 
         RecipeLookup_UI rlu = new RecipeLookup_UI();
 
@@ -84,6 +92,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
         comment_edit = findViewById(R.id.comment_edit);
         comment_add_btn = findViewById(R.id.comment_add_btn);
 
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
         //사용자에 따른 옵션 메뉴 로직 시작
         menubutton = findViewById(R.id.menu_button);
         dropDownMenu = new PopupMenu(this, menubutton);
@@ -103,6 +115,48 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     case 0:
                         //게시글 삭제 로직 추가
                         Log.d("recipe", "삭제하기 menu click");
+                        custon_progressDialog.show();
+                        threadFlag.set(true);
+                        final Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (responseCode.get() == 200) {
+                                    responseCode.set(-1);
+                                    threadFlag.set(false);
+                                    Log.d("레시피 삭제", "성공");
+                                    custon_progressDialog.dismiss();
+                                    onBackPressed();
+                                } else if (responseCode.get() == 500) {
+
+                                } else if (responseCode.get() == 502) {
+
+                                }
+                            }
+                        };
+
+                        class NewRunnable implements Runnable {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < 30; i++) {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (threadFlag.get())
+                                        runOnUiThread(runnable);
+                                    else {
+                                        i = 30;
+                                    }
+                                }
+                            }
+                        }
+                        ControlRecipe_f crf = new ControlRecipe_f();
+                        crf.deleteRecipe(ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id());
+                        NewRunnable nr = new NewRunnable();
+                        Thread t = new Thread(nr);
+                        t.start();
                         return true;
                     case 1:
                         //게시글 수정 로직 추가
@@ -204,91 +258,14 @@ public class RecipeLookupActivity extends AppCompatActivity {
         recipecomment.setText("댓글 " + String.valueOf(recipePostF.getComment_count() + "개"));
         commentAdapter.setCommentList(recipePostF.getComments());
         recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
-        Log.d("recipe", String.valueOf(recipeIngreAdapter.getItemCount()));
 
-        //댓글리스트에 있는 버튼들의 클릭 이벤트 처리
-        commentAdapter.setOnItemLeftButtonClickListener(new CommentAdapter.OnItemLeftButtonClickListener() {
-            @Override
-            public void onItemLeftButtonClick(View view, int position) {
-                Log.d("recipe", String.valueOf(position) + "left button click");
-                comment_edit.setText(recipePostF.getComments().get(position).getComments());
-                comment_add_btn.setText("수정");
-                comment_add_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Comment comment = new Comment(recipePostF.getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
-                        comment_add_btn.setText("등록");
-                        comment_edit.setText("");
-                        /* #34 레시피 게시판 댓글 수정 */
-                        //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
-                        //ccf.editComment(comment);
-                    }
-                });
-                /* #34 레시피 게시판 댓글 수정 */
-                //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
-                //ccf.editComment(comment);
-            }
-        });
-        commentAdapter.setOnItemRightButtonClickListener(new CommentAdapter.OnItemRightButtonClickListener() {
-            @Override
-            public void onItemRightButtonClick(View view, int position) {
-                Log.d("recipe", String.valueOf(position) + "right button click");
-                ControlComment_f ccf = new ControlComment_f();
-                //로그인한 사용자와 댓글을 단 사용자와 같은 경우는 삭제 로직
-                if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getNickname())) {
-                    ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostF.getComments().get(position).getComment_id());
-                } else {//같지 않은 경우는 신고 로직
-                    Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra("comment_id", recipePostF.getComments().get(position).getComment_id());
-                    intent.putExtra("report_post_type", -1);
-                    startActivity(intent);
 
-                }
-                /* #35 레시피 게시판 댓글 삭제 */
-                //ccf.deleteComment("test", 8);
-                /* #36 레시피 게시판 댓글 신고 */
-                //Report reportInfo = new Report("test", "android comment report test", 28, -1);
-                //cref.reportComment(reportInfo);
-            }
-        });
-
-//        like_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //좋아요 관련 로직 추가
-//
-//                //게시글 아이디로 좋아요 판단 여부가 있으면 좋겠습니다.
-//                /* #27 레시피 게시글 "좋아요" 등록 */
-//                //clf.likePost("test", 1, 28);
-//
-//                /* #27 레시피 게시글 "좋아요" 취소 */
-//                //clf.unLikePost("test", 1, 28);
-//            }
-//        });
-
-        comment_add_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //댓글 등록 관련 로직 추가
-                //새로고침필수
-                /* #33 레시피 게시판 댓글 작성 */
-                Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
-                comment_edit.setText("");
-                //ccf.writeComment(comment);
-            }
-        });
-        //로딩창 구현
-        custon_progressDialog = new Custon_ProgressDialog(this);
-        custon_progressDialog.setCanceledOnTouchOutside(false);
-        custon_progressDialog.show();
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (responseCode == 200) {
-                    responseCode = -1;
-                    rlu.startToast(recipePostLookUp.toString());
+                if (responseCode.get() == 200) {
+                    responseCode.set(-1);
                     //댓글 리사이클러뷰 구현
                     commentRecyclerView = (RecyclerView) findViewById(R.id.recipe_comment_recyclerview);
                     commentAdapter = new CommentAdapter();
@@ -354,7 +331,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     recipecomment.setText("댓글 " + String.valueOf(recipePostLookUp.getRecipeInfo().getComment_count() + "개"));
                     commentAdapter.setCommentList(recipePostLookUp.getRecipeInfo().getComments());
                     recipeIngreAdapter.setRecipeIngreList(recipePostLookUp.getRecipeInfo().getRecipe_Ingredients());
-                    Log.d("recipe", String.valueOf(recipeIngreAdapter.getItemCount()));
 
                     //댓글리스트에 있는 버튼들의 클릭 이벤트 처리
                     commentAdapter.setOnItemLeftButtonClickListener(new CommentAdapter.OnItemLeftButtonClickListener() {
@@ -366,27 +342,118 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             comment_add_btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Comment comment = new Comment(recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
-                                    comment_add_btn.setText("등록");
-                                    comment_edit.setText("");
                                     /* #34 레시피 게시판 댓글 수정 */
                                     //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
                                     //ccf.editComment(comment);
+                                    commenteditthreadFlag.set(true);
+                                    custon_progressDialog.show();
+                                    final Runnable runnable = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (responseCode.get()== 200) {
+                                                Log.d("댓글 수정", "성공");
+                                                commenteditthreadFlag.set(false);
+                                                responseCode.set(-1);
+                                                Intent intent = getIntent();
+                                                finish(); //현재 액티비티 종료 실시
+                                                overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                                startActivity(intent); //현재 액티비티 재실행 실시
+                                                overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                                custon_progressDialog.dismiss();
+                                            } else if (responseCode.get() == 500) {
+
+                                            } else if (responseCode.get() == 502) {
+
+                                            }
+                                        }
+                                    };
+
+                                    class NewRunnable implements Runnable {
+                                        @Override
+                                        public void run() {
+                                            for (int i = 0; i < 30; i++) {
+                                                try {
+                                                    Thread.sleep(1000);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                if (commenteditthreadFlag.get())
+                                                    runOnUiThread(runnable);
+                                                else {
+                                                    i = 30;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    Comment newComment = new Comment(recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id(), ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id(), comment_edit.getText().toString(), "");
+                                    comment_add_btn.setText("등록");
+                                    comment_edit.setText("");
+                                    ControlComment_f ccf = new ControlComment_f();
+                                    ccf.editComment(newComment);
+
+                                    NewRunnable nr = new NewRunnable();
+                                    Thread t = new Thread(nr);
+                                    t.start();
                                 }
                             });
-                            /* #34 레시피 게시판 댓글 수정 */
-                            //Comment comment = new Comment(8, "android fix", 28, "android fix", "");
-                            //ccf.editComment(comment);
                         }
                     });
                     commentAdapter.setOnItemRightButtonClickListener(new CommentAdapter.OnItemRightButtonClickListener() {
                         @Override
                         public void onItemRightButtonClick(View view, int position) {
-                            Log.d("recipe", String.valueOf(position) + "right button click");
-                            ControlComment_f ccf = new ControlComment_f();
+                            Log.d("recipe", String.valueOf(position) + "번 댓글 삭제");
                             //로그인한 사용자와 댓글을 단 사용자와 같은 경우는 삭제 로직
+                            commentdeletethreadFlag.set(true);
+                            custon_progressDialog.show();
                             if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getNickname())) {
+                                final Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (responseCode.get() == 200) {
+                                            Log.d("댓글 삭제", "성공");
+                                            responseCode.set(-1) ;
+                                            commentdeletethreadFlag.set(false);
+                                            Intent intent = getIntent();
+                                            finish(); //현재 액티비티 종료 실시
+                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                            startActivity(intent); //현재 액티비티 재실행 실시
+                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                            custon_progressDialog.dismiss();
+                                        } else if(responseCode.get() == 500){
+
+                                        }else if(responseCode.get() == 502){
+
+                                        }
+                                    }
+                                };
+                                class NewRunnable implements Runnable {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            Log.d("레시피 열람","responsecode = "+responseCode.get());
+
+                                            if (commentdeletethreadFlag.get())
+                                                runOnUiThread(runnable);
+                                            else {
+                                                i = 30;
+                                            }
+                                        }
+                                    }
+                                }
+                                ControlComment_f ccf = new ControlComment_f();
                                 ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());
+
+                                NewRunnable nr = new NewRunnable();
+                                Thread t = new Thread(nr);
+                                t.start();
+
+
                             } else {//같지 않은 경우는 신고 로직
                                 Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -402,18 +469,18 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //cref.reportComment(reportInfo);
                         }
                     });
-                    if(recipePostLookUp.isLikeInfo()){
+                    if (recipePostLookUp.isLikeInfo()) {
                         like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
-                    }else {
+                    } else {
                         like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
                     }
                     like_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(recipePostLookUp.isLikeInfo()){
+                            if (recipePostLookUp.isLikeInfo()) {
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
                                 recipePostLookUp.setLikeInfo(false);//좋아요 취소로 수정
-                            }else{
+                            } else {
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
                                 recipePostLookUp.setLikeInfo(true);//좋아요 취소로 수정
                             }
@@ -426,9 +493,62 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //댓글 등록 관련 로직 추가
                             //새로고침필수
                             /* #33 레시피 게시판 댓글 작성 */
-                            Comment comment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getPost_id(), comment_edit.getText().toString(), "");
+                            custon_progressDialog.show();
+                            commentthreadFlag.set(true);
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode.get() == 200) {
+                                        responseCode.set(-1);
+                                        commentthreadFlag.set(false);
+                                        Log.d("댓글 작성", "성공");
+                                        Intent intent = getIntent();
+                                        finish(); //현재 액티비티 종료 실시
+                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                        startActivity(intent); //현재 액티비티 재실행 실시
+                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                        custon_progressDialog.dismiss();
+                                    } else if (responseCode.get() == 500) {
+                                        responseCode.set(-1);
+                                        commentthreadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                    } else if (responseCode.get() == 502) {
+                                        responseCode.set(-1);
+                                        commentthreadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                    }
+                                }
+                            };
+
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (commentthreadFlag.get())
+                                            runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            ControlComment_f ccf = new ControlComment_f();
+                            Comment newComment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getPost_id(), comment_edit.getText().toString(), "");
+                            ccf.writeComment(newComment);
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            responseCode.set(-1);
+                            t.start();
                             comment_edit.setText("");
-                            //ccf.writeComment(comment);
+                            Log.d("댓글 내용", newComment.toString());
                         }
                     });
 
@@ -440,10 +560,12 @@ public class RecipeLookupActivity extends AppCompatActivity {
                      */
                     custon_progressDialog.dismiss();
 
-                } else if (responseCode == 500) {
+                } else if (responseCode.get() == 500) {
+                    responseCode.set(-1);
                     custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                } else if (responseCode == 502) {
+                } else if (responseCode.get() == 502) {
+                    responseCode.set(-1);
                     custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
@@ -471,17 +593,19 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
+        responseCode.set(-1);
         t.start();
     }
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         ControlLike_f clf = new ControlLike_f();
-        if(recipePostLookUp.isLikeInfo()){
-            Log.d("like","좋아요 누른 거 서버로 보내요");
-            clf.likePost(ControlLogin_f.userinfo.getNickname(), 1,recipePostLookUp.getRecipeInfo().getPost_id());
+        if (recipePostLookUp.isLikeInfo()) {
+            Log.d("like", "좋아요 누른 거 서버로 보내요");
+            clf.likePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
         } else {
-            Log.d("like","좋아요 취소한 거 서버로 보내요");
-            clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 1,recipePostLookUp.getRecipeInfo().getPost_id());
+            Log.d("like", "좋아요 취소한 거 서버로 보내요");
+            clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
         }
         this.finish();
     }
