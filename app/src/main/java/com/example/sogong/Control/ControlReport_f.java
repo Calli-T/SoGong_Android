@@ -23,7 +23,7 @@ public class ControlReport_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
@@ -49,7 +49,7 @@ public class ControlReport_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
 
                 // 200
                 if(response.isSuccessful()) {

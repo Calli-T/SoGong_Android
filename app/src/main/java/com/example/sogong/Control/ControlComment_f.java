@@ -22,7 +22,7 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
 
                 // 200
                 if(response.isSuccessful()) {
@@ -33,7 +33,7 @@ public class ControlComment_f {
                         }
                     }
                 } else { // 403
-                    Log.d("result", "디비 오류");
+                    Log.d("result", "댓글 등록 디비 오류");
                 }
             }
             @Override
@@ -51,7 +51,7 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
 
                 // 200
                 if(response.isSuccessful()) {
@@ -82,7 +82,10 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                Log.d("댓글삭제control","responseCode = "+  RecipeLookupActivity.responseCode.get() );
+                //RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
+                Log.d("댓글삭제control","responseCode = "+  RecipeLookupActivity.responseCode.get() );
 
                 // 200
                 if(response.isSuccessful()) {

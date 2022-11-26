@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ingredients">
+        <item>jjokpa</item>
+        <item>asparagus</item>
+        <item>소고기</item>
+
+    </string-array>
+
+    <string-array name="unit">
+        <item>T</item>
+        <item>g</item>
+        <item>kg</item>
+        <item>L</item>
+        <item>mL</item>
+    </string-array>
+</resources>

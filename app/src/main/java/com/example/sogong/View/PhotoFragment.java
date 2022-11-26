@@ -1,5 +1,7 @@
 package com.example.sogong.View;
 
+import static java.lang.Thread.sleep;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,6 +48,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PhotoFragment extends Fragment {
     FloatingActionButton addPhotoBtn;
@@ -56,29 +59,34 @@ public class PhotoFragment extends Fragment {
     ControlReport_f crf = new ControlReport_f();
     public int requestCode;
     private Uri mImageCaptureUri;
+    int currentPage;
+    String currentSort;
+    String[] pagenum;
     public static int totalpage;
     public static int responseCode = 0;
-    private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean pagethreadFlag = new AtomicBoolean();
+    private AtomicBoolean sortthreadFlag = new AtomicBoolean();
+    Boolean firstpage;
     public static List<PhotoPost> photoList;
     private View view;
     private GridView gridview = null;
     private PhotoAdapter photoAdapter = null;
+    Custon_ProgressDialog custon_progressDialog;
 
+    Spinner pagespinner;
+    Spinner sortspinner;
 
-    String tempPhotoLink1;
-    String tempPhotoLink2;
-    String tempPhotoLink3;
-    String tempPhotoLink4;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_photoboard, container, false);
 
-
         gridview = (GridView) view.findViewById(R.id.photo_grid);
         photoAdapter = new PhotoAdapter();
         gridview.setAdapter(photoAdapter);
 
+        responseCode = 0;
         /* 추가) 요리 사진 게시판 */
         //cplf.lookupPhotoList(1);
 
@@ -115,56 +123,315 @@ public class PhotoFragment extends Fragment {
         fab.setOnClickListener(new FABClickListener());
         // 추가) 요리 사진 게시판
 
-        threadFlag = true;
+        threadFlag.set(true);
 
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(requireActivity());
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
+//        final Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                if (responseCode == 200) {
+//                    responseCode = -1;
+//
+//                    if (photoList != null) {
+//                        plu.startToast(photoList.get(0).toString());
+//
+//                        photoAdapter.setPhotoList(photoList);
+//
+//                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                Log.d("사진", "position = " + position + " id = " + id);
+//                                Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                intent.putExtra("photo_post", photoList.get(position));
+//                                startActivity(intent);
+//                            }
+//                        });
+//                    }
+//                    // UI 코드 작성해주세요
+//
+//                } else if (responseCode == 500) {
+//                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+//                } else if (responseCode == 502) {
+//                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+//                }
+//            }
+//        };
+//
+//        class NewRunnable implements Runnable {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 30; i++) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    if (threadFlag.get())
+//                        getActivity().runOnUiThread(runnable);
+//                    else {
+//                        i = 30;
+//                    }
+//                }
+//            }
+//        }
+//
+//        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
+//
+//        NewRunnable nr = new NewRunnable();
+//        Thread t = new Thread(nr);
+//        t.start();
+        currentSort = "최근 순";
+        currentPage = 1;
+
+        return view;
+    }
+
+    public static String BitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+        byte[] bytes = baos.toByteArray();
+        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return temp;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("photofragment", "재시작");
+        // UI controller
+        PhotoList_UI plu = new PhotoList_UI();
+
+        // 사용할 컴포넌트 초기화
+        FloatingActionButton fab = view.findViewById(R.id.photo_add_button);
+        fab.setOnClickListener(new FABClickListener());
+        // 추가) 요리 사진 게시판
+
+
+        custon_progressDialog.show();
+
+        threadFlag.set(true);
+        firstpage = true;
 
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if (responseCode == 200) {
+                    threadFlag.set(false);
                     responseCode = -1;
-
-                    if (photoList != null) {
-                        plu.startToast(photoList.get(0).toString());
-//                        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.lenna);
-//                        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.ramyen);
-//                        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.pizza);
-//                        Bitmap bitmap4 = BitmapFactory.decodeResource(getResources(), R.drawable.chicken);
-//                        tempPhotoLink1 = BitmapToString(bitmap1);
-//                        tempPhotoLink2 = BitmapToString(bitmap2);
-//                        tempPhotoLink3 = BitmapToString(bitmap3);
-//                        tempPhotoLink4 = BitmapToString(bitmap4);
-//                        Log.d("사진","레나사이즈 = "+tempPhotoLink1.length());
-//                        PhotoPost tempPhoto1 = new PhotoPost("test", 1, tempPhotoLink1, 0, "2022/11/11");
-//                        PhotoPost tempPhoto2 = new PhotoPost("test", 2, tempPhotoLink2, 0, "2022/11/11");
-//                        PhotoPost tempPhoto3 = new PhotoPost("test2", 3, tempPhotoLink3, 0, "2022/11/11");
-//                        PhotoPost tempPhoto4 = new PhotoPost("test2", 4, tempPhotoLink4, 0, "2022/11/11");
-//                        List<PhotoPost> templist = new ArrayList<>();
-//                        templist.add(tempPhoto1);
-//                        templist.add(tempPhoto2);
-//                        templist.add(tempPhoto3);
-//                        templist.add(tempPhoto4);
-
-
-//                        photoAdapter.setPhotoList(photoList);
-                        //아직 디비에 base64아이템만 다 들어있는게 아니라서 임시로 이렇게 함. 최종본에서는  photoAdapter.setPhotoList(photoList); <-이 코드 사용
-                        photoAdapter.addItem(photoList.get(1));
-                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("사진", "position = " + position + " id = " + id);
-                                Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                intent.putExtra("photo_post", photoList.get(position));
-                                startActivity(intent);
-                            }
-                        });
+                    pagenum = new String[totalpage];
+                    for (int i = 1; i <= totalpage; i++) {
+                        pagenum[i - 1] = String.valueOf(i);
                     }
-                    // UI 코드 작성해주세요
 
+                    photoAdapter.setPhotoList(photoList);
+                    gridview.setAdapter(photoAdapter);
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("사진", "position = " + position + " id = " + id);
+                            Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("photo_post", photoList.get(position));
+                            startActivity(intent);
+                        }
+                    });
+                    pagespinner = view.findViewById(R.id.photo_page_spinner);
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pagenum);
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    pagespinner.setAdapter(adapter1);
+                    pagespinner.setPrompt("이동할 페이지");
+                    pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                            if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
+                                currentPage = position + 1;
+                                cplf.sortPhotoList(currentSort, position + 1);
+                                custon_progressDialog.show();
+                                final Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (responseCode == 200) {
+                                            responseCode = -1;
+                                            pagethreadFlag.set(false);
+                                            //업데이트된 레시피 리스트로 전환
+                                            photoAdapter.setPhotoList(photoList);
+                                            gridview.setAdapter(photoAdapter);
+                                            //사진 리사이클러뷰 클릭 이벤트
+                                            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    Log.d("사진", "position = " + position + " id = " + id);
+                                                    Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                    intent.putExtra("photo_post", photoList.get(position));
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                            custon_progressDialog.dismiss();
+                                        }
+
+                                    }
+                                };
+                                class NewRunnable implements Runnable {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                sleep(1000);
+                                                Log.d("thread2", "thread2");
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            if (pagethreadFlag.get()) {
+                                                getActivity().runOnUiThread(runnable);
+                                                Log.d("thread2", "thread3");
+                                            } else {
+                                                i = 30;
+                                                Log.d("thread2", "thread4");
+                                            }
+                                        }
+                                        Log.d("thread2", "thread1");
+                                    }
+                                }
+                                NewRunnable nr = new NewRunnable();
+                                Thread t = new Thread(nr);
+                                pagethreadFlag.set(true);
+                                t.start();
+                                //업데이트된 레시피 리스트로 전환
+                                photoAdapter.setPhotoList(photoList);
+                                gridview.setAdapter(photoAdapter);
+                                //레시피 리사이클러뷰 클릭 이벤트
+                                gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.d("사진", "position = " + position + " id = " + id);
+                                        Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        intent.putExtra("photo_post", photoList.get(position));
+                                        startActivity(intent);
+                                    }
+                                });
+                                Log.d("recipefragment", "page spinner " + position + " 클릭");
+                            }
+                            firstpage = false;
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                    sortspinner = view.findViewById(R.id.sort_spinner);
+                    sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
+                            String sort_str = sortspinner.getSelectedItem().toString();
+                            // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
+                            if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
+                                currentSort = sort_str;
+                                cplf.sortPhotoList(sort_str, currentPage);
+                                custon_progressDialog.show();
+                                final Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (responseCode == 200) {
+                                            responseCode = -1;
+                                            sortthreadFlag.set(false);
+                                            //업데이트된 레시피 리스트로 전환
+                                            photoAdapter.setPhotoList(photoList);
+                                            gridview.setAdapter(photoAdapter);
+                                            //레시피 리사이클러뷰 클릭 이벤트
+                                            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    Log.d("사진", "position = " + position + " id = " + id);
+                                                    Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                    intent.putExtra("photo_post", photoList.get(position));
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                            custon_progressDialog.dismiss();
+                                        }
+
+                                    }
+                                };
+                                class NewRunnable implements Runnable {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                sleep(1000);
+                                                Log.d("thread2", "thread2");
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            if (sortthreadFlag.get()) {
+                                                getActivity().runOnUiThread(runnable);
+                                                Log.d("thread2", "thread3");
+                                            } else {
+                                                i = 30;
+                                                Log.d("thread2", "thread4");
+                                            }
+                                        }
+                                        Log.d("thread2", "thread1");
+                                    }
+                                }
+                                NewRunnable nr = new NewRunnable();
+                                Thread t = new Thread(nr);
+                                sortthreadFlag.set(true);
+                                t.start();
+                                //업데이트된 레시피 리스트로 전환
+                                photoAdapter.setPhotoList(photoList);
+                                gridview.setAdapter(photoAdapter);
+                                //레시피 리사이클러뷰 클릭 이벤트
+                                gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.d("사진", "position = " + position + " id = " + id);
+                                        Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        intent.putExtra("photo_post", photoList.get(position));
+                                        startActivity(intent);
+                                    }
+                                });
+                                Log.d("recipefragment", "page spinner " + position + " 클릭");
+                            }
+                            firstpage = false;
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                    gridview.setAdapter(photoAdapter);
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("사진", "position = " + position + " id = " + id);
+                            Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("photo_post", photoList.get(position));
+                            startActivity(intent);
+                        }
+                    });
+                    custon_progressDialog.dismiss();//로딩창 종료
+                    Thread.currentThread().interrupt();
+                    // UI 코드 작성해주세요
                 } else if (responseCode == 500) {
+                    custon_progressDialog.dismiss();//로딩창 종료
                     plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 502) {
+                    custon_progressDialog.dismiss();//로딩창 종료
                     plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
@@ -180,7 +447,7 @@ public class PhotoFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    if (threadFlag)
+                    if (threadFlag.get())
                         getActivity().runOnUiThread(runnable);
                     else {
                         i = 30;
@@ -189,27 +456,17 @@ public class PhotoFragment extends Fragment {
             }
         }
 
-        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
+        cplf.sortPhotoList(currentSort, currentPage); // 시작은 첫 페이지 고정
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
-
-        return view;
-    }
-
-    public static String BitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
-        byte[] bytes = baos.toByteArray();
-        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
-        return temp;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        threadFlag = false;
+        threadFlag.set(false);
     }
 
     class FABClickListener implements View.OnClickListener {

@@ -1,6 +1,8 @@
 package com.example.sogong.View;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -58,19 +60,20 @@ public class MyPageFragment extends Fragment {
                 class NewRunnable implements Runnable {
                     NewRunnable() {
                     }
+
                     @Override
                     public void run() {
-                        while(true){
+                        while (true) {
                             try {
                                 Thread.sleep(100);
                                 if (Custom_Dialog.state == 0) {
                                     Custom_Dialog.state = -1;
                                     /* #12 사용자 작성 레시피 조회 */
-                                    cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
-                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+//                                    cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
+//                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    intent.putExtra("post_type",0);
+                                    intent.putExtra("post_type", 0);
                                     startActivity(intent);
                                     break;
                                 } else if (Custom_Dialog.state == 1) {
@@ -80,7 +83,7 @@ public class MyPageFragment extends Fragment {
                                     Custom_Dialog.state = -1;
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    intent.putExtra("post_type",1);
+                                    intent.putExtra("post_type", 1);
                                     startActivity(intent);
                                     break;
                                 }
@@ -101,6 +104,10 @@ public class MyPageFragment extends Fragment {
             public void onClick(View view) {
                 /* #15 "좋아요"를 누른 게시글 리스트 조회 */
                 //cpf.lookupMyLikeList("test", 1);
+                Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("post_type", 2);
+                startActivity(intent);
             }
         });
 
@@ -109,6 +116,10 @@ public class MyPageFragment extends Fragment {
             public void onClick(View view) {
                 /* #16 댓글을 작성한 게시글들의 리스트 조회 */
                 //cpf.lookupMyCommentList("test");
+                Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("post_type", 3);
+                startActivity(intent);
             }
         });
         refrigerator.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +133,8 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MailBoxActivity.class);
-                startActivity(intent);            }
+                startActivity(intent);
+            }
         });
 
         //비밀번호 변경 버튼 리스너
@@ -154,9 +166,10 @@ public class MyPageFragment extends Fragment {
                     public void run() {
                         if (MainActivity.responseCode == 200) {
                             MainActivity.responseCode = -1;
+
                             mu.startToast("로그아웃");
                             mu.changePage(0);
-//                            getActivity().finish();
+                            MainActivity.isLogout = true;
 
                         } else if (MainActivity.responseCode == 500) {
                             MainActivity.responseCode = 0;
@@ -240,19 +253,6 @@ public class MyPageFragment extends Fragment {
         return rootview;
     }
 
-    private class stateThread extends Thread {
-        private static final String TAG = "ExampleThread";
-
-        public stateThread() {
-
-        }
-
-        public void run() {
-
-        }
-
-    }
-
     class MyPage_UI implements Control {
         int state = -1;
 
@@ -277,8 +277,6 @@ public class MyPageFragment extends Fragment {
 
 
             cd.callFunction(title, message, type, btnTxtList);
-
-
         }
 
         @Override

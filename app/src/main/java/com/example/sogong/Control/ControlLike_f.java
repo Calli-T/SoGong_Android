@@ -6,6 +6,7 @@ import com.example.sogong.Model.LikeInfo;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.Post;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.PhotoLookupActivity;
 import com.example.sogong.View.RecipeLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -31,8 +32,8 @@ public class ControlLike_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
-
+                RecipeLookupActivity.responseCode.set(response.code());
+                PhotoLookupActivity.responseCode = response.code();
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
@@ -63,7 +64,8 @@ public class ControlLike_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode = response.code();
+                RecipeLookupActivity.responseCode.set(response.code());
+                PhotoLookupActivity.responseCode = response.code();
 
                 // 200
                 if (response.isSuccessful()) {

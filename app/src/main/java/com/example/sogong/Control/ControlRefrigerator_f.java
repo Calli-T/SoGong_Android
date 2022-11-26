@@ -8,6 +8,7 @@ import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.Refrigerator;
 import com.example.sogong.View.RecipeFragment;
+import com.example.sogong.View.Refri_AddIngredientActivity;
 import com.example.sogong.View.RefrigeratorActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -47,7 +48,6 @@ public class ControlRefrigerator_f {
                     Log.d("result", "디비 오류");
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<List<Refrigerator>> call, @NonNull Throwable t) { // 500
                 Log.d("result", "알 수 없는 오류");
@@ -63,13 +63,12 @@ public class ControlRefrigerator_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                RefrigeratorActivity.responseCode = response.code();
+                Refri_AddIngredientActivity.responseCode = response.code();
 
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
-                            RefrigeratorActivity.responseResult = response.body();
                             Log.d("result", "" + response.body());
                         }
                     }
@@ -124,7 +123,7 @@ public class ControlRefrigerator_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                RefrigeratorActivity.responseCode = response.code();
+                Refri_AddIngredientActivity.responseCode = response.code();
 
                 // 200
                 if (response.isSuccessful()) {

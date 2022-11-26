@@ -33,6 +33,7 @@
         <activity android:name=".View.PhotoAddActivity" />
         <activity android:name=".View.PhotoLookupActivity" />
         <activity android:name=".View.MyPageBoardActivity" />
+        <activity android:name=".View.Refri_AddIngredientActivity"/>
 
         <activity
             android:name=".View.LoginActivity"

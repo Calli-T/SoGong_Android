@@ -174,7 +174,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
-        android:hint="YYYY/MM/DD 형식으로 입력"
+        android:hint="YYYY-MM-DD 형식으로 입력"
         android:textColor="@color/blue"
         android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0"

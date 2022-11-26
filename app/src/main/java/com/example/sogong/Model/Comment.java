@@ -34,6 +34,17 @@ public class Comment implements Parcelable {
         comment_time = in.readString();
     }
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "comment_id=" + comment_id +
+                ", nickname='" + nickname + '\'' +
+                ", post_id=" + post_id +
+                ", comments='" + comments + '\'' +
+                ", comment_time='" + comment_time + '\'' +
+                '}';
+    }
+
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
         @Override
         public Comment createFromParcel(Parcel in) {

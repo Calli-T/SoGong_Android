@@ -30,12 +30,13 @@ public class ControlLogin_f {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                LoginActivity.responseCode = response.code();
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
                             userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
-                            LoginActivity.responseCode = response.code();
                         }
                     } else // 404
                         Log.d("404 Not Found", "with login");

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.sogong.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -29,6 +31,7 @@ public class SignupActivity extends AppCompatActivity {
 
     public static int responseCode;
     public static String authEmail;
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         responseCode = 0;
+        threadFlag.set(true);
 
         //UI controler
         SignupActivity_UI su = new SignupActivity_UI();
@@ -52,7 +56,7 @@ public class SignupActivity extends AppCompatActivity {
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                su.changePage(0);
             }
         });
 
@@ -79,10 +83,10 @@ public class SignupActivity extends AppCompatActivity {
                             su.startToast("중복된 아이디와 닉네임입니다.");
                         } else if (responseCode == 500) {
                             responseCode = 0;
-                            su.startDialog(0,"서버 오류","정보 등록에 실패했습니다.",new ArrayList<String>(Arrays.asList("확인")));
+                            su.startDialog(0, "서버 오류", "정보 등록에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                         } else if (responseCode == 502) {
                             responseCode = 0;
-                            su.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<String>(Arrays.asList("확인")));
+                            su.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
                         }
                     }
 
@@ -98,7 +102,13 @@ public class SignupActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            runOnUiThread(runnable);
+                            if (threadFlag.get()) {
+                                runOnUiThread(runnable);
+                                Log.d("Sign up thread", "working");
+                            } else {
+                                i = 30;
+                                Log.d("Sign up thread", "down");
+                            }
                         }
                     }
                 }
@@ -122,6 +132,12 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        threadFlag.set(false);
     }
 
     class SignupActivity_UI implements Control {
@@ -157,5 +173,10 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

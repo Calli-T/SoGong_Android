@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
+import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlPhoto_f;
 import com.example.sogong.Control.ControlRecipe_f;
@@ -39,6 +41,7 @@ import com.example.sogong.R;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PhotoLookupActivity extends AppCompatActivity {
     TextView photoAuthor;
@@ -49,11 +52,14 @@ public class PhotoLookupActivity extends AppCompatActivity {
     ImageButton menubutton;
     ImageButton like_btn;
 
+    Boolean likedState;
+
     public static int responseCode;
     public static PhotoLookUp photoLookUp;
-
+    private AtomicBoolean threadFlag = new AtomicBoolean();
     PopupMenu dropDownMenu;
     Menu menu;
+    Custon_ProgressDialog custon_progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +75,10 @@ public class PhotoLookupActivity extends AppCompatActivity {
         photoLike_cnt = findViewById(R.id.photolikecnt_text);
         photoImage = findViewById(R.id.photopost);
         like_btn = findViewById(R.id.like_btn);
-
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+        custon_progressDialog.show();
         //사용자에 따른 옵션 메뉴 로직 시작
         menubutton = findViewById(R.id.menu_button);
         dropDownMenu = new PopupMenu(this, menubutton);
@@ -89,7 +98,58 @@ public class PhotoLookupActivity extends AppCompatActivity {
                     case 0:
                         //게시글 삭제 로직 추가
                         Log.d("recipe", "삭제하기 menu click");
+                        Log.d("recipe", "삭제하기 menu click");
+                        custon_progressDialog.show();
+                        threadFlag.set(true);
+                        final Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (responseCode == 200) {
+                                    responseCode = -1;
+                                    threadFlag.set(false);
+                                    Log.d("사진 삭제", "성공");
+                                    custon_progressDialog.dismiss();
+                                    onBackPressed();
+                                } else if (responseCode == 500) {
+                                    responseCode = -1;
+                                    threadFlag.set(false);
+                                    Log.d("사진 삭제", "실패");
+                                    custon_progressDialog.dismiss();
 
+                                } else if (responseCode == 502) {
+                                    responseCode = -1;
+                                    threadFlag.set(false);
+                                    Log.d("사진 삭제", "실패");
+                                    custon_progressDialog.dismiss();
+
+                                }
+                            }
+                        };
+
+                        class NewRunnable implements Runnable {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < 30; i++) {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (threadFlag.get())
+                                        runOnUiThread(runnable);
+                                    else {
+                                        i = 30;
+                                    }
+                                }
+                            }
+                        }
+                        /* #19 요리 사진 게시글 삭제 */
+                        ControlPhoto_f cpf = new ControlPhoto_f();
+                        cpf.deletePhoto(ControlLogin_f.userinfo.getNickname(), photoPost.getPost_id());
+                        NewRunnable nr = new NewRunnable();
+                        Thread t = new Thread(nr);
+                        t.start();
                         return true;
                     case 1:
                         //게시글 수정 로직 추가
@@ -135,31 +195,42 @@ public class PhotoLookupActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         photoImage.setImageBitmap(bitmap);
 
-        like_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //좋아요 관련 로직 추가
-
-                /* #21 요리 사진 게시글 "좋아요" 취소 */
-                //clf.unLikePost("test", -1, 1);
-
-                /* #21 요리 사진 게시글 "좋아요" 등록 */
-                //clf.likePost("test", -1, 1);
-            }
-        });
-
-
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if (responseCode == 200) {
                     responseCode = -1;
-
-
+                    threadFlag.set(false);
+                    Log.d("사진 좋아요 정보", "좋아요 = "+photoLookUp.isLikeInfo());
+                    if (photoLookUp.isLikeInfo()) {
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                    } else {
+                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                    }
+                    likedState = photoLookUp.isLikeInfo();
+                    like_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (likedState) {
+                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                                likedState = false;
+                            } else {
+                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                                likedState = true;
+                            }
+                        }
+                    });
+                    custon_progressDialog.dismiss();
                 } else if (responseCode == 500) {
+                    responseCode = -1;
+                    threadFlag.set(false);
+                    custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 502) {
+                    responseCode = -1;
+                    threadFlag.set(false);
+                    custon_progressDialog.dismiss();
                     //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
@@ -174,21 +245,132 @@ public class PhotoLookupActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    runOnUiThread(runnable);
+                    Log.d("사진액티비티", "responsecode = " + responseCode);
+                    if (threadFlag.get())
+                        runOnUiThread(runnable);
+                    else {
+                        i = 30;
+                    }
                 }
             }
         }
-        //ControlRecipe_f crf = new ControlRecipe_f();
-        //crf.lookupRecipe(recipePost.getPost_id());
+        ControlPhoto_f cpf = new ControlPhoto_f();
+        cpf.lookupPhoto(photoPost.getPost_id(), ControlLogin_f.userinfo.getNickname());
 
-       // ControlRecipe_f crf = new ControlRecipe_f();
-        //crf.lookupRecipe(42, "test");
-        //ControlPhoto_f cpf = new ControlPhoto_f();
-        //cpf.deletePhoto("test", 23);
-
+        threadFlag.set(true);
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (likedState != photoLookUp.isLikeInfo()) {
+            custon_progressDialog.show();
+            if (photoLookUp.isLikeInfo()) {
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            PhotoLookupActivity.super.onBackPressed();
+                        } else if (responseCode == 500) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        } else if (responseCode == 502) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("사진액티비티", "responsecode = " + responseCode);
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
+                }
+                ControlLike_f clf = new ControlLike_f();
+                clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 2, photoLookUp.getPhotoPost().getPost_id());
+
+                threadFlag.set(true);
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+                /* #21 요리 사진 게시글 "좋아요" 취소 */
+
+                /* #21 요리 사진 게시글 "좋아요" 등록 */
+                //clf.likePost("test", -1, 1);
+
+            } else {
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            PhotoLookupActivity.super.onBackPressed();
+                        } else if (responseCode == 500) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        } else if (responseCode == 502) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("사진액티비티", "responsecode = " + responseCode);
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
+                }
+                ControlLike_f clf = new ControlLike_f();
+                clf.likePost(ControlLogin_f.userinfo.getNickname(), 2, photoLookUp.getPhotoPost().getPost_id());
+                Log.d("좋아요","좋아요 누른 게시글 id = "+photoLookUp.getPhotoPost().getPost_id());
+
+                threadFlag.set(true);
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+            }
+        } else PhotoLookupActivity.super.onBackPressed();
     }
 
     class RecipeLookup_UI implements Control {
