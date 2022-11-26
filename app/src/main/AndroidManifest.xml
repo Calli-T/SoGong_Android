@@ -19,7 +19,7 @@
         <activity android:name=".View.SignupActivity" />
         <activity android:name=".View.Legacy.DetailActivity" />
         <activity android:name=".View.Legacy.PostActivity" />
-        <activity android:name=".View.LoginActivity" />
+        <activity android:name=".View.MainActivity" />
         <activity android:name=".View.Legacy.JoinActivity" />
         <activity android:name=".View.EmailVerificationActivity" />
         <activity android:name=".View.RecipeAddActivity" />
@@ -34,9 +34,10 @@
         <activity android:name=".View.PhotoLookupActivity" />
         <activity android:name=".View.MyPageBoardActivity" />
         <activity android:name=".View.Refri_AddIngredientActivity"/>
+        <activity android:name=".View.RecipeSearchResultActivity"/>
 
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.SoGong.NoActionBar">
             <intent-filter>

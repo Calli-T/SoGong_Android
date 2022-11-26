@@ -18,6 +18,18 @@ public class SearchInfo {
         this.nickname = nickname;
     }
 
+    @Override
+    public String toString() {
+        return "SearchInfo{" +
+                "searchType='" + searchType + '\'' +
+                ", categories='" + categories + '\'' +
+                ", keywordType='" + keywordType + '\'' +
+                ", keyword='" + keyword + '\'' +
+                ", page=" + page +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
+
     public String getSearchType() {
         return searchType;
     }

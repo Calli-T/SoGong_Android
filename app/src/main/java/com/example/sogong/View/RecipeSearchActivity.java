@@ -30,7 +30,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
     ChipGroup chipGroup2;
     StringBuilder categories;
 
-    String[] category_str = new String[]{"족발 보쌈", "찜 탕 찌개", "돈까스", "회", "일식", "피자", "고기구이", "야식", "양식", "치킨", "중식", "아시안", "백반", "죽", "국수", "도시락", "분식", "카페 디저트", "패스트 푸드"};
+    String[] category_str = new String[]{"족발 보쌈", "찜 탕 찌개", "돈까스", "회", "일식", "피자", "고기구이", "야식", "양식", "치킨", "중식", "아시안", "백반", "죽", "국수", "도시락", "분식", "카페 디저트", "패스트푸드"};
 
 
     @Override
@@ -79,9 +79,13 @@ public class RecipeSearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ControlRecipeList_f crlf = new ControlRecipeList_f();
-                crlf.searchRecipeList("타이핑", "", searchOption.getSelectedItem().toString(), searchEdit.getText().toString(), 1);
-
+                Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("searchType", "타이핑");
+                intent.putExtra("categories", "");
+                intent.putExtra("keywordType", searchOption.getSelectedItem().toString());
+                intent.putExtra("keyword", searchEdit.getText().toString());
+                startActivity(intent);
             }
         });
         //카테고리 검색 버튼 클릭 시
@@ -92,8 +96,13 @@ public class RecipeSearchActivity extends AppCompatActivity {
                     Chip chip = (Chip) chipGroup2.getChildAt(i);
                     categories.append(chip.getText().toString()).append("-");
                 }
-                ControlRecipeList_f crlf = new ControlRecipeList_f();
-                crlf.searchRecipeList("카테고리", categories.deleteCharAt(categories.length() - 1).toString(), "", "", 1);
+                Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("searchType", "카테고리");
+                intent.putExtra("categories", categories.deleteCharAt(categories.length() - 1).toString());
+                intent.putExtra("keywordType","");
+                intent.putExtra("keyword", "");
+                startActivity(intent);
             }
         });
 

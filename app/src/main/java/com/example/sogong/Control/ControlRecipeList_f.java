@@ -10,6 +10,7 @@ import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
 import com.example.sogong.View.RecipeFragment;
+import com.example.sogong.View.RecipeSearchResultActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -23,7 +24,7 @@ public class ControlRecipeList_f {
 
     RecipeList recipeList = new RecipeList();
 
-    public void lookupRecipeList(int page){
+    public void lookupRecipeList(int page) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<RecipeList> call = sv.LookupRecipeList(page);
@@ -34,57 +35,61 @@ public class ControlRecipeList_f {
                 RecipeFragment.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             RecipeFragment.recipelist = response.body().getRecipeList();
                             RecipeFragment.totalpage = response.body().getTotal_page();
                             recipeList = response.body();
-                            Log.d("result", ""+recipeList.getRecipeList().size());
+                            Log.d("result", "" + recipeList.getRecipeList().size());
                         }
                     }
                 } else { // 500
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<RecipeList> call, @NonNull Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void searchRecipeList(String searchType, String categories, String keywordType, String keyword, int page){
+
+    public void searchRecipeList(String searchType, String categories, String keywordType, String keyword, int page) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SearchInfo searchInfo = new SearchInfo(searchType, categories, keywordType, keyword, page, "");
         Call<RecipeList> call = sv.SearchRecipeList(searchInfo);
-
+        Log.d("검색 정보", searchInfo.toString());
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
-                RecipeFragment.responseCode = response.code();
+                RecipeSearchResultActivity.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
-                            RecipeFragment.recipelist = response.body().getRecipeList();
-                            RecipeFragment.totalpage = response.body().getTotal_page();
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
+                            RecipeSearchResultActivity.recipeList = response.body().getRecipeList();
+                            RecipeSearchResultActivity.totalpage = response.body().getTotal_page();
                             recipeList = response.body();
-                            Log.d("result", ""+recipeList.getTotal_page());
+                            Log.d("result", "" + recipeList.getTotal_page());
                         }
                     }
                 } else { // 500
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(Call<RecipeList> call, Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void sortRecipeList(String sortBy, int page){
+
+    public void sortRecipeList(String sortBy, int page) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SortInfo sortInfo = new SortInfo(page, sortBy);
@@ -96,9 +101,9 @@ public class ControlRecipeList_f {
                 RecipeFragment.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             RecipeFragment.recipelist = response.body().getRecipeList();
                             RecipeFragment.totalpage = response.body().getTotal_page();
 
@@ -109,12 +114,17 @@ public class ControlRecipeList_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(Call<RecipeList> call, Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void showList(List<RecipePost_f> recipeList){}
-    public void noResult(String message){}
+
+    public void showList(List<RecipePost_f> recipeList) {
+    }
+
+    public void noResult(String message) {
+    }
 }

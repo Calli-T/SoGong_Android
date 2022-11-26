@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.RecipeAddActivity">
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/west"
+        android:contentDescription="back_button"
+        app:layout_constraintBottom_toTopOf="@+id/main_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageButton>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="검색"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/main_line"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="62dp"
+        android:layout_height="74dp"
+        android:src="@drawable/recipebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/main_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+    <TextView
+        android:id="@+id/search_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="검색 종류 &amp; 검색 내용"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/main_line" />
+
+    <View
+        android:id="@+id/sub_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/search_text" />
+
+    <TextView
+        android:id="@+id/movingpage_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이동할 페이지"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toStartOf="@id/recipe_page_spinner"
+        app:layout_constraintTop_toBottomOf="@id/sub_line" />
+
+    <Spinner
+        android:id="@+id/recipe_page_spinner"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sort_spinner"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_line" />
+
+    <View
+        android:id="@+id/sub_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#808080"
+        app:layout_constraintTop_toBottomOf="@id/recipe_page_spinner" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/search_recipe_scrollview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_line2">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recipe_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"
+            app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"
+            app:layout_constraintStart_toStartOf="@id/recipe_scrollview"
+            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/re_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="다시 검색"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

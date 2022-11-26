@@ -68,7 +68,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     ControlComment_f ccf = new ControlComment_f();
     ControlMailList_f cmlf = new ControlMailList_f();
     ControlMail_f cmf = new ControlMail_f();
-
+    boolean isSearch;
     Spinner pagespinner;
     Spinner sortspinner;
     ImageButton searchButton;
@@ -122,12 +122,14 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onResume() {
         super.onResume();
         Log.d("recipefragment", "재시작");
+        isSearch = getActivity().getIntent().getBooleanExtra("isSearch", false);
         // UI controller
         RecipeList_UI rlu = new RecipeList_UI();
         custon_progressDialog.show();
         // 추가) 레시피 게시판 조회 호출 코드
         threadFlag.set(true);
         firstpage = true;
+
 
         final Runnable runnable = new Runnable() {
             @Override
@@ -505,9 +507,9 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     sortspinner = view.findViewById(R.id.sort_spinner);
                     if (currentSort.equals("최근 순")) {
                         sortspinner.setSelection(0);
-                    }else if(currentSort.equals("조회수 순")){
+                    } else if (currentSort.equals("조회수 순")) {
                         sortspinner.setSelection(1);
-                    }else if(currentSort.equals("좋아요 순")){
+                    } else if (currentSort.equals("좋아요 순")) {
                         sortspinner.setSelection(2);
                     }
                     sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
