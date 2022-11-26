@@ -62,9 +62,10 @@ class PhotoAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.grid_photo, viewGroup, false);
+            ImageView photo;
 
-            ImageView photo = (ImageView) convertView.findViewById(R.id.photo_item);
+            convertView = inflater.inflate(R.layout.grid_photo, viewGroup, false);
+            photo = (ImageView) convertView.findViewById(R.id.photo_item);
 
             byte[] encodeByte = Base64.decode(photoPost.getPhoto_link(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);

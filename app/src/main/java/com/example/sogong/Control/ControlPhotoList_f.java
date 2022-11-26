@@ -38,7 +38,7 @@ public class ControlPhotoList_f {
                     if (response.body() != null) {
                         if (response.code() == 200) {
                             photoList = response.body();
-                            Log.d("result", photoList.toString());
+                            Log.d("photo result", photoList.toString());
 
                             // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
                             PhotoFragment.photoList = photoList.getPhotoList();
@@ -75,7 +75,7 @@ public class ControlPhotoList_f {
                             PhotoFragment.totalpage = response.body().getTotal_page();
                             PhotoFragment.photoList = response.body().getPhotoList();
 
-                            //Log.d("result", response.body().toString());
+                            Log.d("result", response.body().toString());
                         }
                     }
                 } else { // 500

@@ -7,6 +7,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,12 +39,19 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     Custon_ProgressDialog custon_progressDialog;
     SwipeRefreshLayout swipeRefreshLayout;
-    public RecipeAdapter recipeAdapter;
-    public RecyclerView recipeRecyclerView;
+    private RecipeAdapter recipeAdapter;
+    private RecyclerView recipeRecyclerView;
+    private GridView gridview = null;
+    private PhotoAdapter photoAdapter = null;
+
+    private ViewGroup rootview;
+
+    private ControlRecipeList_f crlf = new ControlRecipeList_f();
+    private ControlPhotoList_f cplf = new ControlPhotoList_f();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
+        rootview = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
         Log.d("homefragment", "시작");
 
         isInHome = true;
@@ -62,6 +71,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         recipeRecyclerView.setAdapter(recipeAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recipeRecyclerView.setLayoutManager(layoutManager);
+        
+        //사진 Grid 선언
+        gridview = (GridView) rootview.findViewById(R.id.home_photo_grid);
+        photoAdapter = new PhotoAdapter();
+        gridview.setAdapter(photoAdapter);
+
+        //맨 앞으로
+        gridview.bringToFront();
 
         return rootview;
     }
@@ -99,6 +116,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         }
                     });
 
+                    // 사진 그리드뷰의 생성 및 클릭 이벤트
+                    photoAdapter.setPhotoList(PhotoFragment.photoList);
+                    gridview.setAdapter(photoAdapter);
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("사진", PhotoFragment.photoList.get(position).toString());
+                            Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("photo_post", PhotoFragment.photoList.get(position));
+                            //startActivity(intent);
+                        }
+                    });
+
                     custon_progressDialog.dismiss();//로딩창 종료
                 } else if (RecipeFragment.responseCode == 500 || PhotoFragment.responseCode == 500) {
                     custon_progressDialog.dismiss();//로딩창 종료
@@ -116,29 +147,23 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 for (int i = 0; i < 30; i++) {
                     try {
                         Thread.sleep(1000);
-                        Log.d("thread1", "thread2");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        Log.d("thread1", "thread5");
                     }
 
                     if (threadFlag.get()) {
                         getActivity().runOnUiThread(runnable);
-                        Log.d("thread1", "thread3");
 
                     } else {
                         i = 30;
-                        Log.d("thread1", "thread4");
-                        Thread.currentThread().interrupt();
+                        //Thread.currentThread().interrupt();
                     }
                 }
-                Log.d("thread1", "thread1");
             }
         }
 
-        ControlRecipeList_f crlf = new ControlRecipeList_f();
+
         crlf.sortRecipeList("최근 순", 1);
-        ControlPhotoList_f cplf = new ControlPhotoList_f();
         cplf.sortPhotoList("최근 순", 1);
 
         NewRunnable nr = new NewRunnable();

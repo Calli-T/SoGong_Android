@@ -77,7 +77,6 @@ public class PhotoFragment extends Fragment {
     Spinner pagespinner;
     Spinner sortspinner;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_photoboard, container, false);
@@ -112,8 +111,6 @@ public class PhotoFragment extends Fragment {
         /* #22 요리 사진 게시글 신고 */
         //Report reportInfo = new Report("test", "android test3", 1, 2);
         //crf.reportPost(reportInfo);
-
-        responseCode = 0;
 
         // UI controller
         PhotoList_UI plu = new PhotoList_UI();
