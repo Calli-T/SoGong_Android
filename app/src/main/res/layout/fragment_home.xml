@@ -15,8 +15,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/main_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </ImageButton>
+        app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,11 +53,11 @@
         android:layout_marginTop="1dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/roundedrectangle"
-        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintBottom_toTopOf="@id/photobox"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_line"
-        app:layout_constraintBottom_toTopOf="@id/photobox"/>
+        app:layout_constraintTop_toBottomOf="@id/main_line" />
 
     <TextView
         android:id="@+id/textrecipe"
@@ -73,6 +72,45 @@
         app:layout_constraintStart_toStartOf="@id/recipebox"
         app:layout_constraintTop_toTopOf="@id/recipebox" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/home_swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recipebox"
+        app:layout_constraintLeft_toLeftOf="@+id/recipebox"
+        app:layout_constraintRight_toRightOf="@+id/recipebox"
+        app:layout_constraintTop_toBottomOf="@+id/textrecipe"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/home_recipe_scrollview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_recipe_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_recipe_recyclerview"
         android:layout_width="match_parent"
@@ -84,6 +122,7 @@
         app:layout_constraintEnd_toEndOf="@id/recipebox"
         app:layout_constraintStart_toStartOf="@id/recipebox"
         app:layout_constraintTop_toBottomOf="@id/textrecipe" />
+    -->
 
     <View
         android:id="@+id/photobox"
@@ -93,12 +132,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/roundedrectangle"
-        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recipebox"
-         />
+        app:layout_constraintTop_toBottomOf="@id/recipebox" />
 
     <TextView
         android:id="@+id/textphoto"

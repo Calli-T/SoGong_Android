@@ -102,7 +102,7 @@ public class ControlRecipeList_f {
                             RecipeFragment.recipelist = response.body().getRecipeList();
                             RecipeFragment.totalpage = response.body().getTotal_page();
 
-
+                            //Log.d("result", response.body().toString());
                         }
                     }
                 } else { // 500

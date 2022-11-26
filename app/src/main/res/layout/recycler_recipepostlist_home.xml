@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="레시피 제목"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/pepper_1"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_2"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_1"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_3"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_2"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_4"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_3"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <ImageView
+        android:id="@+id/pepper_5"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:background="@drawable/pepper"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/pepper_4"
+        app:layout_constraintTop_toTopOf="@id/title" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/spicy"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:drawableStart="@drawable/pepper_resize"-->
+    <!--        android:text="x5"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/title"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/title"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/title" />-->
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="2020/11/11"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="백종원보단 김재환"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/date"
+        app:layout_constraintStart_toEndOf="@id/date"
+        app:layout_constraintTop_toTopOf="@id/date" />
+
+    <ImageView
+        android:id="@+id/viewcount"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/visibility"
+        app:layout_constraintBottom_toBottomOf="@id/author"
+        app:layout_constraintEnd_toStartOf="@id/viewcount_text"
+        app:layout_constraintTop_toTopOf="@id/author" />
+
+    <TextView
+        android:id="@+id/viewcount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="1"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/viewcount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/viewcount" />
+
+    <ImageView
+        android:id="@+id/commentcount"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/chat_bubble"
+        app:layout_constraintBottom_toBottomOf="@id/author"
+        app:layout_constraintEnd_toStartOf="@id/commentcount_text"
+        app:layout_constraintTop_toTopOf="@id/author" />
+
+    <TextView
+        android:id="@+id/commentcount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="1"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/commentcount"
+        app:layout_constraintEnd_toStartOf="@id/viewcount"
+        app:layout_constraintTop_toTopOf="@id/commentcount" />
+
+    <ImageView
+        android:id="@+id/likecount"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/thumb_up"
+        app:layout_constraintBottom_toBottomOf="@id/author"
+        app:layout_constraintEnd_toStartOf="@id/likecount_text"
+        app:layout_constraintTop_toTopOf="@id/author" />
+
+    <TextView
+        android:id="@+id/likecount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="1"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/likecount"
+        app:layout_constraintEnd_toStartOf="@id/commentcount"
+        app:layout_constraintTop_toTopOf="@id/likecount" />
+
+    <View
+        android:id="@+id/main_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/author" />
+</androidx.constraintlayout.widget.ConstraintLayout>

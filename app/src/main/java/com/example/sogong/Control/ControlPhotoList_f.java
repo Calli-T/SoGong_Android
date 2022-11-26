@@ -72,10 +72,10 @@ public class ControlPhotoList_f {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.code() == 200) {
-
                             PhotoFragment.totalpage = response.body().getTotal_page();
-                            // getter를 각각 만들어 두면 서류는 늘어나지만 static 안써도됩니다.
                             PhotoFragment.photoList = response.body().getPhotoList();
+
+                            //Log.d("result", response.body().toString());
                         }
                     }
                 } else { // 500

@@ -115,7 +115,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public RecipeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.recycler_recipepostlist, parent, false);
+        View view;
+        if(!HomeFragment.isInHome)
+            view = inflater.inflate(R.layout.recycler_recipepostlist, parent, false);
+        else
+            view = inflater.inflate(R.layout.recycler_recipepostlist_home, parent, false);
         RecipeAdapter.ViewHolder vh = new RecipeAdapter.ViewHolder(view);
 
         view.setOnClickListener(new View.OnClickListener() {
