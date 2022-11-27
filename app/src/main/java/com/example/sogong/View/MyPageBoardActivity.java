@@ -87,6 +87,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
     private GridView gridview = null;
     private PhotoAdapter photoAdapter = null;
 
+    MyPageBoard_UI mpbu = new MyPageBoard_UI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,10 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
+
+                        if (recipelist.size() == 0) {
+                            mpbu.startToast("작성한 레시피 게시글이 없습니다.");
+                        }
                         recipeAdapter.setRecipeList(recipelist);
 //                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //                            @Override
@@ -175,6 +180,16 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                                     }
                                                 });
                                                 custon_progressDialog.dismiss();
+                                            } else if (responseCode == 404) {
+                                                responseCode = -1;
+                                                sortthreadFlag.set(false);
+                                                custon_progressDialog.dismiss();
+                                                mpbu.startDialog(0,"요청 실패","정렬 정보 요청을 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                            } else if (responseCode == 500) {
+                                                responseCode = -1;
+                                                sortthreadFlag.set(false);
+                                                custon_progressDialog.dismiss();
+                                                mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                             }
 
                                         }
@@ -215,7 +230,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                             intent.putExtra("recipe_post", recipelist.get(position));
                                             startActivity(intent);
-                                            //+조회수 관련 로직 추가할 것
                                         }
                                     });
                                     Log.d("recipefragment", "page spinner " + position + " 클릭");
@@ -236,7 +250,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 intent.putExtra("recipe_post", recipelist.get(position));
                                 startActivity(intent);
-                                //+조회수 관련 로직 추가할 것
                             }
                         });
                         //검색화면으로 이동
@@ -245,19 +258,23 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 Intent intent = new Intent(MyPageBoardActivity.this, RecipeSearchActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                intent.putExtra("isMyPage",true);
+                                intent.putExtra("isMyPage", true);
                                 startActivity(intent);
                             }
                         });
 
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
+                    } else if (responseCode == 400) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0, "레시피 요청 실패", "레시피 게시글 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 500) {
+                        threadFlag.set(false);
+                        responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-//                            rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                    } else if (responseCode == 502) {
-                        custon_progressDialog.dismiss();//로딩창 종료
-//                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };
@@ -315,7 +332,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
-
+                        if (photolist.size() == 0) {
+                            mpbu.startToast("작성한 요리 사진 게시글이 없습니다.");
+                        }
                         photoAdapter.setPhotoList(photolist);
                         gridview.setAdapter(photoAdapter);
                         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -342,17 +361,16 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         });
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
-                        // UI 코드 작성해주세요
+                    } else if (responseCode == 404) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0, "사진 요청 실패", "사진 게시글 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 500) {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-
-                    } else if (responseCode == 502) {
-                        threadFlag.set(false);
-                        responseCode = -1;
-                        custon_progressDialog.dismiss();//로딩창 종료
-
+                        mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };
@@ -429,6 +447,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
+                        if(recipelist.size()==0){
+                            mpbu.startToast("좋아요를 누른 게시글이 없습니다.");
+                        }
                         recipeAdapter.setRecipeList(recipelist);
                         pagenum = new String[totalpage];
                         for (int i = 1; i <= totalpage; i++) {
@@ -467,11 +488,15 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
+                        threadFlag.set(false);
+                        responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-//                            rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "정보 요청 실패", "정보 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 502) {
+                        threadFlag.set(false);
+                        responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-//                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };
@@ -553,6 +578,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
+                        if(recipelist.size()==0){
+                            mpbu.startToast("댓글을 작성한 게시글이 없습니다.");
+                        }
                         recipeAdapter.setRecipeList(recipelist);
                         pagenum = new String[totalpage];
                         for (int i = 1; i <= totalpage; i++) {
@@ -574,10 +602,16 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
+                        threadFlag.set(false);
+                        responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0,"요청 실패","정보 요청에 실패함.",new ArrayList<>(Arrays.asList("확인")));
 //                            rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 502) {
+                        threadFlag.set(false);
+                        responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
 //                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
@@ -618,7 +652,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
     }
 
 
-    class MyPageRecipe_UI implements Control {
+    class MyPageBoard_UI implements Control {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();

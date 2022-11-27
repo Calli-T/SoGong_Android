@@ -3,14 +3,20 @@ package com.example.sogong.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlRefrigerator_f;
@@ -19,6 +25,9 @@ import com.example.sogong.Model.Refrigerator;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Refri_AddIngredientActivity extends AppCompatActivity {
@@ -33,6 +42,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
     int type;
     Refrigerator ingredients;
+    RefriAdd_UI rau = new RefriAdd_UI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +100,16 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
                             onBackPressed();
+                        } else if (responseCode == 400) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rau.startDialog(0,"요청 실패","재료 추가 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
                         } else if (responseCode == 500) {
-
-                        } else if (responseCode == 502) {
-
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -133,14 +149,16 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                             editthreadFlag.set(false);
                             custon_progressDialog.dismiss();
                             onBackPressed();
+                        } else if (responseCode == 406) {
+                            responseCode = -1;
+                            editthreadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rau.startDialog(0,"변경 실패","재료 변경에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
                         } else if (responseCode == 500) {
                             responseCode = -1;
                             editthreadFlag.set(false);
                             custon_progressDialog.dismiss();
-                        } else if (responseCode == 502) {
-                            responseCode = -1;
-                            editthreadFlag.set(false);
-                            custon_progressDialog.dismiss();
+                            rau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -174,6 +192,38 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                 //crf.editRefrigerator(ingredients);
 
             }
+        }
+    }
+
+    class RefriAdd_UI implements Control {
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getApplicationContext());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+            Custom_Dialog cd = new Custom_Dialog(Refri_AddIngredientActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
+        }
+
+        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
+        @Override
+        public void changePage(int dest) {
+//            if (dest == 0) {
+//                Intent intent = new Intent(RecipeAddActivity.this, RefrigeratorActivity.class);
+//                startActivity(intent);
+//            }
         }
     }
 }

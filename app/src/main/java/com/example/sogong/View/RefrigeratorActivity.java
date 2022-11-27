@@ -33,6 +33,8 @@ import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +48,8 @@ public class RefrigeratorActivity extends AppCompatActivity {
     public static int responseResult;
     Custon_ProgressDialog custon_progressDialog;
 
+    // UI controller
+    Refrigerator_UI rfu = new Refrigerator_UI();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +59,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
 
         threadFlag = true;
 
-        // UI controller
-        Refrigerator_UI rfu = new Refrigerator_UI();
+
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
@@ -64,6 +67,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -132,12 +136,16 @@ public class RefrigeratorActivity extends AppCompatActivity {
                                         overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
                                         custon_progressDialog.dismiss();
 
+                                    } else if (responseCode == 406) {
+                                        responseCode = -1;
+                                        deletethreadFlag = false;
+                                        custon_progressDialog.dismiss();
+                                        rfu.startDialog(0,"삭제 실패","삭제 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
                                     } else if (responseCode == 500) {
                                         responseCode = -1;
                                         deletethreadFlag = false;
-                                    } else if (responseCode == 502) {
-                                        responseCode = -1;
-                                        deletethreadFlag = false;
+                                        custon_progressDialog.dismiss();
+                                        rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                     }
                                 }
                             };
@@ -170,10 +178,18 @@ public class RefrigeratorActivity extends AppCompatActivity {
                     });
                     custon_progressDialog.dismiss();
 
+                } else if (responseCode == 401) {
+                    responseCode = -1;
+                    threadFlag = false;
+                    rfu.startDialog(0,"서버 오류","보유 재료 조회에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                } else if (responseCode == 404) {
+                    responseCode = -1;
+                    threadFlag = false;
+                    rfu.startToast("보유한 재료가 없습니다.");
                 } else if (responseCode == 500) {
-
-                } else if (responseCode == 502) {
-
+                    responseCode = -1;
+                    threadFlag = false;
+                    rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                 }
             }
         };

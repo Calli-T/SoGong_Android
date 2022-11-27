@@ -38,6 +38,8 @@ public class MyPageFragment extends Fragment {
     ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
     ControlPost_f cpf = new ControlPost_f();
 
+    Custon_ProgressDialog custon_progressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -51,6 +53,11 @@ public class MyPageFragment extends Fragment {
         pwdchange_text = (Button) rootview.findViewById(R.id.pwdchange_text);
         nicknamechange_text = (Button) rootview.findViewById(R.id.nicknamechange_text);
         logout_text = (Button) rootview.findViewById(R.id.logout_text);
+
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(getActivity());
+        custon_progressDialog.setCanceledOnTouchOutside(false);
+
 
         MyPage_UI mu = new MyPage_UI();
         writtenRecipe.setOnClickListener(new View.OnClickListener() {
@@ -161,49 +168,72 @@ public class MyPageFragment extends Fragment {
         logout_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mu.startToast("로그아웃 버튼 클릭");
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (MainActivity.responseCode == 200) {
-                            MainActivity.responseCode = -1;
 
-                            mu.startToast("로그아웃");
-                            mu.changePage(0);
-                            MainActivity.isLogout = true;
-
-                        } else if (MainActivity.responseCode == 500) {
-                            MainActivity.responseCode = 0;
-                            mu.startToast("자동 로그인 해제를 실패했습니다.");
-                        } else if (MainActivity.responseCode == 502) {
-                            MainActivity.responseCode = 0;
-                            mu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
+                mu.startDialog(1, "로그아웃", "정말 로그아웃하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
 
                 class NewRunnable implements Runnable {
+                    NewRunnable() {
+                    }
+
                     @Override
                     public void run() {
-                        for (int i = 0; i < 30; i++) {
+                        while (true) {
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(100);
+                                if (Custom_Dialog.state == 0) {
+                                    Custom_Dialog.state = -1;
+                                    final Runnable runnable = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (MainActivity.responseCode == 200) {
+                                                MainActivity.responseCode = -1;
+                                                mu.startToast("로그아웃");
+                                                mu.changePage(0);
+                                                MainActivity.isLogout = true;
+                                            } else if (MainActivity.responseCode == 500) {
+                                                MainActivity.responseCode = 0;
+                                                mu.startToast("자동 로그인 해제를 실패했습니다.");
+                                            } else if (MainActivity.responseCode == 502) {
+                                                MainActivity.responseCode = 0;
+                                                mu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                                            }
+                                        }
+                                    };
+
+                                    class NewRunnable1 implements Runnable {
+                                        @Override
+                                        public void run() {
+                                            for (int i = 0; i < 30; i++) {
+                                                try {
+                                                    Thread.sleep(1000);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                getActivity().runOnUiThread(runnable);
+                                            }
+                                        }
+                                    }
+
+                                    if (MainActivity.responseCode == 0) {
+                                        MainActivity.responseCode = -1;
+
+                                        ControlLogout_f clf = new ControlLogout_f();
+                                        clf.logout();
+                                    }
+                                    NewRunnable1 nr = new NewRunnable1();
+                                    Thread t = new Thread(nr);
+                                    t.start();
+                                    break;
+                                } else if (Custom_Dialog.state == 1) {
+                                    break;
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
-                            getActivity().runOnUiThread(runnable);
                         }
                     }
                 }
-
-                if (MainActivity.responseCode == 0) {
-                    MainActivity.responseCode = -1;
-
-                    ControlLogout_f clf = new ControlLogout_f();
-                    clf.logout();
-                }
-
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
                 t.start();

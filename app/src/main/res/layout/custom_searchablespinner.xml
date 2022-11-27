@@ -56,14 +56,26 @@
         android:id="@+id/unit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="단위"
+        android:text="단위 선택"
         android:textSize="20sp"
+        android:layout_marginStart="30dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/amount_text"
         app:layout_constraintTop_toBottomOf="@id/list_view" />
+    <Spinner
+        android:id="@+id/unit_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:text="단위"
+        android:entries="@array/unit"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/unit_text"
+        app:layout_constraintTop_toBottomOf="@id/list_view" />
     <!-- Edit text to allow user to type name
            of item he/she wants to search-->
+
     <EditText
         android:id="@+id/edit_text1"
         android:layout_width="match_parent"

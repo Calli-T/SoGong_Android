@@ -5,7 +5,10 @@ import static java.lang.Thread.sleep;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,11 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
 import com.example.sogong.Control.ControlRecipeList_f;
@@ -29,6 +34,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -57,6 +64,8 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
     int currentPage;
 
     StringBuilder searchContent_str;
+
+    SearchResult_UI sru = new SearchResult_UI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,16 +282,19 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         });
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
+                    } else if (responseCode == 404) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        sru.startDialog(0,"요청 실패","검색 결과 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                        Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
+                        sru.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                         Thread.currentThread().interrupt();
-                    } else if (responseCode == 502) {
-                        threadFlag.set(false);
-                        responseCode = -1;
-                        custon_progressDialog.dismiss();//로딩창 종료
-                        Thread.currentThread().interrupt();
+
                     }
                 }
             };
@@ -313,6 +325,37 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
             Thread t = new Thread(nr);
             t.start();
 
+        }
+    }
+    class SearchResult_UI implements Control {
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getApplicationContext());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+            Custom_Dialog cd = new Custom_Dialog(RecipeSearchResultActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
+        }
+
+        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
+        @Override
+        public void changePage(int dest) {
+            if (dest == 0) {
+                Intent intent = new Intent(RecipeSearchResultActivity.this, RefrigeratorActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }

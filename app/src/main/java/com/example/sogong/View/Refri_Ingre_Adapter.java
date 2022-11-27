@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapter.ViewHolder> {
 
-    private List<Refrigerator> mData;
+    private List<Refrigerator> mData = null;
     private Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -28,6 +28,7 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
         TextView amount;
         ImageButton left_btn;
         ImageButton right_btn;
+
         ViewHolder(View itemView) {
             super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
@@ -62,12 +63,14 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
         }
 
         void onBind(Refrigerator refrigerator) {
-            name.setText(refrigerator.getName());
-            String date_str = refrigerator.getExpiry_date().toString().split("T")[0];
-            date.setText(date_str);
-            String amountstr = String.valueOf(refrigerator.getAmmount()) + refrigerator.getUnit();
-            amount.setText(amountstr);
+            if (refrigerator.getExpiry_date() != null) {
+                name.setText(refrigerator.getName());
+                date.setText(refrigerator.getExpiry_date().split("T")[0]);
+                String amountstr = String.valueOf(refrigerator.getAmmount()) + refrigerator.getUnit();
+                amount.setText(amountstr);
+            }
         }
+
         public TextView getName() {
             return name;
         }
@@ -108,7 +111,6 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
     @Override
     public void onBindViewHolder(Refri_Ingre_Adapter.ViewHolder holder, int position) {
         holder.onBind(mData.get(position));
-
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -129,22 +131,26 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
     public void setOnItemClickListener(OnItemClickListener listener) {
         itemClickListener = listener;
     }
+
     //왼쪽버튼 클릭 리스너
-    public interface OnItemLeftButtonClickListener{
-        void onItemLeftButtonClick(View view,int position);
+    public interface OnItemLeftButtonClickListener {
+        void onItemLeftButtonClick(View view, int position);
     }
+
     private Refri_Ingre_Adapter.OnItemLeftButtonClickListener onItemLeftButtonClickListener;
 
-    public void setOnItemLeftButtonClickListener(Refri_Ingre_Adapter.OnItemLeftButtonClickListener listener){
+    public void setOnItemLeftButtonClickListener(Refri_Ingre_Adapter.OnItemLeftButtonClickListener listener) {
         onItemLeftButtonClickListener = listener;
     }
+
     //오른쪽버튼 클릭 리스너
-    public interface OnItemRightButtonClickListener{
-        void onItemRightButtonClick(View view,int position);
+    public interface OnItemRightButtonClickListener {
+        void onItemRightButtonClick(View view, int position);
     }
+
     private Refri_Ingre_Adapter.OnItemRightButtonClickListener onItemRightButtonClickListener;
 
-    public void setOnItemRightButtonClickListener(Refri_Ingre_Adapter.OnItemRightButtonClickListener listener){
+    public void setOnItemRightButtonClickListener(Refri_Ingre_Adapter.OnItemRightButtonClickListener listener) {
         onItemRightButtonClickListener = listener;
     }
 

@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
+import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.RecipePost_f;
@@ -106,7 +108,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         unitmap.put("쪽파", "g");
 
         //레시피 종류 스피너
-        SpinnerWithHintAdapter spinnerArrayAdapter1 = new SpinnerWithHintAdapter(context, android.R.layout.simple_spinner_dropdown_item, ingrecate_str);
+        SpinnerWithHintAdapter spinnerArrayAdapter1 = new SpinnerWithHintAdapter(context, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.category));
         spinnerArrayAdapter1.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         recipecate.setAdapter(spinnerArrayAdapter1);
         recipecate.setSelection(spinnerArrayAdapter1.getCount());
@@ -129,7 +131,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                 ingreSelectDialog.show();
                 EditText editText = ingreSelectDialog.findViewById(R.id.edit_text);
                 ListView listView = ingreSelectDialog.findViewById(R.id.list_view);
-                TextView unitText = ingreSelectDialog.findViewById(R.id.unit_text);
+                Spinner unitSpinner = ingreSelectDialog.findViewById(R.id.unit_spinner);
                 EditText editText1 = ingreSelectDialog.findViewById(R.id.edit_text1);
                 Button addButton = ingreSelectDialog.findViewById(R.id.ingre_add_button);
                 Button cancelButton = ingreSelectDialog.findViewById(R.id.cancel_button);
@@ -156,7 +158,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("position", "position = " + position);
                         editText.setText(adapter.getItem(position));
-                        unitText.setText(unitmap.get(editText.getText().toString()));
+                        editText.setEnabled(false);
                         listView.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -172,6 +174,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         ImageButton removeButton = view.findViewById(R.id.minus_button);
                         selectName.setText(editText.getText().toString());
                         editAmount.setText(editText1.getText().toString());
+                        unit.setText(unitSpinner.getSelectedItem().toString());
                         removeButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -194,6 +197,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         });
         if(isEdit){
             recipetitle.setText(recipePostF.getTitle());
+            String[] category_str = getResources().getStringArray(R.array.category);
             //recipecate.setSelection(); 레시피 카테고리 배열 인덱스로 나중에 하기
             recipespicy.setSelection(recipePostF.getDegree_of_spicy());
             recipedescription.setText(recipePostF.getDescription());
@@ -415,4 +419,36 @@ public class RecipeAddActivity extends AppCompatActivity {
             return count > 0 ? count - 1 : count;
         }
     }
+    class PhotoAdd_UI implements Control {
+        @Override
+        public void startToast(String message) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+            TextView toast_textview = layout.findViewById(R.id.toast_textview);
+            toast_textview.setText(String.valueOf(message));
+            Toast toast = new Toast(getApplicationContext());
+            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
+            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+            toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
+            toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
+            toast.setView(layout);
+            toast.show();
+        }
+
+        @Override
+        public void startDialog(int type, String title, String message, List<String> btnTxtList) {
+            Custom_Dialog cd = new Custom_Dialog(RecipeAddActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
+        }
+
+        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
+        @Override
+        public void changePage(int dest) {
+//            if (dest == 0) {
+//                Intent intent = new Intent(RecipeAddActivity.this, RefrigeratorActivity.class);
+//                startActivity(intent);
+//            }
+        }
+    }
+
 }

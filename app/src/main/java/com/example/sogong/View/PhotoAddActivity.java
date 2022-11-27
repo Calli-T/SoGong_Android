@@ -52,7 +52,8 @@ public class PhotoAddActivity extends AppCompatActivity {
     Button addPhoto;
     String base64Img;
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
-
+    Custon_ProgressDialog custon_progressDialog;
+    PhotoAdd_UI pau = new PhotoAdd_UI();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +65,10 @@ public class PhotoAddActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityResult.launch(intent);
+
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         reselctPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,28 +85,26 @@ public class PhotoAddActivity extends AppCompatActivity {
                 threadFlag = true;
                 if (state == 1) {
                     Log.d("photoadd", "이미지 있는 상태");
-                    Log.d("photoadd",""+base64Img.length());
-                    Log.d("photoadd",""+base64Img.substring(0,100));
+                    Log.d("photoadd", "" + base64Img.length());
+                    Log.d("photoadd", "" + base64Img.substring(0, 100));
                     final Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
                             if (responseCode == 200) {
                                 responseCode = -1;
                                 threadFlag = false;
-                                Log.d("photoadd","responseCode = "+responseCode );
+                                Log.d("photoadd", "responseCode = " + responseCode);
                                 onBackPressed();
-                            }else if(responseCode == 500){
+                            } else if (responseCode == 500) {
                                 responseCode = -1;
                                 threadFlag = false;
-                                Log.d("photoadd","responseCode = "+responseCode );
-                            }else if(responseCode == 502){
+                                Log.d("photoadd", "responseCode = " + responseCode);
+                                pau.startDialog(0,"서버 오류","게시글 등록을 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 502) {
                                 responseCode = -1;
                                 threadFlag = false;
-                                Log.d("photoadd","responseCode = "+responseCode );
-                            }else {
-                                responseCode = -1;
-                                threadFlag = false;
-                                Log.d("photoadd","responseCode = "+responseCode );
+                                Log.d("photoadd", "responseCode = " + responseCode);
+                                pau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                             }
                             // UI 코드 작성해주세요
 
@@ -132,7 +135,10 @@ public class PhotoAddActivity extends AppCompatActivity {
                     Thread t = new Thread(nr);
                     t.start();
 
-                } else Log.d("photoadd", "이미지 없는 상태");
+                } else {
+                    pau.startDialog(0,"사진 등록","등록할 이미지를 선택하시오.",new ArrayList<>(Arrays.asList("확인")));
+                    Log.d("photoadd", "이미지 없는 상태");
+                }
             }
         });
 
@@ -164,18 +170,6 @@ public class PhotoAddActivity extends AppCompatActivity {
                     }
                 }
             });
-
-
-    public static String compress(String str) throws IOException {
-        if (str == null || str.length() == 0) {
-            return str;
-        }/*w  w w. ja  va 2s.c om*/
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        GZIPOutputStream gzip = new GZIPOutputStream(out);
-        gzip.write(str.getBytes());
-        gzip.close();
-        return out.toString("UTF-8");
-    }
 
     class PhotoAdd_UI implements Control {
         @Override

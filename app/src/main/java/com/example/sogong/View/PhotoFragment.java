@@ -356,6 +356,16 @@ public class PhotoFragment extends Fragment {
                                                 }
                                             });
                                             custon_progressDialog.dismiss();
+                                        } else if(responseCode == 500){
+                                            responseCode = -1;
+                                            sortthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            plu.startDialog(0, "서버 오류", "게시글 요청을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                        }else if(responseCode == 502){
+                                            responseCode = -1;
+                                            sortthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            plu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                         }
 
                                     }
