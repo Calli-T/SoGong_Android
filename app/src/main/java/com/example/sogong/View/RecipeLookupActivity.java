@@ -163,7 +163,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         Intent intent2 = new Intent(RecipeLookupActivity.this, RecipeAddActivity.class);
                         intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         intent2.putExtra("isEdit",true);
-                        intent2.putExtra("EditRecipe",recipePostF);
+                        intent2.putExtra("EditRecipe",recipePostLookUp.getRecipeInfo());
                         startActivity(intent2);
 
                         Log.d("recipe", "수정하기 menu click");

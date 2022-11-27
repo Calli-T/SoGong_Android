@@ -291,12 +291,31 @@ public class RecipeAddActivity extends AppCompatActivity {
                 Thread t = new Thread(nr);
                 t.start();
             }else {
+                int index = 0;
                 newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
                 newRecipe.setTitle(recipetitle.getText().toString());
                 newRecipe.setCategory(recipecate.getSelectedItem().toString());
                 newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
                 newRecipe.setDescription(recipedescription.getText().toString());
-                for (int i = 0; i < linearlayout.getChildCount(); i++) {
+                for(int j = 0; j<recipePostF.getRecipe_Ingredients().size(); j++){
+                    View tempview = linearlayout.getChildAt(j);
+                    TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                    TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                    String temp_ingrename = nameTemp.getText().toString();
+                    float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+
+                    Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+                    tempingredients.setId(recipePostF.getRecipe_Ingredients().get(j).getId());
+                    tempingredients.setName(temp_ingrename);
+                    tempingredients.setPost_id(recipePostF.getPost_id());
+                    tempingredients.setAmount(temp_amount);
+                    tempingredients.setUnit(unitmap.get(temp_ingrename));
+                    recipe_ingredients.add(tempingredients);
+                    index++;
+
+                    Log.d("레시피 재료 등록", "i =" + j);
+                }
+                for (int i = index; i < linearlayout.getChildCount(); i++) {
                     View tempview = linearlayout.getChildAt(i);
                     TextView nameTemp = tempview.findViewById(R.id.writtenname);
                     TextView amountTemp = tempview.findViewById(R.id.writtenamount);
@@ -304,7 +323,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     float temp_amount = Float.parseFloat(amountTemp.getText().toString());
 
                     Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                    tempingredients.setId(recipePostF.getRecipe_Ingredients().get(i).getId());
+                    tempingredients.setId(0);
                     tempingredients.setName(temp_ingrename);
                     tempingredients.setPost_id(recipePostF.getPost_id());
                     tempingredients.setAmount(temp_amount);
