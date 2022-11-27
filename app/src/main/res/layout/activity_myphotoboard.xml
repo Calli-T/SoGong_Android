@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.MainActivity">
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/west"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/main_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="요리 사진 게시판"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/main_line"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="62dp"
+        android:layout_height="74dp"
+        android:src="@drawable/recipebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/main_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+
+    <!--    <androidx.core.widget.NestedScrollView-->
+    <!--        android:id="@+id/photo_scrollview"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:fillViewport="true"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/sub_line2">-->
+
+    <GridView
+        android:id="@+id/photo_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numColumns="3"
+        android:layout_marginTop="1dp"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_line"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:id="@+id/home_photo_recyclerview"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:nestedScrollingEnabled="true"-->
+    <!--            app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintStart_toStartOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />-->
+
+    <!--    </androidx.core.widget.NestedScrollView>-->
+
+    <!--id를 recipe->photo로 단어 하나를 바꿔놨음-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

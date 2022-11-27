@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -30,13 +31,17 @@ import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlMailList_f;
 import com.example.sogong.Control.ControlMail_f;
+import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
+import com.example.sogong.Control.ControlPhotoList_f;
+import com.example.sogong.Control.ControlPhoto_f;
 import com.example.sogong.Control.ControlPost_f;
 import com.example.sogong.Control.ControlRecipeList_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Control.ControlReport_f;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipePost_f;
+import com.example.sogong.Model.SortInfo;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -55,7 +60,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
 
     public static int responseCode = 0;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
-    private AtomicBoolean pagethreadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean sortthreadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
 
     public RecipeAdapter recipeAdapter;
     public RecyclerView recipeRecyclerView;
@@ -67,32 +72,40 @@ public class MyPageBoardActivity extends AppCompatActivity {
     ControlIngredients_f cif = new ControlIngredients_f();
     ControlComment_f ccf = new ControlComment_f();
     ControlMail_f cmf = new ControlMail_f();
-
+    ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
+    ControlMyPhoto_f cmpf = new ControlMyPhoto_f();
     Spinner pagespinner;
     Spinner sortspinner;
     ImageButton searchButton;
     private View view;
     Boolean firstpage;
+    String currentSort;
+
+    public int requestCode;
+    private Uri mImageCaptureUri;
+
+    private GridView gridview = null;
+    private PhotoAdapter photoAdapter = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("post_type", -1);
-        Log.d("type","type = "+type);
+        Log.d("type", "type = " + type);
 
         if (type == 0) {//레시피 게시판
             Log.d("mypageRecipe", "시작");
-            setContentView(R.layout.fragment_recipeboard);
+            setContentView(R.layout.activity_myboard);
             searchButton = findViewById(R.id.search_button);//검색 버튼
+            searchButton.setVisibility(View.VISIBLE);
             //레시피 게시글 리스트 리사이클러뷰
             recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recyclerview);
             recipeAdapter = new RecipeAdapter();
             recipeRecyclerView.setAdapter(recipeAdapter);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recipeRecyclerView.setLayoutManager(layoutManager);
-            //플로팅 버튼
-            FloatingActionButton fab = findViewById(R.id.recipe_add_button);
-            fab.setVisibility(View.INVISIBLE);
+
             responseCode = 0;
 
             //로딩창 구현
@@ -100,15 +113,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
             custon_progressDialog.setCanceledOnTouchOutside(false);
             custon_progressDialog.show();
 
-            //검색화면으로 이동
-            searchButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MyPageBoardActivity.this, RecipeSearchActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                }
-            });
+            currentSort = "";
+
 
             // 추가) 레시피 게시판 조회 호출 코드
             threadFlag.set(true);
@@ -120,29 +126,41 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         recipeAdapter.setRecipeList(recipelist);
-                        /*pagenum = new String[totalpage];
-                        for (int i = 1; i <= totalpage; i++) {
-                            pagenum[i - 1] = String.valueOf(i);
-                        }
-                        //페이지 수 스피너 설정
-                        pagespinner = findViewById(R.id.recipe_page_spinner);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MyPageBoardActivity.this, android.R.layout.simple_spinner_item, pagenum);
-                        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        pagespinner.setAdapter(adapter1);
-                        pagespinner.setPrompt("이동할 페이지");
-                        pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                            @Override
+//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
+//                                String sort_str = sortspinner.getSelectedItem().toString();
+//                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
+//                                //crlf.sortRecipeList(sort_str, 1);
+//                                SortInfo sortInfo = new SortInfo(ControlLogin_f.userinfo.getNickname(),sortspinner.getSelectedItem().toString());
+//                                cmrf.sortMyRecipeList(sortInfo);
+//                            }
+//
+//                            @Override
+//                            public void onNothingSelected(AdapterView<?> parent) {
+//
+//                            }
+//                        });
+                        sortspinner = findViewById(R.id.sort_spinner);
+                        sortspinner.setVisibility(View.VISIBLE);
+                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
+                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
+                                String sort_str = sortspinner.getSelectedItem().toString();
+                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
                                 if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
-                                    crlf.lookupRecipeList(position + 1);
+                                    currentSort = sort_str;
+                                    SortInfo sortInfo = new SortInfo(ControlLogin_f.userinfo.getNickname(), sort_str);
+                                    cmrf.sortMyRecipeList(sortInfo);
                                     custon_progressDialog.show();
                                     final Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
                                             if (responseCode == 200) {
                                                 responseCode = -1;
-                                                pagethreadFlag.set(false);
+                                                sortthreadFlag.set(false);
                                                 //업데이트된 레시피 리스트로 전환
                                                 recipeAdapter.setRecipeList(recipelist);
                                                 //레시피 리사이클러뷰 클릭 이벤트
@@ -172,7 +190,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                                     e.printStackTrace();
                                                 }
 
-                                                if (pagethreadFlag.get()) {
+                                                if (sortthreadFlag.get()) {
                                                     runOnUiThread(runnable);
                                                     Log.d("thread2", "thread3");
                                                 } else {
@@ -185,8 +203,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                     }
                                     NewRunnable nr = new NewRunnable();
                                     Thread t = new Thread(nr);
-                                    pagethreadFlag.set(true);
-                                    threadFlag.set(true);
+                                    sortthreadFlag.set(true);
                                     t.start();
                                     //업데이트된 레시피 리스트로 전환
                                     recipeAdapter.setRecipeList(recipelist);
@@ -210,24 +227,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });*/
-
-                        sortspinner = findViewById(R.id.sort_spinner);
-                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
-                                String sort_str = sortspinner.getSelectedItem().toString();
-                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
-                                //crlf.sortRecipeList(sort_str, 1);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
                         });
-
                         //레시피 리사이클러뷰 클릭 이벤트
                         recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
                             @Override
@@ -237,6 +237,16 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 intent.putExtra("recipe_post", recipelist.get(position));
                                 startActivity(intent);
                                 //+조회수 관련 로직 추가할 것
+                            }
+                        });
+                        //검색화면으로 이동
+                        searchButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MyPageBoardActivity.this, RecipeSearchActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("isMyPage",true);
+                                startActivity(intent);
                             }
                         });
 
@@ -285,20 +295,107 @@ public class MyPageBoardActivity extends AppCompatActivity {
             t.start();
         } else if (type == 1) {
             //사진게시판
+            setContentView(R.layout.activity_myphotoboard);
+            gridview = (GridView) findViewById(R.id.photo_grid);
+            photoAdapter = new PhotoAdapter();
+            gridview.setAdapter(photoAdapter);
+
+            responseCode = 0;
+            //로딩창 구현
+            custon_progressDialog = new Custon_ProgressDialog(this);
+            custon_progressDialog.setCanceledOnTouchOutside(false);
+            custon_progressDialog.show();
+
+            threadFlag.set(true);
+            firstpage = true;
+
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (responseCode == 200) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+
+                        photoAdapter.setPhotoList(photolist);
+                        gridview.setAdapter(photoAdapter);
+                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("사진", "position = " + position + " id = " + id);
+                                Intent intent = new Intent(MyPageBoardActivity.this, PhotoLookupActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("photo_post", photolist.get(position));
+                                startActivity(intent);
+                            }
+                        });
+
+                        gridview.setAdapter(photoAdapter);
+                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("사진", "position = " + position + " id = " + id);
+                                Intent intent = new Intent(MyPageBoardActivity.this, PhotoLookupActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("photo_post", photolist.get(position));
+                                startActivity(intent);
+                            }
+                        });
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        Thread.currentThread().interrupt();
+                        // UI 코드 작성해주세요
+                    } else if (responseCode == 500) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+
+                    } else if (responseCode == 502) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+
+                    }
+                }
+            };
+
+            class NewRunnable implements Runnable {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 30; i++) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (threadFlag.get())
+                            runOnUiThread(runnable);
+                        else {
+                            i = 30;
+                        }
+                    }
+                }
+            }
+
+            cmpf.lookupMyPhotoList(ControlLogin_f.userinfo.getNickname());
+
+            NewRunnable nr = new NewRunnable();
+            Thread t = new Thread(nr);
+            t.start();
+
+
         } else if (type == 2) {
             //좋아요한 리스트
             Log.d("mypageRecipe", "시작");
-            setContentView(R.layout.fragment_recipeboard);
+            setContentView(R.layout.activity_myboard);
             searchButton = findViewById(R.id.search_button);//검색 버튼
+            searchButton.setVisibility(View.INVISIBLE);
             //레시피 게시글 리스트 리사이클러뷰
             recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recyclerview);
             recipeAdapter = new RecipeAdapter();
             recipeRecyclerView.setAdapter(recipeAdapter);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recipeRecyclerView.setLayoutManager(layoutManager);
-            //플로팅 버튼
-            FloatingActionButton fab = findViewById(R.id.recipe_add_button);
-            fab.setVisibility(View.INVISIBLE);
+
             responseCode = 0;
 
 //                //swipe레이아웃
@@ -337,109 +434,22 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         for (int i = 1; i <= totalpage; i++) {
                             pagenum[i - 1] = String.valueOf(i);
                         }
-                        //페이지 수 스피너 설정
-                        pagespinner = findViewById(R.id.recipe_page_spinner);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MyPageBoardActivity.this, android.R.layout.simple_spinner_item, pagenum);
-                        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        pagespinner.setAdapter(adapter1);
-                        pagespinner.setPrompt("이동할 페이지");
-                        pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-                                if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
-                                    crlf.lookupRecipeList(position + 1);
-                                    custon_progressDialog.show();
-                                    final Runnable runnable = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (responseCode == 200) {
-                                                responseCode = -1;
-                                                pagethreadFlag.set(false);
-                                                //업데이트된 레시피 리스트로 전환
-                                                recipeAdapter.setRecipeList(recipelist);
-                                                //레시피 리사이클러뷰 클릭 이벤트
-                                                recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClicked(int position, String data) {
-                                                        Intent intent = new Intent(MyPageBoardActivity.this, RecipeLookupActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                                        intent.putExtra("recipe_post", recipelist.get(position));
-                                                        startActivity(intent);
-                                                        //+조회수 관련 로직 추가할 것
-                                                    }
-                                                });
-                                                custon_progressDialog.dismiss();
-                                            }
 
-                                        }
-                                    };
-                                    class NewRunnable implements Runnable {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 0; i < 30; i++) {
-                                                try {
-                                                    sleep(1000);
-                                                    Log.d("thread2", "thread2");
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-
-                                                if (pagethreadFlag.get()) {
-                                                    runOnUiThread(runnable);
-                                                    Log.d("thread2", "thread3");
-                                                } else {
-                                                    i = 30;
-                                                    Log.d("thread2", "thread4");
-                                                }
-                                            }
-                                            Log.d("thread2", "thread1");
-                                        }
-                                    }
-                                    NewRunnable nr = new NewRunnable();
-                                    Thread t = new Thread(nr);
-                                    pagethreadFlag.set(true);
-                                    threadFlag.set(true);
-                                    t.start();
-                                    //업데이트된 레시피 리스트로 전환
-                                    recipeAdapter.setRecipeList(recipelist);
-                                    //레시피 리사이클러뷰 클릭 이벤트
-                                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClicked(int position, String data) {
-                                            Intent intent = new Intent(MyPageBoardActivity.this, RecipeLookupActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            intent.putExtra("recipe_post", recipelist.get(position));
-                                            startActivity(intent);
-                                            //+조회수 관련 로직 추가할 것
-                                        }
-                                    });
-                                    Log.d("recipefragment", "page spinner " + position + " 클릭");
-                                }
-                                firstpage = false;
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                        sortspinner = findViewById(R.id.sort_spinner);
-                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
-                                String sort_str = sortspinner.getSelectedItem().toString();
-                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
-                                //crlf.sortRecipeList(sort_str, 1);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
+//                        sortspinner = findViewById(R.id.sort_spinner);
+//                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                            @Override
+//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
+//                                String sort_str = sortspinner.getSelectedItem().toString();
+//                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
+//                                //crlf.sortRecipeList(sort_str, 1);
+//                            }
+//
+//                            @Override
+//                            public void onNothingSelected(AdapterView<?> parent) {
+//
+//                            }
+//                        });
 
                         //레시피 리사이클러뷰 클릭 이벤트
                         recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
@@ -452,9 +462,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 //+조회수 관련 로직 추가할 것
                             }
                         });
-
+                        sortspinner = findViewById(R.id.sort_spinner);
+                        sortspinner.setVisibility(View.INVISIBLE);
                         custon_progressDialog.dismiss();//로딩창 종료
-                        Log.d("recipefragment", recipelist.get(0).toString());
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
                         custon_progressDialog.dismiss();//로딩창 종료
@@ -500,17 +510,16 @@ public class MyPageBoardActivity extends AppCompatActivity {
         } else if (type == 3) {
             //댓글을 작성한 리스트
             Log.d("mypageRecipe", "시작");
-            setContentView(R.layout.fragment_recipeboard);
+            setContentView(R.layout.activity_myboard);
             searchButton = findViewById(R.id.search_button);//검색 버튼
+            searchButton.setVisibility(View.INVISIBLE);
             //레시피 게시글 리스트 리사이클러뷰
             recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recyclerview);
             recipeAdapter = new RecipeAdapter();
             recipeRecyclerView.setAdapter(recipeAdapter);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recipeRecyclerView.setLayoutManager(layoutManager);
-            //플로팅 버튼
-            FloatingActionButton fab = findViewById(R.id.recipe_add_button);
-            fab.setVisibility(View.INVISIBLE);
+
             responseCode = 0;
 
 //                //swipe레이아웃
@@ -549,110 +558,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         for (int i = 1; i <= totalpage; i++) {
                             pagenum[i - 1] = String.valueOf(i);
                         }
-                        //페이지 수 스피너 설정
-                        pagespinner = findViewById(R.id.recipe_page_spinner);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MyPageBoardActivity.this, android.R.layout.simple_spinner_item, pagenum);
-                        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        pagespinner.setAdapter(adapter1);
-                        pagespinner.setPrompt("이동할 페이지");
-                        pagespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-                                if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
-                                    crlf.lookupRecipeList(position + 1);
-                                    custon_progressDialog.show();
-                                    final Runnable runnable = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (responseCode == 200) {
-                                                responseCode = -1;
-                                                pagethreadFlag.set(false);
-                                                //업데이트된 레시피 리스트로 전환
-                                                recipeAdapter.setRecipeList(recipelist);
-                                                //레시피 리사이클러뷰 클릭 이벤트
-                                                recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClicked(int position, String data) {
-                                                        Intent intent = new Intent(MyPageBoardActivity.this, RecipeLookupActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                                        intent.putExtra("recipe_post", recipelist.get(position));
-                                                        startActivity(intent);
-                                                        //+조회수 관련 로직 추가할 것
-                                                    }
-                                                });
-                                                custon_progressDialog.dismiss();
-                                            }
-
-                                        }
-                                    };
-                                    class NewRunnable implements Runnable {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 0; i < 30; i++) {
-                                                try {
-                                                    sleep(1000);
-                                                    Log.d("thread2", "thread2");
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-
-                                                if (pagethreadFlag.get()) {
-                                                    runOnUiThread(runnable);
-                                                    Log.d("thread2", "thread3");
-                                                } else {
-                                                    i = 30;
-                                                    Log.d("thread2", "thread4");
-                                                }
-                                            }
-                                            Log.d("thread2", "thread1");
-                                        }
-                                    }
-                                    NewRunnable nr = new NewRunnable();
-                                    Thread t = new Thread(nr);
-                                    pagethreadFlag.set(true);
-                                    threadFlag.set(true);
-                                    t.start();
-                                    //업데이트된 레시피 리스트로 전환
-                                    recipeAdapter.setRecipeList(recipelist);
-                                    //레시피 리사이클러뷰 클릭 이벤트
-                                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClicked(int position, String data) {
-                                            Intent intent = new Intent(MyPageBoardActivity.this, RecipeLookupActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            intent.putExtra("recipe_post", recipelist.get(position));
-                                            startActivity(intent);
-                                            //+조회수 관련 로직 추가할 것
-                                        }
-                                    });
-                                    Log.d("recipefragment", "page spinner " + position + " 클릭");
-                                }
-                                firstpage = false;
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                        sortspinner = findViewById(R.id.sort_spinner);
-                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
-                                String sort_str = sortspinner.getSelectedItem().toString();
-                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
-                                //crlf.sortRecipeList(sort_str, 1);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
                         //레시피 리사이클러뷰 클릭 이벤트
                         recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
                             @Override
@@ -664,9 +569,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 //+조회수 관련 로직 추가할 것
                             }
                         });
-
+                        sortspinner = findViewById(R.id.sort_spinner);
+                        sortspinner.setVisibility(View.INVISIBLE);
                         custon_progressDialog.dismiss();//로딩창 종료
-                        Log.d("recipefragment", recipelist.get(0).toString());
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 500) {
                         custon_progressDialog.dismiss();//로딩창 종료

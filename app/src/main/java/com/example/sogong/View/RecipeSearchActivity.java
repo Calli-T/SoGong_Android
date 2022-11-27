@@ -38,6 +38,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchrecipe);
         categories = new StringBuilder();
+        Boolean isMyPage = getIntent().getBooleanExtra("isMyPage", false);
 
         searchOption = findViewById(R.id.searchoption_spinner);
         searchEdit = findViewById(R.id.search_edit);
@@ -45,66 +46,87 @@ public class RecipeSearchActivity extends AppCompatActivity {
         cateSearchButton = findViewById(R.id.cate_search_button);
         chipGroup = findViewById(R.id.chipgroup);
         chipGroup2 = findViewById(R.id.chipgroup2);
-        for (int i = 0; i < category_str.length; i++) {//카테고리 버튼들 추가
-            Chip chip = new Chip(RecipeSearchActivity.this);
-            chip.setText(category_str[i]);
-            chipGroup.addView(chip);
-            //카테고리 버튼들 클릭 시 chipGroup2영역에 추가
-            chip.setOnClickListener(new View.OnClickListener() {
+
+        if (!isMyPage) {
+            for (String s : category_str) {//카테고리 버튼들 추가
+                Chip chip = new Chip(RecipeSearchActivity.this);
+                chip.setText(s);
+                chipGroup.addView(chip);
+                //카테고리 버튼들 클릭 시 chipGroup2영역에 추가
+                chip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chip.setEnabled(false);
+                        Chip chip2 = new Chip(RecipeSearchActivity.this);
+                        chip2.setText(chip.getText());
+                        chip2.setCloseIconVisible(true);
+                        chipGroup2.addView(chip2);
+                        chip2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                chipGroup2.removeView(v);
+                                chip.setEnabled(true);
+                            }
+                        });
+                        chip2.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                chipGroup2.removeView(v);
+                                chip.setEnabled(true);
+                            }
+                        });
+                    }
+                });
+            }
+            //타이핑 검색 버튼 클릭 시
+            searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    chip.setEnabled(false);
-                    Chip chip2 = new Chip(RecipeSearchActivity.this);
-                    chip2.setText(chip.getText());
-                    chip2.setCloseIconVisible(true);
-                    chipGroup2.addView(chip2);
-                    chip2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            chipGroup2.removeView(v);
-                            chip.setEnabled(true);
-                        }
-                    });
-                    chip2.setOnCloseIconClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            chipGroup2.removeView(v);
-                            chip.setEnabled(true);
-                        }
-                    });
+                    Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra("searchType", "타이핑");
+                    intent.putExtra("categories", "");
+                    intent.putExtra("keywordType", searchOption.getSelectedItem().toString());
+                    intent.putExtra("keyword", searchEdit.getText().toString());
+
+                    startActivity(intent);
+                }
+            });
+            //카테고리 검색 버튼 클릭 시
+            cateSearchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i = 0; i < chipGroup2.getChildCount(); i++) {
+                        Chip chip = (Chip) chipGroup2.getChildAt(i);
+                        categories.append(chip.getText().toString()).append("-");
+                    }
+                    Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra("searchType", "카테고리");
+                    intent.putExtra("categories", categories.deleteCharAt(categories.length() - 1).toString());
+                    intent.putExtra("keywordType", "");
+                    intent.putExtra("keyword", "");
+                    startActivity(intent);
+                }
+            });
+        }else {
+            cateSearchButton.setVisibility(View.INVISIBLE);
+            //타이핑 검색 버튼 클릭 시
+            searchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra("searchType", "타이핑");
+                    intent.putExtra("categories", "");
+                    intent.putExtra("keywordType", searchOption.getSelectedItem().toString());
+                    intent.putExtra("keyword", searchEdit.getText().toString());
+                    intent.putExtra("isMyPage",true);
+                    startActivity(intent);
                 }
             });
         }
-        //타이핑 검색 버튼 클릭 시
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("searchType", "타이핑");
-                intent.putExtra("categories", "");
-                intent.putExtra("keywordType", searchOption.getSelectedItem().toString());
-                intent.putExtra("keyword", searchEdit.getText().toString());
-                startActivity(intent);
-            }
-        });
-        //카테고리 검색 버튼 클릭 시
-        cateSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < chipGroup2.getChildCount(); i++) {
-                    Chip chip = (Chip) chipGroup2.getChildAt(i);
-                    categories.append(chip.getText().toString()).append("-");
-                }
-                Intent intent = new Intent(RecipeSearchActivity.this, RecipeSearchResultActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("searchType", "카테고리");
-                intent.putExtra("categories", categories.deleteCharAt(categories.length() - 1).toString());
-                intent.putExtra("keywordType","");
-                intent.putExtra("keyword", "");
-                startActivity(intent);
-            }
-        });
+
 
     }
 }

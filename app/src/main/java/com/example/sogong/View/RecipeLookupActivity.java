@@ -63,14 +63,14 @@ public class RecipeLookupActivity extends AppCompatActivity {
     private AtomicBoolean commentthreadFlag = new AtomicBoolean();
     private AtomicBoolean commenteditthreadFlag = new AtomicBoolean();
     private AtomicBoolean commentdeletethreadFlag = new AtomicBoolean();
-
+    RecipePost_f recipePostF;
     PopupMenu dropDownMenu;
     Menu menu;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RecipePost_f recipePostF = getIntent().getParcelableExtra("recipe_post");
+        recipePostF = getIntent().getParcelableExtra("recipe_post");
 
         responseCode.set(0);
 
@@ -160,7 +160,14 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         return true;
                     case 1:
                         //게시글 수정 로직 추가
+                        Intent intent2 = new Intent(RecipeLookupActivity.this, RecipeAddActivity.class);
+                        intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        intent2.putExtra("isEdit",true);
+                        intent2.putExtra("EditRecipe",recipePostF);
+                        startActivity(intent2);
+
                         Log.d("recipe", "수정하기 menu click");
+
                         return true;
                     case 2:
                         //쪽지보내기 로직 추가
@@ -260,6 +267,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
         recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
 
 
+
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override

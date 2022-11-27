@@ -161,6 +161,7 @@ public class MyPageFragment extends Fragment {
         logout_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mu.startToast("로그아웃 버튼 클릭");
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {

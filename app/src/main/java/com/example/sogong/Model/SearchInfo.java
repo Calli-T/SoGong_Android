@@ -8,7 +8,9 @@ public class SearchInfo {
     private int page;
     private String nickname;
 
-    public SearchInfo() {}
+    public SearchInfo() {
+    }
+
     public SearchInfo(String searchType, String categories, String keywordType, String keyword, int page, String nickname) {
         this.searchType = searchType;
         this.categories = categories;
@@ -16,6 +18,11 @@ public class SearchInfo {
         this.keyword = keyword;
         this.page = page;
         this.nickname = nickname;
+    }
+
+    public SearchInfo(String nickname, String keyword) {
+        this.nickname = nickname;
+        this.keyword = keyword;
     }
 
     @Override

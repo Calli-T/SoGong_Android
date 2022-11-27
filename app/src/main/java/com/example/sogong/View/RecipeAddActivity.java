@@ -78,10 +78,15 @@ public class RecipeAddActivity extends AppCompatActivity {
 
     int ingre_cnt;//재료의 수
 
+    Boolean isEdit;
+    RecipePost_f recipePostF;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addrecipe);
+        isEdit = getIntent().getBooleanExtra("isEdit",false);
+        recipePostF = getIntent().getParcelableExtra("EditRecipe");
+
         context = RecipeAddActivity.this;
         recipetitle = findViewById(R.id.recipetitle_text1);
         recipecate = findViewById(R.id.recipecate_spinner);
@@ -97,8 +102,8 @@ public class RecipeAddActivity extends AppCompatActivity {
         //임시로 단위들 추가
         unitmap.put("아스파라거스", "T");
         unitmap.put("닭고기", "g");
-        unitmap.put("계란", "판");
-        unitmap.put("쪽파", "개");
+        unitmap.put("계란", "g");
+        unitmap.put("쪽파", "g");
 
         //레시피 종류 스피너
         SpinnerWithHintAdapter spinnerArrayAdapter1 = new SpinnerWithHintAdapter(context, android.R.layout.simple_spinner_dropdown_item, ingrecate_str);
@@ -128,7 +133,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                 EditText editText1 = ingreSelectDialog.findViewById(R.id.edit_text1);
                 Button addButton = ingreSelectDialog.findViewById(R.id.ingre_add_button);
                 Button cancelButton = ingreSelectDialog.findViewById(R.id.cancel_button);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, ingrename_str);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.ingredients));
                 listView.setAdapter(adapter);
                 editText.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -182,17 +187,42 @@ public class RecipeAddActivity extends AppCompatActivity {
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onBackPressed();
+                        ingreSelectDialog.dismiss();
                     }
                 });
             }
         });
+        if(isEdit){
+            recipetitle.setText(recipePostF.getTitle());
+            //recipecate.setSelection(); 레시피 카테고리 배열 인덱스로 나중에 하기
+            recipespicy.setSelection(recipePostF.getDegree_of_spicy());
+            recipedescription.setText(recipePostF.getDescription());
+            for(int i = 0; i< recipePostF.getRecipe_Ingredients().size();i++){
+            View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
+            TextView name = view.findViewById(R.id.name);
+            TextView selectName = view.findViewById(R.id.writtenname);
+            TextView amount = view.findViewById(R.id.amount);
+            TextView editAmount = view.findViewById(R.id.writtenamount);
+            TextView unit = view.findViewById(R.id.unit);
+            ImageButton removeButton = view.findViewById(R.id.minus_button);
+            selectName.setText(recipePostF.getRecipe_Ingredients().get(i).getName());
+            editAmount.setText(Float.toString(recipePostF.getRecipe_Ingredients().get(i).getAmount()));
+            removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    linearlayout.removeView(view);
+                }
+            });
+            linearlayout.addView(view);
+            }
+        }
     }
 
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             // FAB Click 이벤트 처리 구간
+            if(!isEdit) {
             newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
             newRecipe.setTitle(recipetitle.getText().toString());
             newRecipe.setCategory(recipecate.getSelectedItem().toString());
@@ -220,47 +250,118 @@ public class RecipeAddActivity extends AppCompatActivity {
 
             // #24 레시피 게시글 등록 호출 코드
             threadFlag.set(true);
-            final Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    if (responseCode == 200) {
-                        responseCode = -1;
-                        threadFlag.set(false);
-                        Log.d("레시피 등록", "성공");
-                        onBackPressed();
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            Log.d("레시피 등록", "성공");
+                            onBackPressed();
 
-                    } else if (responseCode == 500) {
-                    } else if (responseCode == 502) {
+                        } else if (responseCode == 500) {
+                        } else if (responseCode == 502) {
 
-                    }
-                }
-            };
-
-            class NewRunnable implements Runnable {
-                @Override
-                public void run() {
-                    for (int i = 0; i < 30; i++) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        if (threadFlag.get())
-                            runOnUiThread(runnable);
-                        else {
-                            i = 30;
                         }
                     }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
                 }
+                ControlRecipe_f crf = new ControlRecipe_f();
+                crf.addRecipe(newRecipe);
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+            }else {
+                newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
+                newRecipe.setTitle(recipetitle.getText().toString());
+                newRecipe.setCategory(recipecate.getSelectedItem().toString());
+                newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
+                newRecipe.setDescription(recipedescription.getText().toString());
+                for (int i = 0; i < linearlayout.getChildCount(); i++) {
+                    View tempview = linearlayout.getChildAt(i);
+                    TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                    TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                    String temp_ingrename = nameTemp.getText().toString();
+                    float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+
+                    Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+                    tempingredients.setId(recipePostF.getRecipe_Ingredients().get(i).getId());
+                    tempingredients.setName(temp_ingrename);
+                    tempingredients.setPost_id(recipePostF.getPost_id());
+                    tempingredients.setAmount(temp_amount);
+                    tempingredients.setUnit(unitmap.get(temp_ingrename));
+                    recipe_ingredients.add(tempingredients);
+
+                    Log.d("레시피 재료 등록", "i =" + i);
+                }
+                newRecipe.setRecipe_Ingredients(recipe_ingredients);
+
+                Log.d("recipe", newRecipe.toString());
+                //newRecipe로 게시글 등록 함수에 넣으면 됨
+
+                // #24 레시피 게시글 등록 호출 코드
+                threadFlag.set(true);
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            Log.d("레시피 수정", "성공");
+                            onBackPressed();
+
+                        } else if (responseCode == 500) {
+                        } else if (responseCode == 502) {
+
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
+                }
+                newRecipe.setPost_id(recipePostF.getPost_id());
+                ControlRecipe_f crf = new ControlRecipe_f();
+                crf.editRecipe(newRecipe);
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
             }
-            ControlRecipe_f crf = new ControlRecipe_f();
-            crf.addRecipe(newRecipe);
-
-            NewRunnable nr = new NewRunnable();
-            Thread t = new Thread(nr);
-            t.start();
-
         }
     }
 
