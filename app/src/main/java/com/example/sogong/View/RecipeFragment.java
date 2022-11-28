@@ -74,6 +74,8 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
     ImageButton searchButton;
     private View view;
     Boolean firstpage;
+    // UI controller
+    RecipeList_UI rlu = new RecipeList_UI();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,8 +97,7 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
-        // UI controller
-        RecipeList_UI rlu = new RecipeList_UI();
+
 
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(requireActivity());
@@ -259,6 +260,16 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                                 }
                                             });
                                             custon_progressDialog.dismiss();
+                                        } else if (responseCode == 500) {
+                                            responseCode = -1;
+                                            sortthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            rlu.startDialog(0,"정렬 실패","정렬된 게시글 목록을 가져오는데 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                        }else if (responseCode == 502) {
+                                            responseCode = -1;
+                                            sortthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            rlu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                         }
 
                                     }

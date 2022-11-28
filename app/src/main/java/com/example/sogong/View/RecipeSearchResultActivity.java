@@ -100,6 +100,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
+
                         if (searchType.equals("키워드")) {
                             searchContent_str.append(keywordType);
                             searchContent_str.append(" : ");
@@ -108,6 +109,9 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         } else if (searchType.equals("카테고리")) {
                             searchContent_str.append(categories);
                             searchContent.setText(searchContent_str);
+                        }
+                        if(recipeList.size()==0){
+                            sru.startToast("검색결과 레시피가 존재하지 않습니다.");
                         }
                         recipeAdapter.setRecipeList(recipeList);
                         pagenum = new String[totalpage];
@@ -218,11 +222,13 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
+                        sru.startDialog(0,"요청 실패","검색 결과 요청에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 502) {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
+                        sru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };

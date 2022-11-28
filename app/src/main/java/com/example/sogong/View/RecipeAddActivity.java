@@ -42,6 +42,7 @@ import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,11 +83,14 @@ public class RecipeAddActivity extends AppCompatActivity {
 
     Boolean isEdit;
     RecipePost_f recipePostF;
+    RecipeAdd_UI rau = new RecipeAdd_UI();
+    Custon_ProgressDialog custon_progressDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addrecipe);
-        isEdit = getIntent().getBooleanExtra("isEdit",false);
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
         recipePostF = getIntent().getParcelableExtra("EditRecipe");
 
         context = RecipeAddActivity.this;
@@ -118,6 +122,10 @@ public class RecipeAddActivity extends AppCompatActivity {
         spinnerArrayAdapter2.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         recipespicy.setAdapter(spinnerArrayAdapter2);
         recipespicy.setSelection(spinnerArrayAdapter2.getCount());
+
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         //버튼 클릭 시 재료 입력 ui 동적 생성
         addingre.setOnClickListener(new View.OnClickListener() {
@@ -195,29 +203,29 @@ public class RecipeAddActivity extends AppCompatActivity {
                 });
             }
         });
-        if(isEdit){
+        if (isEdit) {
             recipetitle.setText(recipePostF.getTitle());
             String[] category_str = getResources().getStringArray(R.array.category);
             //recipecate.setSelection(); 레시피 카테고리 배열 인덱스로 나중에 하기
             recipespicy.setSelection(recipePostF.getDegree_of_spicy());
             recipedescription.setText(recipePostF.getDescription());
-            for(int i = 0; i< recipePostF.getRecipe_Ingredients().size();i++){
-            View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
-            TextView name = view.findViewById(R.id.name);
-            TextView selectName = view.findViewById(R.id.writtenname);
-            TextView amount = view.findViewById(R.id.amount);
-            TextView editAmount = view.findViewById(R.id.writtenamount);
-            TextView unit = view.findViewById(R.id.unit);
-            ImageButton removeButton = view.findViewById(R.id.minus_button);
-            selectName.setText(recipePostF.getRecipe_Ingredients().get(i).getName());
-            editAmount.setText(Float.toString(recipePostF.getRecipe_Ingredients().get(i).getAmount()));
-            removeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    linearlayout.removeView(view);
-                }
-            });
-            linearlayout.addView(view);
+            for (int i = 0; i < recipePostF.getRecipe_Ingredients().size(); i++) {
+                View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
+                TextView name = view.findViewById(R.id.name);
+                TextView selectName = view.findViewById(R.id.writtenname);
+                TextView amount = view.findViewById(R.id.amount);
+                TextView editAmount = view.findViewById(R.id.writtenamount);
+                TextView unit = view.findViewById(R.id.unit);
+                ImageButton removeButton = view.findViewById(R.id.minus_button);
+                selectName.setText(recipePostF.getRecipe_Ingredients().get(i).getName());
+                editAmount.setText(Float.toString(recipePostF.getRecipe_Ingredients().get(i).getAmount()));
+                removeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        linearlayout.removeView(view);
+                    }
+                });
+                linearlayout.addView(view);
             }
         }
     }
@@ -225,165 +233,196 @@ public class RecipeAddActivity extends AppCompatActivity {
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            custon_progressDialog.show();
             // FAB Click 이벤트 처리 구간
-            if(!isEdit) {
-            newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
-            newRecipe.setTitle(recipetitle.getText().toString());
-            newRecipe.setCategory(recipecate.getSelectedItem().toString());
-            newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
-            newRecipe.setDescription(recipedescription.getText().toString());
-            for (int i = 0; i < linearlayout.getChildCount(); i++) {
-                View tempview = linearlayout.getChildAt(i);
-                TextView nameTemp = tempview.findViewById(R.id.writtenname);
-                TextView amountTemp = tempview.findViewById(R.id.writtenamount);
-                String temp_ingrename = nameTemp.getText().toString();
-                float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+            if (!isEdit) {
+                //입력 값을 제대로 입력하지 않은 경우
+                if ((recipetitle.getText().toString().equals(""))
+                        | (recipecate.getSelectedItem().toString().equals("레시피 종류"))
+                        | (recipespicy.getSelectedItem().toString().equals("매운맛 단계"))
+                        | (recipedescription.getText().toString().equals(""))) {
+                    rau.startToast("모든 정보를 입력해주세요.");
+                } else {
+                    newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
+                    newRecipe.setTitle(recipetitle.getText().toString());
+                    newRecipe.setCategory(recipecate.getSelectedItem().toString());
+                    newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
+                    newRecipe.setDescription(recipedescription.getText().toString());
+                    for (int i = 0; i < linearlayout.getChildCount(); i++) {
+                        View tempview = linearlayout.getChildAt(i);
+                        TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                        TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                        String temp_ingrename = nameTemp.getText().toString();
+                        float temp_amount = Float.parseFloat(amountTemp.getText().toString());
 
-                Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                tempingredients.setName(temp_ingrename);
-                tempingredients.setAmount(temp_amount);
-                tempingredients.setUnit(unitmap.get(temp_ingrename));
-                recipe_ingredients.add(tempingredients);
+                        Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+                        tempingredients.setName(temp_ingrename);
+                        tempingredients.setAmount(temp_amount);
+                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        recipe_ingredients.add(tempingredients);
 
-                Log.d("레시피 재료 등록", "i =" + i);
-            }
-            newRecipe.setRecipe_Ingredients(recipe_ingredients);
-
-            Log.d("recipe", newRecipe.toString());
-            //newRecipe로 게시글 등록 함수에 넣으면 됨
-
-            // #24 레시피 게시글 등록 호출 코드
-            threadFlag.set(true);
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            Log.d("레시피 등록", "성공");
-                            onBackPressed();
-
-                        } else if (responseCode == 500) {
-                        } else if (responseCode == 502) {
-
-                        }
+                        Log.d("레시피 재료 등록", "i =" + i);
                     }
-                };
+                    newRecipe.setRecipe_Ingredients(recipe_ingredients);
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    Log.d("recipe", newRecipe.toString());
+                    //newRecipe로 게시글 등록 함수에 넣으면 됨
 
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                    // #24 레시피 게시글 등록 호출 코드
+                    threadFlag.set(true);
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                Log.d("레시피 등록", "성공");
+                                onBackPressed();
+                            } else if (responseCode == 500) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "생성 실패", "게시글 생성에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 502) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
-                    }
-                }
-                ControlRecipe_f crf = new ControlRecipe_f();
-                crf.addRecipe(newRecipe);
+                    };
 
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
-            }else {
-                int index = 0;
-                newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
-                newRecipe.setTitle(recipetitle.getText().toString());
-                newRecipe.setCategory(recipecate.getSelectedItem().toString());
-                newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
-                newRecipe.setDescription(recipedescription.getText().toString());
-                for(int j = 0; j<recipePostF.getRecipe_Ingredients().size(); j++){
-                    View tempview = linearlayout.getChildAt(j);
-                    TextView nameTemp = tempview.findViewById(R.id.writtenname);
-                    TextView amountTemp = tempview.findViewById(R.id.writtenamount);
-                    String temp_ingrename = nameTemp.getText().toString();
-                    float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-                    Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                    tempingredients.setId(recipePostF.getRecipe_Ingredients().get(j).getId());
-                    tempingredients.setName(temp_ingrename);
-                    tempingredients.setPost_id(recipePostF.getPost_id());
-                    tempingredients.setAmount(temp_amount);
-                    tempingredients.setUnit(unitmap.get(temp_ingrename));
-                    recipe_ingredients.add(tempingredients);
-                    index++;
-
-                    Log.d("레시피 재료 등록", "i =" + j);
-                }
-                for (int i = index; i < linearlayout.getChildCount(); i++) {
-                    View tempview = linearlayout.getChildAt(i);
-                    TextView nameTemp = tempview.findViewById(R.id.writtenname);
-                    TextView amountTemp = tempview.findViewById(R.id.writtenamount);
-                    String temp_ingrename = nameTemp.getText().toString();
-                    float temp_amount = Float.parseFloat(amountTemp.getText().toString());
-
-                    Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                    tempingredients.setId(0);
-                    tempingredients.setName(temp_ingrename);
-                    tempingredients.setPost_id(recipePostF.getPost_id());
-                    tempingredients.setAmount(temp_amount);
-                    tempingredients.setUnit(unitmap.get(temp_ingrename));
-                    recipe_ingredients.add(tempingredients);
-
-                    Log.d("레시피 재료 등록", "i =" + i);
-                }
-                newRecipe.setRecipe_Ingredients(recipe_ingredients);
-
-                Log.d("recipe", newRecipe.toString());
-                //newRecipe로 게시글 등록 함수에 넣으면 됨
-
-                // #24 레시피 게시글 등록 호출 코드
-                threadFlag.set(true);
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            Log.d("레시피 수정", "성공");
-                            onBackPressed();
-
-                        } else if (responseCode == 500) {
-                        } else if (responseCode == 502) {
-
-                        }
-                    }
-                };
-
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
                             }
                         }
                     }
-                }
-                newRecipe.setPost_id(recipePostF.getPost_id());
-                ControlRecipe_f crf = new ControlRecipe_f();
-                crf.editRecipe(newRecipe);
+                    ControlRecipe_f crf = new ControlRecipe_f();
+                    crf.addRecipe(newRecipe);
 
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
+                }
+            } else {
+                //입력 값을 제대로 입력하지 않은 경우
+                if ((recipetitle.getText().toString().equals(""))
+                        | (recipecate.getSelectedItem().toString().equals("레시피 종류"))
+                        | (recipespicy.getSelectedItem().toString().equals("매운맛 단계"))
+                        | (recipedescription.getText().toString().equals(""))) {
+                    rau.startToast("모든 정보를 입력해주세요.");
+                } else {
+                    int index = 0;
+                    newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
+                    newRecipe.setTitle(recipetitle.getText().toString());
+                    newRecipe.setCategory(recipecate.getSelectedItem().toString());
+                    newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
+                    newRecipe.setDescription(recipedescription.getText().toString());
+                    for (int j = 0; j < recipePostF.getRecipe_Ingredients().size(); j++) {
+                        View tempview = linearlayout.getChildAt(j);
+                        TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                        TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                        String temp_ingrename = nameTemp.getText().toString();
+                        float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+
+                        Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+                        tempingredients.setId(recipePostF.getRecipe_Ingredients().get(j).getId());
+                        tempingredients.setName(temp_ingrename);
+                        tempingredients.setPost_id(recipePostF.getPost_id());
+                        tempingredients.setAmount(temp_amount);
+                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        recipe_ingredients.add(tempingredients);
+                        index++;
+
+                        Log.d("레시피 재료 등록", "i =" + j);
+                    }
+                    for (int i = index; i < linearlayout.getChildCount(); i++) {
+                        View tempview = linearlayout.getChildAt(i);
+                        TextView nameTemp = tempview.findViewById(R.id.writtenname);
+                        TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                        String temp_ingrename = nameTemp.getText().toString();
+                        float temp_amount = Float.parseFloat(amountTemp.getText().toString());
+
+                        Recipe_Ingredients tempingredients = new Recipe_Ingredients();
+                        tempingredients.setId(0);
+                        tempingredients.setName(temp_ingrename);
+                        tempingredients.setPost_id(recipePostF.getPost_id());
+                        tempingredients.setAmount(temp_amount);
+                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        recipe_ingredients.add(tempingredients);
+
+                        Log.d("레시피 재료 등록", "i =" + i);
+                    }
+                    newRecipe.setRecipe_Ingredients(recipe_ingredients);
+
+                    Log.d("recipe", newRecipe.toString());
+                    //newRecipe로 게시글 등록 함수에 넣으면 됨
+
+                    // #24 레시피 게시글 등록 호출 코드
+                    threadFlag.set(true);
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                Log.d("레시피 등록", "성공");
+                                onBackPressed();
+                            } else if (responseCode == 500) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0,"게시글 수정","게시글 수정을 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 502) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                            }
+                        }
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
+                            }
+                        }
+                    }
+                    newRecipe.setPost_id(recipePostF.getPost_id());
+                    ControlRecipe_f crf = new ControlRecipe_f();
+                    crf.editRecipe(newRecipe);
+
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
+                }
             }
         }
     }
@@ -419,7 +458,8 @@ public class RecipeAddActivity extends AppCompatActivity {
             return count > 0 ? count - 1 : count;
         }
     }
-    class PhotoAdd_UI implements Control {
+
+    class RecipeAdd_UI implements Control {
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();

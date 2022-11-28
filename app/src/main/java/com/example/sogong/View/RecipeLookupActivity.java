@@ -32,6 +32,8 @@ import com.example.sogong.Model.RecipePostLookUp;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -66,6 +68,9 @@ public class RecipeLookupActivity extends AppCompatActivity {
     RecipePost_f recipePostF;
     PopupMenu dropDownMenu;
     Menu menu;
+    RecipeLookup_UI rlu = new RecipeLookup_UI();
+
+    Boolean likedState;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,9 +132,17 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                     custon_progressDialog.dismiss();
                                     onBackPressed();
                                 } else if (responseCode.get() == 500) {
-
+                                    responseCode.set(-1);
+                                    threadFlag.set(false);
+                                    Log.d("레시피 삭제", "성공");
+                                    custon_progressDialog.dismiss();
+                                    rlu.startDialog(0, "게시글 삭제", "삭제에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                                 } else if (responseCode.get() == 502) {
-
+                                    responseCode.set(-1);
+                                    threadFlag.set(false);
+                                    Log.d("레시피 삭제", "성공");
+                                    custon_progressDialog.dismiss();
+                                    rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                 }
                             }
                         };
@@ -162,8 +175,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         //게시글 수정 로직 추가
                         Intent intent2 = new Intent(RecipeLookupActivity.this, RecipeAddActivity.class);
                         intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent2.putExtra("isEdit",true);
-                        intent2.putExtra("EditRecipe",recipePostLookUp.getRecipeInfo());
+                        intent2.putExtra("isEdit", true);
+                        intent2.putExtra("EditRecipe", recipePostLookUp.getRecipeInfo());
                         startActivity(intent2);
 
                         Log.d("recipe", "수정하기 menu click");
@@ -267,10 +280,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
         recipeIngreAdapter.setRecipeIngreList(recipePostF.getRecipe_Ingredients());
 
 
-
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
@@ -362,7 +375,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                     final Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (responseCode.get()== 200) {
+                                            if (responseCode.get() == 200) {
                                                 Log.d("댓글 수정", "성공");
                                                 commenteditthreadFlag.set(false);
                                                 responseCode.set(-1);
@@ -424,7 +437,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                     public void run() {
                                         if (responseCode.get() == 200) {
                                             Log.d("댓글 삭제", "성공");
-                                            responseCode.set(-1) ;
+                                            responseCode.set(-1);
                                             commentdeletethreadFlag.set(false);
                                             Intent intent = getIntent();
                                             finish(); //현재 액티비티 종료 실시
@@ -432,9 +445,9 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                             startActivity(intent); //현재 액티비티 재실행 실시
                                             overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
                                             custon_progressDialog.dismiss();
-                                        } else if(responseCode.get() == 500){
+                                        } else if (responseCode.get() == 500) {
 
-                                        }else if(responseCode.get() == 502){
+                                        } else if (responseCode.get() == 502) {
 
                                         }
                                     }
@@ -448,7 +461,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
-                                            Log.d("레시피 열람","responsecode = "+responseCode.get());
+                                            Log.d("레시피 열람", "responsecode = " + responseCode.get());
 
                                             if (commentdeletethreadFlag.get())
                                                 runOnUiThread(runnable);
@@ -481,23 +494,36 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //cref.reportComment(reportInfo);
                         }
                     });
-                    if (recipePostLookUp.isLikeInfo()) {
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
-                    } else {
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
-                    }
+                    likedState = recipePostLookUp.isLikeInfo();
                     like_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (recipePostLookUp.isLikeInfo()) {
+                            if (likedState) {
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
-                                recipePostLookUp.setLikeInfo(false);//좋아요 취소로 수정
+                                likedState = false;
                             } else {
                                 like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
-                                recipePostLookUp.setLikeInfo(true);//좋아요 취소로 수정
+                                likedState = true;
                             }
                         }
                     });
+//                    if (recipePostLookUp.isLikeInfo()) {
+//                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+//                    } else {
+//                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+//                    }
+//                    like_btn.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            if (recipePostLookUp.isLikeInfo()) {
+//                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+//                                recipePostLookUp.setLikeInfo(false);//좋아요 취소로 수정
+//                            } else {
+//                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+//                                recipePostLookUp.setLikeInfo(true);//좋아요 취소로 수정
+//                            }
+//                        }
+//                    });
 
                     comment_add_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -505,62 +531,68 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             //댓글 등록 관련 로직 추가
                             //새로고침필수
                             /* #33 레시피 게시판 댓글 작성 */
-                            custon_progressDialog.show();
-                            commentthreadFlag.set(true);
-                            final Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (responseCode.get() == 200) {
-                                        responseCode.set(-1);
-                                        commentthreadFlag.set(false);
-                                        Log.d("댓글 작성", "성공");
-                                        Intent intent = getIntent();
-                                        finish(); //현재 액티비티 종료 실시
-                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                        startActivity(intent); //현재 액티비티 재실행 실시
-                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                        custon_progressDialog.dismiss();
-                                    } else if (responseCode.get() == 500) {
-                                        responseCode.set(-1);
-                                        commentthreadFlag.set(false);
-                                        custon_progressDialog.dismiss();
-                                    } else if (responseCode.get() == 502) {
-                                        responseCode.set(-1);
-                                        commentthreadFlag.set(false);
-                                        custon_progressDialog.dismiss();
-                                    }
-                                }
-                            };
-
-                            class NewRunnable implements Runnable {
-                                @Override
-                                public void run() {
-                                    for (int i = 0; i < 30; i++) {
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        if (commentthreadFlag.get())
-                                            runOnUiThread(runnable);
-                                        else {
-                                            i = 30;
+                            if (comment_edit.getText().toString().equals("")) {
+                                rlu.startDialog(0,"댓글 작성","댓글 작성란이 비어있습니다.",new ArrayList<>(Arrays.asList("확인")));
+                            } else {
+                                custon_progressDialog.show();
+                                commentthreadFlag.set(true);
+                                final Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (responseCode.get() == 200) {
+                                            responseCode.set(-1);
+                                            commentthreadFlag.set(false);
+                                            Log.d("댓글 작성", "성공");
+                                            Intent intent = getIntent();
+                                            finish(); //현재 액티비티 종료 실시
+                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                            startActivity(intent); //현재 액티비티 재실행 실시
+                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                            custon_progressDialog.dismiss();
+                                        } else if (responseCode.get() == 403) {
+                                            responseCode.set(-1);
+                                            commentthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            rlu.startDialog(0,"댓글 등록","댓글 등록에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                        } else if (responseCode.get() == 500) {
+                                            responseCode.set(-1);
+                                            commentthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
+                                            rlu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                         }
                                     }
+                                };
+
+                                class NewRunnable implements Runnable {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            if (commentthreadFlag.get())
+                                                runOnUiThread(runnable);
+                                            else {
+                                                i = 30;
+                                            }
+                                        }
+                                    }
                                 }
+
+
+                                ControlComment_f ccf = new ControlComment_f();
+                                Comment newComment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getPost_id(), comment_edit.getText().toString(), "");
+                                ccf.writeComment(newComment);
+                                NewRunnable nr = new NewRunnable();
+                                Thread t = new Thread(nr);
+                                responseCode.set(-1);
+                                t.start();
+                                comment_edit.setText("");
+                                Log.d("댓글 내용", newComment.toString());
                             }
-
-
-                            ControlComment_f ccf = new ControlComment_f();
-                            Comment newComment = new Comment(0, ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getPost_id(), comment_edit.getText().toString(), "");
-                            ccf.writeComment(newComment);
-                            NewRunnable nr = new NewRunnable();
-                            Thread t = new Thread(nr);
-                            responseCode.set(-1);
-                            t.start();
-                            comment_edit.setText("");
-                            Log.d("댓글 내용", newComment.toString());
                         }
                     });
 
@@ -575,11 +607,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 } else if (responseCode.get() == 500) {
                     responseCode.set(-1);
                     custon_progressDialog.dismiss();
-                    //rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                    rlu.startToast("게시글을 가져오는데 실패했습니다.");
                 } else if (responseCode.get() == 502) {
                     responseCode.set(-1);
                     custon_progressDialog.dismiss();
-                    //rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                    rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
         };
@@ -611,15 +643,107 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ControlLike_f clf = new ControlLike_f();
-        if (recipePostLookUp.isLikeInfo()) {
-            Log.d("like", "좋아요 누른 거 서버로 보내요");
-            clf.likePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
-        } else {
-            Log.d("like", "좋아요 취소한 거 서버로 보내요");
-            clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
-        }
-        this.finish();
+        if (likedState != recipePostLookUp.isLikeInfo()) {
+            custon_progressDialog.show();
+            if (recipePostLookUp.isLikeInfo()) {//좋아요 취소를 하려는 경우
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode.get() == 200) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            RecipeLookupActivity.super.onBackPressed();
+                        } else if (responseCode.get() == 500) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rlu.startDialog(0, "서버 오류", "좋아요 취소를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        } else if (responseCode.get() == 502) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("사진액티비티", "responsecode = " + responseCode);
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
+                }
+                ControlLike_f clf = new ControlLike_f();
+                Log.d("like", "좋아요 취소한 거 서버로 보내요");
+                clf.unLikePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
+
+                threadFlag.set(true);
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+            } else {
+                final Runnable runnable = new Runnable() {//좋아요 등록을 하려는 경우우
+                    @Override
+                    public void run() {
+                        if (responseCode.get() == 200) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            RecipeLookupActivity.super.onBackPressed();
+                        } else if (responseCode.get() == 501) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rlu.startDialog(0, "서버 오류", "좋아요 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        } else if (responseCode.get() == 502) {
+                            responseCode.set(-1);
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        }
+                    }
+                };
+
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
+                        }
+                    }
+                }
+                ControlLike_f clf = new ControlLike_f();
+                clf.likePost(ControlLogin_f.userinfo.getNickname(), 1, recipePostLookUp.getRecipeInfo().getPost_id());
+                Log.d("like", "좋아요 누른 거 서버로 보내요");
+                threadFlag.set(true);
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+            }
+        } else RecipeLookupActivity.super.onBackPressed();
     }
 
     class RecipeLookup_UI implements Control {

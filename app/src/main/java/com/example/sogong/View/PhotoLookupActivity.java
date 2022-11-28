@@ -195,8 +195,8 @@ public class PhotoLookupActivity extends AppCompatActivity {
                         //신고하기 로직 추가
                         Intent intent = new Intent(PhotoLookupActivity.this, ReportActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent.putExtra("recipe_id", photoPost.getPost_id());
-                        intent.putExtra("report_post_type", 1);
+                        intent.putExtra("photo_id", photoPost.getPost_id());
+                        intent.putExtra("report_post_type", 2);
                         startActivity(intent);
                         Log.d("recipe", "신고하기 menu click");
                         return true;
