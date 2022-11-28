@@ -295,6 +295,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
         //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
@@ -614,13 +615,17 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     remain_amount_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            custon_progressDialog.show();
+
                             final Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
                                     if (responseCode3.get() == 200) {
-                                        rlu.startToast("남는재료 계산 완료");
+                                        //rlu.startToast("남는재료 계산 완료");
+                                        threadFlag.set(false);
                                     } else {
-                                        rlu.startDialog(0, "저장 실패", "감산 결과를 저장하는데 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                        //rlu.startDialog(0, "저장 실패", "감산 결과를 저장하는데 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                        threadFlag.set(false);
                                     }
                                 }
                             };
@@ -639,6 +644,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                             runOnUiThread(runnable);
                                         else {
                                             i = 30;
+                                            custon_progressDialog.dismiss();
                                         }
                                     }
                                 }
@@ -646,6 +652,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
                             if(responseCode.get() == -1 && responseCode2.get() == -1) {
                                 ControlIngredients_f cif = new ControlIngredients_f();
+                                responseCode.set(-2);
+                                responseCode2.set(-2);
                                 cif.remainAmmounts(ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id());
                             }
                             NewRunnable nr = new NewRunnable();
