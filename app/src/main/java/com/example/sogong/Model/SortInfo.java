@@ -6,6 +6,16 @@ public class SortInfo {
     private String arrangeBy;
 
     public SortInfo() {}
+
+    @Override
+    public String toString() {
+        return "SortInfo{" +
+                "nickname='" + nickname + '\'' +
+                ", page=" + page +
+                ", arrangeBy='" + arrangeBy + '\'' +
+                '}';
+    }
+
     public SortInfo(int page, String arrangeBy) {
         this.page = page;
         this.arrangeBy = arrangeBy;

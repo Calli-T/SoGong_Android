@@ -15,6 +15,7 @@ import retrofit2.Response;
 
 public class ControlComment_f {
     public void writeComment(Comment comment){
+        Log.d("받은 writeComment",comment.toString());
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.WriteComment(comment);
@@ -44,7 +45,7 @@ public class ControlComment_f {
     }
 
     public void editComment(Comment comment){
-
+        Log.d("받은 writeComment",comment.toString());
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.EditComment(comment);
 
@@ -72,7 +73,7 @@ public class ControlComment_f {
         });
     }
     public void deleteComment(String nickname, int commentId){
-
+        Log.d("받은 writeComment","nickname = "+ nickname+" commentId = "+commentId);
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Comment deleteTarget = new Comment();
         deleteTarget.setNickname(nickname);

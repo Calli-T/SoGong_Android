@@ -20,7 +20,7 @@ public class ControlIngredients_f {
     List<Recipe_Ingredients> unExistIngredients;
 
     public void lookupUnExistIngredients(String nickname, int postId) {
-
+        Log.d("받은 nickname과 postId","nickname = "+ nickname + " postId = "+postId);
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<List<Recipe_Ingredients>> call = sv.LookupUnExistIngredients(nickname, postId);
 
@@ -47,7 +47,7 @@ public class ControlIngredients_f {
     }
     public void showUnExistIngredients(List<Recipe_Ingredients> unExistIngredients){}
     public void remainAmmounts(String nickname, int postId){
-
+        Log.d("받은 nickname과 postId","nickname = "+ nickname + " postId = "+postId);
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.RemainAmmounts(nickname, postId);
 

@@ -20,6 +20,16 @@ public class Report {
         this.post_type = post_type;
     }
 
+    @Override
+    public String toString() {
+        return "Report{" +
+                "reporter='" + reporter + '\'' +
+                ", contents='" + contents + '\'' +
+                ", post_id=" + post_id +
+                ", post_type=" + post_type +
+                '}';
+    }
+
     public String getReporter() {
         return reporter;
     }

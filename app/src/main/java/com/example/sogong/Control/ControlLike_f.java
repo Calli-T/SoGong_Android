@@ -22,9 +22,9 @@ public class ControlLike_f {
     }
 
     public void likePost(String nickname, int postType, int postId) {
-
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         LikeInfo likeInfo = new LikeInfo(0, nickname, postType, postId, "등록");
+        Log.d("받은 likeInfo", likeInfo.toString());
         Call<Integer> call;
         if (likeInfo.getPostType() == 1) call = sv.LikeRecipePost(likeInfo);
         else call = sv.LikePhotoPost(likeInfo);
@@ -57,6 +57,7 @@ public class ControlLike_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         LikeInfo likeInfo = new LikeInfo(0, nickname, postType, postId, "취소");
+        Log.d("받은 likeInfo", likeInfo.toString());
         Call<Integer> call;
         if (likeInfo.getPostType() == 1) call = sv.UnLikeRecipePost(likeInfo);
         else call = sv.UnLikePhotoPost(likeInfo);

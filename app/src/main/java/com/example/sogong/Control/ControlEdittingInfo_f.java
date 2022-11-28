@@ -16,7 +16,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlEdittingInfo_f {
-    public void editPassword(String pw){
+    public void editPassword(String pw) {
+        Log.d("받은 pw", "pw = " + pw);
         User old = ControlLogin_f.userinfo;
         User newUser = new User(old.getNickname(), old.getUid(), pw, old.getEmail(), old.isAuto_login());
 
@@ -51,8 +52,9 @@ public class ControlEdittingInfo_f {
         });
 
     }
-    public void editNickname(String new_nickname){
 
+    public void editNickname(String new_nickname) {
+        Log.d("받은 new_nickname", "new_nickname = " + new_nickname);
         User old = ControlLogin_f.userinfo;
         User newUser = new User(new_nickname, old.getUid(), old.getPassword(), old.getEmail(), old.isAuto_login());
 

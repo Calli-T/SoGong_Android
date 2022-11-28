@@ -13,6 +13,10 @@ import com.example.sogong.View.RefrigeratorActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,7 @@ public class ControlRefrigerator_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<List<Refrigerator>> call = sv.LookupRefrigerator(nickname);
+        Log.d("lookup Refrigerator", "nickname = " + nickname);
 
         call.enqueue(new Callback<List<Refrigerator>>() {
             @Override
@@ -48,6 +53,7 @@ public class ControlRefrigerator_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<List<Refrigerator>> call, @NonNull Throwable t) { // 500
                 Log.d("result", "알 수 없는 오류");
@@ -59,6 +65,7 @@ public class ControlRefrigerator_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.AddRefrigerator(ingredient);
+        Log.d("add Refrigerator",ingredient.toString());
 
         call.enqueue(new Callback<Integer>() {
             @Override
@@ -90,6 +97,7 @@ public class ControlRefrigerator_f {
         Map<String, Integer> deleteInfo = new HashMap<>();
         deleteInfo.put("id", id);
         Call<Integer> call = sv.DeleteRefrigerator(deleteInfo);
+        Log.d("delete Refrigerator","id = "+id);
 
         call.enqueue(new Callback<Integer>() {
             @Override
@@ -119,6 +127,7 @@ public class ControlRefrigerator_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.EditRefrigerator(ingredient);
+        Log.d("edit Refrigerator",ingredient.toString());
 
         call.enqueue(new Callback<Integer>() {
             @Override
@@ -144,7 +153,13 @@ public class ControlRefrigerator_f {
         });
     }
 
-    public void expireDateWarning() {
+    public long expireDateWarning(String expireDate) throws ParseException {
+        Date now = new Date();
+        Date expire = new SimpleDateFormat("yyyy-MM-dd").parse(expireDate);
+        long diffSec = (expire.getTime() - now.getTime()) / 1000; //초 차이
+        long remainDay = diffSec / (24*60*60);
+        Log.d("남은 일자", String.valueOf(remainDay));
+        return remainDay;
     }
 
     public void showRefrigerator(List<Recipe_Ingredients> refrigerator) {

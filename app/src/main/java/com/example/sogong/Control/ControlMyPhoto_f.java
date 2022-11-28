@@ -23,6 +23,7 @@ public class ControlMyPhoto_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<List<PhotoPost>> call = sv.LookupMyPhotoList(nickname);
+        Log.d("lookup My PhotoList","nickname = "+nickname);
 
         call.enqueue(new Callback<List<PhotoPost>>() {
             @Override

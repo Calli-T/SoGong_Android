@@ -10,4 +10,7 @@
     <color name="red_700">#D32F2F</color>
     <color name="beige">#F5EFE6</color>
     <color name="blue">#7895B2</color>
+    <color name="pastel_green">#5de85d</color>
+    <color name="pastel_yellow">#ffff75</color>
+    <color name="pastel_red">#ffa1a1</color>
 </resources>

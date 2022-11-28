@@ -1,6 +1,7 @@
 package com.example.sogong.View;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,18 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sogong.Control.ControlRefrigerator_f;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.Model.Refrigerator;
 import com.example.sogong.R;
 
+import java.text.ParseException;
 import java.util.List;
 
 public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapter.ViewHolder> {
 
     private List<Refrigerator> mData = null;
     private Context context;
+    ControlRefrigerator_f crf = new ControlRefrigerator_f();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -28,6 +33,7 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
         TextView amount;
         ImageButton left_btn;
         ImageButton right_btn;
+        ConstraintLayout background;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -37,7 +43,7 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
             amount = (TextView) itemView.findViewById(R.id.amount);
             left_btn = (ImageButton) itemView.findViewById(R.id.left_button);
             right_btn = (ImageButton) itemView.findViewById(R.id.right_button);
-
+            background = (ConstraintLayout) itemView.findViewById(R.id.ingredient_background);
             left_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,12 +68,22 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
 
         }
 
-        void onBind(Refrigerator refrigerator) {
+        void onBind(Refrigerator refrigerator) throws ParseException {
             if (refrigerator.getExpiry_date() != null) {
                 name.setText(refrigerator.getName());
                 date.setText(refrigerator.getExpiry_date().split("T")[0]);
                 String amountstr = String.valueOf(refrigerator.getAmmount()) + refrigerator.getUnit();
                 amount.setText(amountstr);
+                long remainDate = crf.expireDateWarning(refrigerator.getExpiry_date());
+                if (remainDate > 7) {
+                    background.setBackgroundColor(context.getResources().getColor(R.color.pastel_green));
+                } else if (remainDate > 3){
+                    background.setBackgroundColor(context.getResources().getColor(R.color.pastel_yellow));
+                }else if (remainDate >= 0){
+                    background.setBackgroundColor(context.getResources().getColor(R.color.pastel_red));
+                } else if (remainDate<0){
+                    background.setBackgroundColor(context.getResources().getColor(com.google.maps.android.rx.places.R.color.quantum_grey));
+                }
             }
         }
 
@@ -110,7 +126,11 @@ public class Refri_Ingre_Adapter extends RecyclerView.Adapter<Refri_Ingre_Adapte
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(Refri_Ingre_Adapter.ViewHolder holder, int position) {
-        holder.onBind(mData.get(position));
+        try {
+            holder.onBind(mData.get(position));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

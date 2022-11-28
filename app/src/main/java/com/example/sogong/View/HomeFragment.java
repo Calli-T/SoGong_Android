@@ -80,12 +80,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         //맨 앞으로
         gridview.bringToFront();
 
-        return rootview;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         Log.d("homefragment", "재시작");
         // UI controller
         Home_UI hu = new Home_UI();
@@ -169,6 +163,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
+
+
+        return rootview;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

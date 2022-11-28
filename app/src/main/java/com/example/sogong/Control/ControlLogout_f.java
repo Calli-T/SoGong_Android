@@ -18,6 +18,7 @@ public class ControlLogout_f {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.Logout(ControlLogin_f.userinfo);
+        Log.d("logout", ControlLogin_f.userinfo.toString());
 
         call.enqueue(new Callback<String>() {
             @Override

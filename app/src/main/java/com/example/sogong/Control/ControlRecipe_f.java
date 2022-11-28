@@ -27,6 +27,7 @@ public class ControlRecipe_f {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<RecipePostLookUp> call = sv.LookupRecipe(postId, nickname);
+        Log.d("lookup Recipe","postId = "+postId+" nickname = "+nickname);
 
         call.enqueue(new Callback<RecipePostLookUp>() {
             @Override
@@ -57,6 +58,7 @@ public class ControlRecipe_f {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<RecipePost_f> call = sv.AddRecipe(newRecipe);
+        Log.d("add Recipe",newRecipe.toString());
 
         call.enqueue(new Callback<RecipePost_f>() {
             @Override
@@ -87,6 +89,7 @@ public class ControlRecipe_f {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<RecipePost_f> call = sv.EditRecipe(edittedRecipe);
+        Log.d("edit Recipe",edittedRecipe.toString());
 
         call.enqueue(new Callback<RecipePost_f>() {
             @Override
@@ -120,6 +123,7 @@ public class ControlRecipe_f {
         targetPost.setNickname(nickname);
         targetPost.setPost_id(postId);
         Call<Integer> call = sv.DeleteRecipe(targetPost);
+        Log.d("delete Recipe",targetPost.toString());
 
         call.enqueue(new Callback<Integer>() {
             @Override

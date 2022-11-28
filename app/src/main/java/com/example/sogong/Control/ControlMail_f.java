@@ -51,7 +51,7 @@ public class ControlMail_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Mail> call = sv.SendMail(mail);
-
+        Log.d("send mail", mail.toString());
         call.enqueue(new Callback<Mail>() {
             @Override
             public void onResponse(@NonNull Call<Mail> call, @NonNull Response<Mail> response) {
@@ -82,7 +82,7 @@ public class ControlMail_f {
         mail.setMail_id(mailId);
         mail.setNickname(nickname);
         Call<Integer> call = sv.DeleteMail(mail);
-
+        Log.d("delete mail", mail.toString());
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {

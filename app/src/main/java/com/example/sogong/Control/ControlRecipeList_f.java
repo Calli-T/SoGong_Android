@@ -61,7 +61,7 @@ public class ControlRecipeList_f {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SearchInfo searchInfo = new SearchInfo(searchType, categories, keywordType, keyword, page, "");
         Call<RecipeList> call = sv.SearchRecipeList(searchInfo);
-        Log.d("검색 정보", searchInfo.toString());
+        Log.d("search RecipeList", searchInfo.toString());
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
@@ -94,7 +94,7 @@ public class ControlRecipeList_f {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SortInfo sortInfo = new SortInfo(page, sortBy);
         Call<RecipeList> call = sv.SortRecipeList(sortInfo);
-
+        Log.d("sort RecipeList",sortInfo.toString());
         call.enqueue(new Callback<RecipeList>() {
             @Override
             public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {

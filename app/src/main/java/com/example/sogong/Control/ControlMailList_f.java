@@ -26,6 +26,7 @@ public class ControlMailList_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<MailList> call = sv.LookupMailList(nickname, page);
+        Log.d("lookup MailList", "page = " + page + " nickname = " + nickname);
 
         call.enqueue(new Callback<MailList>() {
             @Override
@@ -33,9 +34,9 @@ public class ControlMailList_f {
                 MailBoxActivity.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             mailList = response.body();
                             Log.d("result", mailList.getMailList().toString());
                             MailBoxActivity.maillist = mailList.getMailList();
@@ -46,11 +47,14 @@ public class ControlMailList_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<MailList> call, @NonNull Throwable t) { // 500
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void showList(List<Mail> mailList){}
+
+    public void showList(List<Mail> mailList) {
+    }
 }

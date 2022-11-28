@@ -17,6 +17,7 @@ public class ControlReport_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call;
+        Log.d("reportPost",reportInfo.toString());
         if(reportInfo.getPost_type() == 1) call = sv.ReportRecipePost(reportInfo);
         else call = sv.ReportPhotoPost(reportInfo);
 
@@ -45,7 +46,7 @@ public class ControlReport_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<Integer> call = sv.ReportComment(reportInfo);
-
+        Log.d("reportComment",reportInfo.toString());
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {

@@ -81,7 +81,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 String[] time1 = time.split("T");
                 date.setText(time1[0]);
                 leftbutton.setVisibility(View.INVISIBLE);
-                rightbutton.setBackground(Drawable.createFromPath("@android:drawable/report"));
+
             }
 
         }
@@ -126,9 +126,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
         holder.onBind(mData.get(position));
         //사용자의 따라 적절한 아이콘 설정
-//        if (!Objects.equals(ControlLogin_f.userinfo.getNickname(), mData.get(position).getNickname())) {
-//            holder.rightbutton.setBackground(ContextCompat.getDrawable(context, R.drawable.report));
-//        }
+        if (!Objects.equals(ControlLogin_f.userinfo.getNickname(), mData.get(position).getNickname())) {
+            holder.rightbutton.setBackground(ContextCompat.getDrawable(context, R.drawable.report));
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

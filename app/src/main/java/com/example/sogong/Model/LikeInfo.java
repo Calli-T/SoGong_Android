@@ -62,6 +62,17 @@ public class LikeInfo {
     public void setTask(String task) {
         this.task = task;
     }
+
+    @Override
+    public String toString() {
+        return "LikeInfo{" +
+                "like_id=" + like_id +
+                ", nickname='" + nickname + '\'' +
+                ", postType=" + postType +
+                ", postId=" + postId +
+                ", task='" + task + '\'' +
+                '}';
+    }
 }
 
 /*

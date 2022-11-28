@@ -28,6 +28,7 @@ public class ControlPhoto_f {
     public void lookupPhoto(int postId, String nickname) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoLookUp> call = sv.LookupPhoto(postId, nickname);
+        Log.d("lookup Photo","postId = " +postId +" nickname = "+nickname);
 
         call.enqueue(new Callback<PhotoLookUp>() {
             @Override
@@ -60,6 +61,7 @@ public class ControlPhoto_f {
     public void addPhoto(PhotoPost newPhoto) {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<PhotoPost> call = sv.AddPhoto(newPhoto);
+        Log.d("add Photo",newPhoto.toString());
 
         call.enqueue(new Callback<PhotoPost>() {
             @Override
@@ -92,6 +94,7 @@ public class ControlPhoto_f {
         deleteTarget.setAuthor(nickname);
         deleteTarget.setPost_id(postId);
         Call<Integer> call = sv.DeletePhoto(deleteTarget);
+        Log.d("deletePhoto",deleteTarget.toString());
 
         call.enqueue(new Callback<Integer>() {
             @Override

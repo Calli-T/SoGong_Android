@@ -62,6 +62,7 @@ public class ControlPhotoList_f {
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         SortInfo sortInfo = new SortInfo(page, sortBy);
         Call<PhotoList> call = sv.SortPhotoList(sortInfo);
+        Log.d("sort PhotoList",sortInfo.toString());
 
         call.enqueue(new Callback<PhotoList>() {
             @Override

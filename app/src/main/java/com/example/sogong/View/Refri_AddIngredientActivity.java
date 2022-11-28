@@ -62,7 +62,6 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
         unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingreUnit.setAdapter(unitAdapter);
 
-
         FloatingActionButton fab = findViewById(R.id.recipe_add_button);
         fab.setOnClickListener(new FABClickListener());
         /*
@@ -73,8 +72,15 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             }
         });
         */
+        ArrayList<String> ingreName_str =new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredients)));
+        ArrayList<String> ingreUnit_str =new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.unit)));
         if (type == 1) {
-            ingreName.setSelection(0);
+            ingreName.setSelection(ingreName_str.indexOf(ingredients.getName()));
+            ingreUnit.setSelection(ingreUnit_str.indexOf(ingredients.getUnit()));
+            ingreAmount.setText(Float.toString(ingredients.getAmmount()));
+            if(!ingredients.getExpiry_date().equals("")){
+                ingreExpiredate.setText(ingredients.getExpiry_date());
+            }
         }
     }
 
@@ -92,7 +98,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             custon_progressDialog.show();
 
             if (type == 0) {
-                if (ingreUnit.getSelectedItem().toString().equals("")) {
+                if (ingreAmount.getText().toString().equals("")) {
                     rau.startToast("형식에 맞지 않은 정보가 있습니다.");
                 } else {
                     final Runnable runnable = new Runnable() {
@@ -145,8 +151,8 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                     t.start();
                 }
             } else if (type == 1) {
-                if (ingreUnit.getSelectedItem().toString().equals("")) {
-                    rau.startDialog(0,"유효하지 않음","입력 정보가 유효하지 않습니다.",new ArrayList<>(Arrays.asList("확인")));
+                if (ingreAmount.getText().toString().equals("")) {
+                    rau.startDialog(0, "유효하지 않음", "입력 정보가 유효하지 않습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else {
                     final Runnable runnable = new Runnable() {
                         @Override

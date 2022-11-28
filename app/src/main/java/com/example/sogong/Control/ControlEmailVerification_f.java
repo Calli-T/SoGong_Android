@@ -18,6 +18,7 @@ import retrofit2.Response;
 
 public class ControlEmailVerification_f {
     public void authStart(String email) {
+        Log.d("받은 email", "email = " + email);
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.AuthStart(new AuthInfo(email, "123456"));
         call.enqueue(new Callback<String>() {
@@ -40,6 +41,7 @@ public class ControlEmailVerification_f {
     }
 
     public void authFinish(String email, String code) {
+        Log.d("받은 email과 code", "email = " + email + " code = " + code);
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.AuthFinish(new AuthInfo(email, code));
         call.enqueue(new Callback<String>() {

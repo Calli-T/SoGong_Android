@@ -26,7 +26,7 @@ public class ControlLogin_f {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
         Call<User> call = sv.Login(new User(null, id, pw, null, isAutoLogin));
-
+        Log.d("받은 userInfo", "id = " + id + " pw = " + pw + " isAutoLogin = " + isAutoLogin);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

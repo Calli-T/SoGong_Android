@@ -1,5 +1,7 @@
 package com.example.sogong.Control;
 
+import android.util.Log;
+
 import com.example.sogong.Model.User;
 import com.example.sogong.View.RetrofitService;
 import com.example.sogong.View.RetrofitStringClient;
@@ -14,6 +16,7 @@ public class ControlSignup_f {
 
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         Call<String> call = sv.SignUp(userinfo);
+        Log.d("signUp",userinfo.toString());
 
         call.enqueue(new Callback<String>() {
             @Override
