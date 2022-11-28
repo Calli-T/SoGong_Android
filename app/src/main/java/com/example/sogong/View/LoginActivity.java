@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
 
     public static int responseCode;
+    private AtomicBoolean threadFlag = new AtomicBoolean();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,76 +69,86 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lu.startToast("로그인 중");
-                custon_progressDialog.show();
-                String id = userid_et.getText().toString();
-                String pw = passwd_et.getText().toString();
-                boolean auto_login = checkbox.isChecked();
-                // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
+                if (userid_et.getText().toString().equals("") | passwd_et.getText().toString().equals("")) {
+                    lu.startToast("ID 또는 비밀번호를 입력해주세요");
+                } else {
+                    lu.startToast("로그인 중");
+                    custon_progressDialog.show();
+                    String id = userid_et.getText().toString();
+                    String pw = passwd_et.getText().toString();
+                    boolean auto_login = checkbox.isChecked();
+                    // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
                 /*
                 컨트롤러에서 API호출을 하는동안
                 대기하다 컨트롤러에서 호출을 성공하여 activity의 static field를 채워주면
                 activity를 전환하며, 해당 field를 되돌려주는 코드이다.
                 */
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = 0;
-                            custon_progressDialog.dismiss();
-                            lu.startToast("로그인 성공");
 
-                            if (auto_login) {
-                                SharedPreferences auto = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
-                                SharedPreferences.Editor autoLoginEdit = auto.edit();
-                                autoLoginEdit.putString("uid", id);
-                                autoLoginEdit.putString("password", pw);
-                                autoLoginEdit.putString("nickname", ControlLogin_f.userinfo.getNickname());
-                                autoLoginEdit.putString("email", ControlLogin_f.userinfo.getEmail());
-                                autoLoginEdit.putBoolean("auto_login", true);
-                                autoLoginEdit.apply();
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                lu.startToast("로그인 성공");
+
+                                if (auto_login) {
+                                    SharedPreferences auto = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
+                                    SharedPreferences.Editor autoLoginEdit = auto.edit();
+                                    autoLoginEdit.putString("uid", id);
+                                    autoLoginEdit.putString("password", pw);
+                                    autoLoginEdit.putString("nickname", ControlLogin_f.userinfo.getNickname());
+                                    autoLoginEdit.putString("email", ControlLogin_f.userinfo.getEmail());
+                                    autoLoginEdit.putBoolean("auto_login", true);
+                                    autoLoginEdit.apply();
+                                }
+                                lu.changePage(0);
+                            } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
+                            } else if (responseCode == 500) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                lu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
                             }
+                        }
+                    };
 
-                            lu.changePage(0);
-                        } else if (responseCode == 400) { // custom dialog랑 toast 및 control 구현해둘것
-                            responseCode = 0;
-                            custon_progressDialog.dismiss();
-                            lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                            custon_progressDialog.dismiss();
-                            lu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            int i = 30;
+                            while (i > 0) {
+                                i--;
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
+                            }
                         }
                     }
-                };
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        int i = 30;
-                        while (i > 0) {
-                            i--;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            runOnUiThread(runnable);
-                        }
+                    if (responseCode != -1) {
+                        ControlLogin_f clf = new ControlLogin_f();
+                        clf.login(id, pw, auto_login);
+                        responseCode = -1;
                     }
+
+                    NewRunnable nr = new NewRunnable();
+                    threadFlag.set(true);
+                    Thread t = new Thread(nr);
+                    t.start();
+
                 }
-
-                if (responseCode != -1) {
-                    ControlLogin_f clf = new ControlLogin_f();
-                    clf.login(id, pw, auto_login);
-                    responseCode = -1;
-                }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
-
             }
         });
 
@@ -192,13 +204,13 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
         boolean isAuto = sp.getBoolean("auto_login", false);
-        Log.d("test auto", isAuto+"");
+        Log.d("test auto", isAuto + "");
 
-        if(isAuto && !MainActivity.isLogout){
+        if (isAuto && !MainActivity.isLogout) {
             String nickname = sp.getString("nickname", "default");
             String email = sp.getString("email", "default");
             String uid = sp.getString("uid", "default");
-            String password =sp.getString("password", "default");
+            String password = sp.getString("password", "default");
 
             ControlLogin_f.userinfo = new User(nickname, uid, password, email, true);
 

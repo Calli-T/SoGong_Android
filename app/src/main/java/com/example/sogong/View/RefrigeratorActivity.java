@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlMyPhoto_f;
 import com.example.sogong.Control.ControlMyRecipe_f;
 import com.example.sogong.Control.ControlPhoto_f;
@@ -47,6 +48,8 @@ public class RefrigeratorActivity extends AppCompatActivity {
     private boolean deletethreadFlag;
     public static int responseResult;
     Custon_ProgressDialog custon_progressDialog;
+
+    Boolean isProgress;
 
     // UI controller
     Refrigerator_UI rfu = new Refrigerator_UI();
@@ -121,59 +124,100 @@ public class RefrigeratorActivity extends AppCompatActivity {
                         public void onItemRightButtonClick(View view, int position) {
                             Log.d("recipe", String.valueOf(position) + "right button click");
                             /* #8 사용자 보유 재료 삭제 */
-                            deletethreadFlag = true;
-                            custon_progressDialog.show();
-                            final Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (responseCode == 200) {
-                                        responseCode = -1;
-                                        deletethreadFlag = false;
-                                        Intent intent = getIntent();
-                                        finish(); //현재 액티비티 종료 실시
-                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                        startActivity(intent); //현재 액티비티 재실행 실시
-                                        overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                        custon_progressDialog.dismiss();
-
-                                    } else if (responseCode == 406) {
-                                        responseCode = -1;
-                                        deletethreadFlag = false;
-                                        custon_progressDialog.dismiss();
-                                        rfu.startDialog(0,"삭제 실패","삭제 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
-                                    } else if (responseCode == 500) {
-                                        responseCode = -1;
-                                        deletethreadFlag = false;
-                                        custon_progressDialog.dismiss();
-                                        rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-                                    }
-                                }
-                            };
+                            rfu.startDialog(1, "재료 삭제", "해당 식재료를 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
 
                             class NewRunnable implements Runnable {
+                                NewRunnable() {
+                                }
+
                                 @Override
                                 public void run() {
-                                    for (int i = 0; i < 30; i++) {
+                                    while (true) {
                                         try {
-                                            Thread.sleep(1000);
+                                            Thread.sleep(100);
+                                            if (Custom_Dialog.state == 0) {
+                                                Custom_Dialog.state = -1;
+                                                isProgress = true;
+                                                final Runnable progress = new Runnable(){
+                                                    @Override
+                                                    public void run() {
+                                                        if(isProgress){
+                                                            custon_progressDialog.show();
+                                                        }else custon_progressDialog.dismiss();;
+                                                    }
+                                                };
+                                                runOnUiThread(progress);
+                                                final Runnable runnable = new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (responseCode == 200) {
+                                                            responseCode = -1;
+                                                            deletethreadFlag = false;
+                                                            isProgress = false;
+                                                            runOnUiThread(progress);
+                                                            Intent intent = getIntent();
+                                                            finish(); //현재 액티비티 종료 실시
+                                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                                            startActivity(intent); //현재 액티비티 재실행 실시
+                                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+
+                                                        } else if (responseCode == 406) {
+                                                            responseCode = -1;
+                                                            deletethreadFlag = false;
+                                                            isProgress = false;
+                                                            runOnUiThread(progress);
+                                                            rfu.startDialog(0,"삭제 실패","삭제 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+
+                                                        } else if (responseCode == 500) {
+                                                            responseCode = -1;
+                                                            deletethreadFlag = false;
+                                                            isProgress = false;
+                                                            runOnUiThread(progress);
+                                                            rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                        }
+                                                    }
+                                                };
+
+                                                class NewRunnable1 implements Runnable {
+                                                    @Override
+                                                    public void run() {
+                                                        for (int i = 0; i < 30; i++) {
+                                                            try {
+                                                                Thread.sleep(1000);
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                            if (deletethreadFlag)
+                                                                runOnUiThread(runnable);
+                                                            else {
+                                                                i = 30;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                deletethreadFlag = true;
+                                                ControlRefrigerator_f crff = new ControlRefrigerator_f();
+                                                crff.deleteRefrigerator(ingreList.get(position).getRefrigerator_id());
+                                                NewRunnable1 nr1 = new NewRunnable1();
+                                                Thread t = new Thread(nr1);
+                                                t.start();
+
+                                                break;
+                                            } else if (Custom_Dialog.state == 1) {
+                                                break;
+                                            }
                                         } catch (Exception e) {
                                             e.printStackTrace();
-                                        }
-
-                                        if (deletethreadFlag)
-                                            runOnUiThread(runnable);
-                                        else {
-                                            i = 30;
                                         }
                                     }
                                 }
                             }
                             deletethreadFlag = true;
-                            ControlRefrigerator_f crff = new ControlRefrigerator_f();
-                            crff.deleteRefrigerator(ingreList.get(position).getRefrigerator_id());
                             NewRunnable nr = new NewRunnable();
                             Thread t = new Thread(nr);
                             t.start();
+
                         }
                     });
                     custon_progressDialog.dismiss();

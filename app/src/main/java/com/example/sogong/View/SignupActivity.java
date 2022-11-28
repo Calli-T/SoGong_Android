@@ -64,78 +64,83 @@ public class SignupActivity extends AppCompatActivity {
         join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (userid_et.getText().toString().equals("")
+                        | passwd_et.getText().toString().equals("")
+                        | passwdcheck_et.getText().toString().equals("")
+                        | nickname_et.getText().toString().equals("")) {
+                    su.startDialog(0,"양식 오류","양식에 맞지 않은 입력입니다.",new ArrayList<>(Arrays.asList("확인")));
+                } else {
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -2;
+                                su.startToast("회원가입 완료");
+                                su.changePage(0);
+                            } else if (responseCode == 400) {
+                                responseCode = 0;
+                                su.startToast("중복된 아이디입니다.");
+                            } else if (responseCode == 401) {
+                                responseCode = 0;
+                                su.startToast("중복된 닉네임입니다.");
+                            } else if (responseCode == 402) {
+                                responseCode = 0;
+                                su.startToast("중복된 아이디와 닉네임입니다.");
+                            } else if (responseCode == 500) {
+                                responseCode = 0;
+                                su.startDialog(0, "서버 오류", "정보 등록에 실패했습니다. 재시도 해주십시오.", new ArrayList<String>(Arrays.asList("확인")));
+                            } else if (responseCode == 502) {
+                                responseCode = 0;
+                                su.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
+                            }
+                        }
 
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -2;
-                            su.startToast("회원가입 완료");
-                            su.changePage(0);
-                        } else if (responseCode == 400) {
-                            responseCode = 0;
-                            su.startToast("중복된 아이디입니다.");
-                        } else if (responseCode == 401) {
-                            responseCode = 0;
-                            su.startToast("중복된 닉네임입니다.");
-                        } else if (responseCode == 402) {
-                            responseCode = 0;
-                            su.startToast("중복된 아이디와 닉네임입니다.");
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                            su.startDialog(0, "서버 오류", "정보 등록에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
-                        } else if (responseCode == 502) {
-                            responseCode = 0;
-                            su.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (threadFlag.get()) {
+                                    runOnUiThread(runnable);
+                                    Log.d("Sign up thread", "working");
+                                } else {
+                                    i = 30;
+                                    Log.d("Sign up thread", "down");
+                                }
+                            }
                         }
                     }
 
-                };
+                    if (responseCode == 0) {
+                        // 비밀번호와 확인이 일치
+                        if (passwd_et.getText().toString().equals(passwdcheck_et.getText().toString())) {
+                            // 자동 로그인 default는 false
+                            User temp = new User(nickname_et.getText().toString(), userid_et.getText().toString(), passwd_et.getText().toString(), authEmail, false);
+                            responseCode = -1;
+                            ControlSignup_f csf = new ControlSignup_f();
+                            csf.signUp(temp);
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
+                        } else { // 미일치
 
-                            if (threadFlag.get()) {
-                                runOnUiThread(runnable);
-                                Log.d("Sign up thread", "working");
-                            } else {
-                                i = 30;
-                                Log.d("Sign up thread", "down");
-                            }
                         }
                     }
                 }
-
-                if (responseCode == 0) {
-                    // 비밀번호와 확인이 일치
-                    if (passwd_et.getText().toString().equals(passwdcheck_et.getText().toString())) {
-                        // 자동 로그인 default는 false
-                        User temp = new User(nickname_et.getText().toString(), userid_et.getText().toString(), passwd_et.getText().toString(), authEmail, false);
-                        responseCode = -1;
-                        ControlSignup_f csf = new ControlSignup_f();
-                        csf.signUp(temp);
-
-                        NewRunnable nr = new NewRunnable();
-                        Thread t = new Thread(nr);
-                        t.start();
-                    } else { // 미일치
-
-                    }
-                }
-
             }
         });
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         threadFlag.set(false);
     }

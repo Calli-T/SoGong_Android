@@ -19,13 +19,17 @@ import com.example.sogong.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChangeNicknameActivity extends AppCompatActivity {
 
     EditText nickname_et;
     Button change_button, cancel_button;
-
+    Custon_ProgressDialog custon_progressDialog;
     public static int responseCode;
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    //UI controller
+    CN_UI cu = new CN_UI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,61 +42,76 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         cancel_button = findViewById(R.id.cancel_button);
 
         responseCode = 0;
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        //UI controller
-        CN_UI cu = new CN_UI();
 
         // 닉네임 변경
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nickname = nickname_et.getText().toString();
-
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -2;
-                            cu.startToast("닉네임 변경 완료");
-                            finish();
-                        } else if (responseCode == 400) {
-                            responseCode = 0;
-                            cu.startDialog(0,"닉네임 중복", "중복된 닉네임입니다.",new ArrayList<>(Arrays.asList("확인")));
-                        }  else if (responseCode == 500) {
-                            responseCode = 0;
-                            cu.startDialog(0,"서버 오류", "서버 연결에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
-                        } else if (responseCode == 502) {
-                            responseCode = 0;
-                            cu.startDialog(0,"서버 오류", "알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
-
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                if (nickname_et.getText().toString().equals("")) {
+                    cu.startDialog(0, "입력", "새로운 닉네임을 입력해주세요.", new ArrayList<>(Arrays.asList("확인")));
+                } else {
+                    String nickname = nickname_et.getText().toString();
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -2;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startToast("닉네임 변경 완료");
+                                finish();
+                            } else if (responseCode == 400) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startDialog(0, "닉네임 중복", "중복된 닉네임입니다.", new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 500) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 502) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
+                        }
+                    };
 
-                            runOnUiThread(runnable);
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
+                            }
                         }
                     }
+
+                    if (responseCode == 0) {
+                        responseCode = -1;
+                        custon_progressDialog.show();
+
+                        ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
+                        cef.editNickname(nickname);
+                    }
+
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
                 }
-
-                if (responseCode == 0) {
-                    responseCode = -1;
-
-                    ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                    cef.editNickname(nickname);
-                }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
             }
 
         });

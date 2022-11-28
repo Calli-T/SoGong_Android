@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmailVerificationActivity extends AppCompatActivity {
 
@@ -34,10 +36,15 @@ public class EmailVerificationActivity extends AppCompatActivity {
     public static int destination = 0; // 액티비티 이동 분기, 회원가입으로 or 닉네임 변경으로
     private boolean isFinish = false; // 스레드의 접근권한 제어
 
+    Custon_ProgressDialog custon_progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailverification);
+
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         // flags
         responseCode = 0;
@@ -56,69 +63,80 @@ public class EmailVerificationActivity extends AppCompatActivity {
         sendcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = email_at.getText().toString();
+                if (email_at.getText().toString().equals("") | isValidEmail(email_at.getText().toString())) {
+                    eu.startToast("잘못된 형식의 입력입니다.");
+                } else {
+                    custon_progressDialog.show();
+                    String email = email_at.getText().toString();
 
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isFinish) {
-                            if (responseCode == 200) {
-                                responseCode = -2;
-                                eu.startToast("코드 전송");
-                                isFinish = true;
-                            } else if (responseCode == 404) {
-                                responseCode = 0;
-                                eu.startToast("존재하지 않는 이메일입니다.");
-                            } else if (responseCode == 501) {
-                                responseCode = 0;
-                                eu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isFinish) {
+                                if (responseCode == 200) {
+                                    responseCode = -2;
+                                    threadFlag.set(false);
+                                    eu.startToast("이메일을 전송했습니다.");
+                                    isFinish = true;
+                                    custon_progressDialog.dismiss();
+                                } else if (responseCode == 404) {
+                                    responseCode = 0;
+                                    threadFlag.set(false);
+                                    eu.startToast("존재하지 않는 이메일입니다.");
+                                    custon_progressDialog.dismiss();
+                                } else if (responseCode == 501) {
+                                    responseCode = 0;
+                                    threadFlag.set(false);
+                                    eu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                                    custon_progressDialog.dismiss();
+                                }
+                            }
+                        }
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (threadFlag.get()) {
+                                    runOnUiThread(runnable);
+                                    Log.d("Verification thread", "working");
+                                } else {
+                                    i = 30;
+                                    Log.d("Verification thread", "down");
+                                }
                             }
                         }
                     }
-                };
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    if (responseCode == 0) {
+                        responseCode = -1;
 
-                            if (threadFlag.get()) {
-                                runOnUiThread(runnable);
-                                Log.d("Verification thread", "working");
-                            } else {
-                                i = 30;
-                                Log.d("Verification thread", "down");
-                            }
+                        ControlEmailVerification_f cef = new ControlEmailVerification_f();
+                        // 비밀변경에는 사용자의 email과 대조하는 과정이 추가로 필요하다.
+                        // 아예 자동으로 userinfo에서 꺼내와서 code 전송하고 잠궈라
+                        if (destination == 0) {
+                            cef.authStart(email);
+                        } else if (destination == 1) {
+                            eu.startToast("코드 전송");
+                            //if(ControlLogin_f.userinfo.getEmail() == email)
+                            cef.authStart(email);
+                            //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
                         }
-                    }
-                }
 
-                if (responseCode == 0) {
-                    responseCode = -1;
-
-                    ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                    // 비밀변경에는 사용자의 email과 대조하는 과정이 추가로 필요하다.
-                    // 아예 자동으로 userinfo에서 꺼내와서 code 전송하고 잠궈라
-                    if (destination == 0) {
-                        cef.authStart(email);
-                    } else if (destination == 1) {
-                        eu.startToast("코드 전송");
-                        //if(ControlLogin_f.userinfo.getEmail() == email)
-                        cef.authStart(email);
-                        //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
                     }
 
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
+
                 }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
-
             }
 
         });
@@ -171,13 +189,20 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            runOnUiThread(runnable);
+                            if (threadFlag.get()) {
+                                runOnUiThread(runnable);
+                                Log.d("Verification thread", "working");
+                            } else {
+                                i = 30;
+                                Log.d("Verification thread", "down");
+                            }
                         }
                     }
                 }
 
                 if (responseCode == -2) {
                     ControlEmailVerification_f cef = new ControlEmailVerification_f();
+                    threadFlag.set(true);
                     cef.authFinish(email, code);
                     responseCode = -3;
                 }
@@ -233,6 +258,17 @@ public class EmailVerificationActivity extends AppCompatActivity {
             }
         }
 
+    }
+    //이메일 정규식
+    public static boolean isValidEmail(String email) {
+        boolean err = false;
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if(m.matches()) {
+            err = true;
+        }
+        return err;
     }
 }
 

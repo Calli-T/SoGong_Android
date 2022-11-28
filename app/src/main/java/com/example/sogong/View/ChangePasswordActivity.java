@@ -22,14 +22,17 @@ import com.example.sogong.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
     EditText passwd_et, passwdcheck_et;
     Button change_button, cancel_button;
-
+    Custon_ProgressDialog custon_progressDialog;
     public static int responseCode = 0;
-
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    // UI controller
+    CP_UI cu = new CP_UI();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +44,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         change_button = findViewById(R.id.change_button);
         cancel_button = findViewById(R.id.cancel_button);
 
-        // UI controller
-        CP_UI cu = new CP_UI();
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         // 비밀번호 변경
         change_button.setOnClickListener(new View.OnClickListener() {
@@ -56,14 +59,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     public void run() {
                         if (responseCode == 200) {
                             responseCode = -2;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
                             cu.startToast("비밀번호 변경완료");
                             finish();
-                        }  else if (responseCode == 500) {
+                        } else if (responseCode == 500) {
                             responseCode = 0;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
                             cu.startToast("비밀번호 변경요청 실패했습니다.");
                         } else if (responseCode == 502) {
                             responseCode = 0;
-                            cu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                         }
                     }
                 };
@@ -80,8 +89,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
-                            runOnUiThread(runnable);
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
                         }
                     }
                 }
@@ -90,9 +102,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     responseCode = -1;
 
                     ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                    if(passwd.equals(passwdcheck)) {
+                    if (passwd.equals(passwdcheck)) {
+                        custon_progressDialog.show();
+                        threadFlag.set(true);
                         cef.editPassword(passwd);
-                    }
+                    } else
+                        cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
 
                 NewRunnable nr = new NewRunnable();

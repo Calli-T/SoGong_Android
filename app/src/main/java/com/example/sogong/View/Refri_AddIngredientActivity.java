@@ -90,107 +90,115 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             custon_progressDialog = new Custon_ProgressDialog(Refri_AddIngredientActivity.this);
             custon_progressDialog.setCanceledOnTouchOutside(false);
             custon_progressDialog.show();
+
             if (type == 0) {
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            Log.d("재료 등록", "성공");
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            onBackPressed();
-                        } else if (responseCode == 400) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            rau.startDialog(0,"요청 실패","재료 추가 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
-                        } else if (responseCode == 500) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            rau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                if (ingreUnit.getSelectedItem().toString().equals("")) {
+                    rau.startToast("형식에 맞지 않은 정보가 있습니다.");
+                } else {
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                Log.d("재료 등록", "성공");
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                onBackPressed();
+                            } else if (responseCode == 400) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "요청 실패", "재료 추가 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 500) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
-                            Log.d("재료 추가", "responsecode = " + responseCode);
+                        }
+                    };
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                Log.d("재료 추가", "responsecode = " + responseCode);
 
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
                             }
                         }
                     }
+                    threadFlag.set(true);
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    ControlRefrigerator_f crf = new ControlRefrigerator_f();
+                    Refrigerator ingredient = new Refrigerator(0, ingreName.getSelectedItem().toString(), ControlLogin_f.userinfo.getNickname(), ingreUnit.getSelectedItem().toString(), Float.parseFloat(ingreAmount.getText().toString()), ingreExpiredate.getText().toString());
+                    crf.addRefrigerator(ingredient);
+                    t.start();
                 }
-                threadFlag.set(true);
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                ControlRefrigerator_f crf = new ControlRefrigerator_f();
-                Refrigerator ingredient = new Refrigerator(0, ingreName.getSelectedItem().toString(), ControlLogin_f.userinfo.getNickname(), ingreUnit.getSelectedItem().toString(), Float.parseFloat(ingreAmount.getText().toString()), ingreExpiredate.getText().toString());
-                crf.addRefrigerator(ingredient);
-                t.start();
             } else if (type == 1) {
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            Log.d("재료 변경", "성공");
-                            responseCode = -1;
-                            editthreadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            onBackPressed();
-                        } else if (responseCode == 406) {
-                            responseCode = -1;
-                            editthreadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            rau.startDialog(0,"변경 실패","재료 변경에 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
-                        } else if (responseCode == 500) {
-                            responseCode = -1;
-                            editthreadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            rau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                if (ingreUnit.getSelectedItem().toString().equals("")) {
+                    rau.startDialog(0,"유효하지 않음","입력 정보가 유효하지 않습니다.",new ArrayList<>(Arrays.asList("확인")));
+                } else {
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                Log.d("재료 변경", "성공");
+                                responseCode = -1;
+                                editthreadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                onBackPressed();
+                            } else if (responseCode == 406) {
+                                responseCode = -1;
+                                editthreadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "변경 실패", "재료 변경에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            } else if (responseCode == 500) {
+                                responseCode = -1;
+                                editthreadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                rau.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
-                            Log.d("재료 변경", "responsecode = " + responseCode);
+                        }
+                    };
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                Log.d("재료 변경", "responsecode = " + responseCode);
 
-                            if (editthreadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                                if (editthreadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
                             }
                         }
                     }
+                    editthreadFlag.set(true);
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    ControlRefrigerator_f crf = new ControlRefrigerator_f();
+                    Refrigerator ingredient = new Refrigerator(ingredients.getRefrigerator_id(), ingreName.getSelectedItem().toString(), ControlLogin_f.userinfo.getNickname(), ingreUnit.getSelectedItem().toString(), Float.parseFloat(ingreAmount.getText().toString()), ingreExpiredate.getText().toString());
+                    crf.editRefrigerator(ingredient);
+                    t.start();
+                    //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
+                    //crf.editRefrigerator(ingredients);
                 }
-                editthreadFlag.set(true);
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                ControlRefrigerator_f crf = new ControlRefrigerator_f();
-                Refrigerator ingredient = new Refrigerator(ingredients.getRefrigerator_id(), ingreName.getSelectedItem().toString(), ControlLogin_f.userinfo.getNickname(), ingreUnit.getSelectedItem().toString(), Float.parseFloat(ingreAmount.getText().toString()), ingreExpiredate.getText().toString());
-                crf.editRefrigerator(ingredient);
-                t.start();
-                //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
-                //crf.editRefrigerator(ingredients);
-
             }
         }
     }

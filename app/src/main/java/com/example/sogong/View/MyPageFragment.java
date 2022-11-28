@@ -33,6 +33,8 @@ public class MyPageFragment extends Fragment {
     Button writtenRecipe, likedRecipe, commentRecipe, refrigerator, mailbox;
     ViewGroup rootview;
 
+    Boolean isProgress;
+
     ControlRefrigerator_f crf = new ControlRefrigerator_f();
     ControlMyPhoto_f cmpf = new ControlMyPhoto_f();
     ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
@@ -77,7 +79,7 @@ public class MyPageFragment extends Fragment {
                                     Custom_Dialog.state = -1;
                                     /* #12 사용자 작성 레시피 조회 */
 //                                    cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
-//                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     intent.putExtra("post_type", 0);
@@ -182,20 +184,37 @@ public class MyPageFragment extends Fragment {
                                 Thread.sleep(100);
                                 if (Custom_Dialog.state == 0) {
                                     Custom_Dialog.state = -1;
+                                    isProgress = true;
+                                    final Runnable progress = new Runnable(){
+                                        @Override
+                                        public void run() {
+                                            if(isProgress){
+                                            custon_progressDialog.show();
+                                            }else custon_progressDialog.dismiss();;
+                                        }
+                                    };
+                                    getActivity().runOnUiThread(progress);
                                     final Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
                                             if (MainActivity.responseCode == 200) {
                                                 MainActivity.responseCode = -1;
+
                                                 mu.startToast("로그아웃");
                                                 mu.changePage(0);
+                                                isProgress = false;
+                                                getActivity().runOnUiThread(progress);
                                                 MainActivity.isLogout = true;
                                             } else if (MainActivity.responseCode == 500) {
                                                 MainActivity.responseCode = 0;
                                                 mu.startToast("자동 로그인 해제를 실패했습니다.");
+                                                isProgress = false;
+                                                getActivity().runOnUiThread(progress);
                                             } else if (MainActivity.responseCode == 502) {
                                                 MainActivity.responseCode = 0;
                                                 mu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                                                isProgress = false;
+                                                getActivity().runOnUiThread(progress);
                                             }
                                         }
                                     };
