@@ -78,7 +78,6 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
 
     public void setRecipeIngreList(List<Recipe_Ingredients> list) {
         this.mData = list;
-        //this.isExist
         notifyDataSetChanged();
     }
 
@@ -94,12 +93,15 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
         if (isExist == null)
             holder.onBind(mData.get(position), true);
         else{
-            if(isExist.contains(mData.get(position).getId()))
+            if(!isExist.contains(mData.get(position).getId())) {
+                Log.d("언젠가 그가 너를", position+ " " + mData.get(position).getId());
                 holder.onBind(mData.get(position), true);
-            else
+            }
+            else{
                 holder.onBind(mData.get(position), false);
+                Log.d("맘아프게 혼자", position+ " " + mData.get(position).getId());
+            }
         }
-
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

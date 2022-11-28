@@ -52,6 +52,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     ImageButton menubutton;
     ImageButton like_btn;
     Button comment_add_btn;
+    Button remain_amount_btn;
     EditText comment_edit;
 
     public Recipe_Ingre_Adapter recipeIngreAdapter;
@@ -62,6 +63,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     //public static int responseCode;
     public static AtomicInteger responseCode = new AtomicInteger();
     public static AtomicInteger responseCode2 = new AtomicInteger();
+    public static AtomicInteger responseCode3 = new AtomicInteger();
     public static RecipePostLookUp recipePostLookUp;
     public static List<Recipe_Ingredients> unExistIngredients;
     public static int commentResult;
@@ -104,6 +106,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         like_btn = findViewById(R.id.like_btn);
         comment_edit = findViewById(R.id.comment_edit);
         comment_add_btn = findViewById(R.id.comment_add_btn);
+        remain_amount_btn = findViewById(R.id.ingrecal_btn);
 
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
@@ -364,7 +367,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     recipecomment.setText("댓글 " + String.valueOf(recipePostLookUp.getRecipeInfo().getComment_count() + "개"));
                     commentAdapter.setCommentList(recipePostLookUp.getRecipeInfo().getComments());
 
-                    for(int i = 0; i< unExistIngredients.size(); i++)
+                    for (int i = 0; i < unExistIngredients.size(); i++)
                         isExist.add(unExistIngredients.get(i).getId());
                     recipeIngreAdapter.setRecipeIngreListExist(recipePostLookUp.getRecipeInfo().getRecipe_Ingredients(), isExist);
 
@@ -534,8 +537,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
 //                                recipePostLookUp.setLikeInfo(true);//좋아요 취소로 수정
 //                            }
 //                        }
-//                    });
-
+//                    })
                     comment_add_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -604,6 +606,48 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                 comment_edit.setText("");
                                 Log.d("댓글 내용", newComment.toString());
                             }
+                        }
+                    });
+                    remain_amount_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode3.get() == 200) {
+                                        rlu.startToast("남는재료 계산 완료");
+                                    } else {
+                                        rlu.startDialog(0, "저장 실패", "감산 결과를 저장하는데 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                    }
+                                }
+                            };
+
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (threadFlag.get())
+                                            runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(responseCode.get() == -1 && responseCode2.get() == -1) {
+                                ControlIngredients_f cif = new ControlIngredients_f();
+                                cif.remainAmmounts(ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id());
+                            }
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
                         }
                     });
 

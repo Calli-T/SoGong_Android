@@ -58,6 +58,8 @@ public class ControlIngredients_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                RecipeLookupActivity.responseCode3.set(response.code());
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
