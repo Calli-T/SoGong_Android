@@ -1,6 +1,7 @@
 package com.example.sogong.View;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adapter.ViewHolder> {
 
     private List<Recipe_Ingredients> mData;
+    private ArrayList<Integer> isExist;
     private Context context;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -29,15 +32,18 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
             // 뷰 객체에 대한 참조. (hold strong reference)
             name = (TextView) itemView.findViewById(R.id.name);
             amount = (TextView) itemView.findViewById(R.id.amount);
-
         }
 
-        void onBind(Recipe_Ingredients ingredients) {
+        void onBind(Recipe_Ingredients ingredients, Boolean exist) {
             name.setText(ingredients.getName());
             String amountstr = String.valueOf(ingredients.getAmount()) + ingredients.getUnit();
             Log.d("amount", "재료 및 양 " + amountstr);
             amount.setText(amountstr);
 
+            if(!exist){
+                name.setTextColor(Color.parseColor("#FF0000"));
+                amount.setTextColor(Color.parseColor("#FF0000"));
+            }
         }
 
         public TextView getName() {
@@ -72,14 +78,27 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
 
     public void setRecipeIngreList(List<Recipe_Ingredients> list) {
         this.mData = list;
+        //this.isExist
         notifyDataSetChanged();
+    }
 
+    public void setRecipeIngreListExist(List<Recipe_Ingredients> list, ArrayList<Integer> isExist) {
+        this.mData = list;
+        this.isExist = isExist;
+        notifyDataSetChanged();
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(Recipe_Ingre_Adapter.ViewHolder holder, int position) {
-        holder.onBind(mData.get(position));
+        if (isExist == null)
+            holder.onBind(mData.get(position), true);
+        else{
+            if(isExist.contains(mData.get(position).getId()))
+                holder.onBind(mData.get(position), true);
+            else
+                holder.onBind(mData.get(position), false);
+        }
 
     }
 

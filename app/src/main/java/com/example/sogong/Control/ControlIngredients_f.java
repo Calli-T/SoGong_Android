@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.Recipe_Ingredients;
+import com.example.sogong.View.RecipeLookupActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -27,12 +28,15 @@ public class ControlIngredients_f {
         call.enqueue(new Callback<List<Recipe_Ingredients>>() {
             @Override
             public void onResponse(@NonNull Call<List<Recipe_Ingredients>> call, @NonNull Response<List<Recipe_Ingredients>> response) {
+                RecipeLookupActivity.responseCode2.set(response.code());
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
                         if(response.code() == 200) {
                             unExistIngredients = response.body();
                             Log.d("result", unExistIngredients.toString());
+                            RecipeLookupActivity.unExistIngredients = response.body();
                         }
                     }
                 } else { // 500
