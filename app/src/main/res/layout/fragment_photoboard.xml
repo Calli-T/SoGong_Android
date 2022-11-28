@@ -91,16 +91,6 @@
         android:background="#808080"
         app:layout_constraintTop_toBottomOf="@id/photo_page_spinner" />
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/photo_scrollview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sub_line2">
-
         <GridView
             android:id="@+id/photo_grid"
             android:layout_width="wrap_content"
@@ -124,7 +114,6 @@
         <!--            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />-->
 
         <!--    </androidx.core.widget.NestedScrollView>-->
-    </androidx.core.widget.NestedScrollView>
     <!--id를 recipe->photo로 단어 하나를 바꿔놨음-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/photo_add_button"

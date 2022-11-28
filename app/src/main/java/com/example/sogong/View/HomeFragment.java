@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (RecipeFragment.responseCode == 200 && PhotoFragment.responseCode == 200) {
                     RecipeFragment.responseCode = 0;
                     PhotoFragment.responseCode = 0;
+                    threadFlag.set(false);
                     Log.d("homefragment", "레시피리스트와 포토리스트 가져옴");
 
                     // 레시피 리사이클러뷰 생성
@@ -126,9 +127,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                     custon_progressDialog.dismiss();//로딩창 종료
                 } else if (RecipeFragment.responseCode == 500 || PhotoFragment.responseCode == 500) {
+                    RecipeFragment.responseCode = 0;
+                    PhotoFragment.responseCode = 0;
+                    threadFlag.set(false);
                     custon_progressDialog.dismiss();//로딩창 종료
                     hu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (RecipeFragment.responseCode == 502 || PhotoFragment.responseCode == 502) {
+                    RecipeFragment.responseCode = 0;
+                    PhotoFragment.responseCode = 0;
+                    threadFlag.set(false);
                     custon_progressDialog.dismiss();//로딩창 종료
                     hu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }

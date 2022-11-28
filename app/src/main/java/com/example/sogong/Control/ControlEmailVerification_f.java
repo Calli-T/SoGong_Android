@@ -47,9 +47,10 @@ public class ControlEmailVerification_f {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                EmailVerificationActivity.responseCode = response.code();
                 if (response.isSuccessful())// && response.body() != null)
                 {
-                    EmailVerificationActivity.responseCode = response.code();
+
                     //Log.e("String 결과값", "response.body().toString() : " + response.body().toString());
                 }
             }
