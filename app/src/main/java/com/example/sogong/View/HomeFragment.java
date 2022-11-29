@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment  {
             @Override
             public void run() {
                 if (RecipeFragment.responseCode == 200 && PhotoFragment.responseCode == 200) {
-                    RecipeFragment.responseCode = 0;
+                    RecipeFragment.responseCode = -1;
                     PhotoFragment.responseCode = 0;
                     threadFlag.set(false);
                     Log.d("homefragment", "레시피리스트와 포토리스트 가져옴");
@@ -106,10 +106,11 @@ public class HomeFragment extends Fragment  {
                         // 원소 번호와 정보를 긁어다 intent에 넣어 lookup으로 이동?
                         @Override
                         public void onItemClicked(int position, String data) {
+                            Log.d("사진", RecipeFragment.recipelist.get(position).toString());
                             Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipe_post", recipelist.get(position));
-                            //startActivity(intent);
+                            intent.putExtra("recipe_post", RecipeFragment.recipelist.get(position));
+                            startActivity(intent);
                         }
                     });
 
@@ -123,7 +124,7 @@ public class HomeFragment extends Fragment  {
                             Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             intent.putExtra("photo_post", PhotoFragment.photoList.get(position));
-                            //startActivity(intent);
+                            startActivity(intent);
                         }
                     });
 
