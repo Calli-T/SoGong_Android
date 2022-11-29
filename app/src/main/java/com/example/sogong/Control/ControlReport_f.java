@@ -61,7 +61,7 @@ public class ControlReport_f {
                             Log.d("result", ""+response.body());
                         }
                     }
-                } else { // 404
+                } else {
                     Log.d("result", "디비 오류");
                 }
             }

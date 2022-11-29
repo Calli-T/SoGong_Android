@@ -117,7 +117,6 @@ public class ControlRecipe_f {
     }
 
     public void deleteRecipe(String nickname, int postId) {
-
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
         RecipePost_f targetPost = new RecipePost_f();
         targetPost.setNickname(nickname);
@@ -155,22 +154,4 @@ public class ControlRecipe_f {
         Boolean result = true;
         return result;
     }
-
-    /*
-    public void testLookup(int postId) {
-        RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
-        Call<RecipePost> call = sv.test(postId);
-        call.enqueue(new Callback<RecipePost>() {
-            @Override
-            public void onResponse(@NonNull Call<RecipePost> call, @NonNull Response<RecipePost> response) {
-                HomeFragment.str = response.code() +"";//response.body().toString();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<RecipePost> call, @NonNull Throwable t) {
-                //Log.e(TAG, t.getLocalizedMessage());
-            }
-        });
-    }
-    */
 }

@@ -20,7 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ControlPost_f {
-    List<Post> postList;//얘는 왜 Post타입?? -> 사진, 레시피 둘 다 포함하는거라 Post 라고 보고서에만 적은거고 구현은 recipeList, photoList 두개로 나누면됨
+    List<Post> postList;
     List<RecipePost_f> recipeList;
     List<PhotoPost> photoList;
 

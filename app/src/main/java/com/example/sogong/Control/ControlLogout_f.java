@@ -24,26 +24,11 @@ public class ControlLogout_f {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 MainActivity.responseCode = response.code();
-                // 200
-                /*if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.code() == 200) {
-                            //userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
-                            //LoginActivity.responseCode = response.code();
-                            autoLoginDisabled("muyaho"); // 자동로그인 해제 로직이 정해지면 만듭시다
-                        }
-                    } else // 404
-                        Log.d("404 Not Found", "with logout");
-                } else {
-                    // 400 or 500
-
-                    //LoginActivity.responseCode = response.code();
-                }*/
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+
             }
         });
 
