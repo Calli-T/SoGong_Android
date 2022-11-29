@@ -80,6 +80,7 @@ public class RecipeAddActivity extends AppCompatActivity {
     public static RecipePost_f newRecipe = new RecipePost_f();//추가될 레시피게시글의 정보를 담을 객체
 
     List<Recipe_Ingredients> recipe_ingredients = new ArrayList<>();//레시피 재료를 담을 객체
+    List<String> existName = new ArrayList<>();
 
     int ingre_cnt;//재료의 수
 
@@ -175,26 +176,29 @@ public class RecipeAddActivity extends AppCompatActivity {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
-                        TextView name = view.findViewById(R.id.name);
-                        TextView selectName = view.findViewById(R.id.writtenname);
-                        TextView amount = view.findViewById(R.id.amount);
-                        TextView editAmount = view.findViewById(R.id.writtenamount);
-                        TextView unit = view.findViewById(R.id.unit);
-                        ImageButton removeButton = view.findViewById(R.id.minus_button);
-                        selectName.setText(editText.getText().toString());
-                        editAmount.setText(editText1.getText().toString());
-                        unit.setText(unitSpinner.getSelectedItem().toString());
-                        removeButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                linearlayout.removeView(view);
-                            }
-                        });
-                        linearlayout.addView(view);
-
-
-                        ingreSelectDialog.dismiss();
+                        if (existName.contains(editText.getText().toString())) {
+                            rau.startDialog(0,"중복 오류","이미 존재하는 재료입니다.",new ArrayList<>(Arrays.asList("확인")));
+                        } else {
+                            View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
+                            TextView name = view.findViewById(R.id.name);
+                            TextView selectName = view.findViewById(R.id.writtenname);
+                            TextView amount = view.findViewById(R.id.amount);
+                            TextView editAmount = view.findViewById(R.id.writtenamount);
+                            TextView unit = view.findViewById(R.id.unit);
+                            ImageButton removeButton = view.findViewById(R.id.minus_button);
+                            selectName.setText(editText.getText().toString());
+                            editAmount.setText(editText1.getText().toString());
+                            unit.setText(unitSpinner.getSelectedItem().toString());
+                            removeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    linearlayout.removeView(view);
+                                }
+                            });
+                            linearlayout.addView(view);
+                            existName.add(selectName.getText().toString());
+                            ingreSelectDialog.dismiss();
+                        }
                     }
                 });
                 cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -205,10 +209,11 @@ public class RecipeAddActivity extends AppCompatActivity {
                 });
             }
         });
+
         if (isEdit) {
             recipetitle.setText(recipePostF.getTitle());
-            String[] category_str = getResources().getStringArray(R.array.category);
-            //recipecate.setSelection(); 레시피 카테고리 배열 인덱스로 나중에 하기
+            ArrayList<String> category_str = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category)));
+            recipecate.setSelection(category_str.indexOf(recipePostF.getCategory()));
             recipespicy.setSelection(recipePostF.getDegree_of_spicy());
             recipedescription.setText(recipePostF.getDescription());
             for (int i = 0; i < recipePostF.getRecipe_Ingredients().size(); i++) {
@@ -221,12 +226,14 @@ public class RecipeAddActivity extends AppCompatActivity {
                 ImageButton removeButton = view.findViewById(R.id.minus_button);
                 selectName.setText(recipePostF.getRecipe_Ingredients().get(i).getName());
                 editAmount.setText(Float.toString(recipePostF.getRecipe_Ingredients().get(i).getAmount()));
+                unit.setText(recipePostF.getRecipe_Ingredients().get(i).getUnit());
                 removeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         linearlayout.removeView(view);
                     }
                 });
+                existName.add(recipePostF.getRecipe_Ingredients().get(i).getName());
                 linearlayout.addView(view);
             }
         }
@@ -395,7 +402,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                                 responseCode = -1;
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
-                                rau.startDialog(0,"게시글 수정","게시글 수정을 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                rau.startDialog(0, "게시글 수정", "게시글 수정을 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = -1;
                                 threadFlag.set(false);

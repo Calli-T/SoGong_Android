@@ -81,6 +81,13 @@ public class MailBoxActivity extends AppCompatActivity {
                     mailAdapter.setRecipeList(maillist);
                     threadFlag.set(false);
                     pagenum = new String[totalpage];
+
+                    if (maillist.size() == 0) {
+                        TextView noResult = findViewById(R.id.noResult);
+                        noResult.setVisibility(View.VISIBLE);
+                    }
+
+
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
                     }

@@ -128,7 +128,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         responseCode = -1;
 
                         if (recipelist.size() == 0) {
-                            mpbu.startToast("작성한 레시피 게시글이 없습니다.");
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
 //                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -333,7 +334,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         if (photolist.size() == 0) {
-                            mpbu.startToast("작성한 요리 사진 게시글이 없습니다.");
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
                         }
                         photoAdapter.setPhotoList(photolist);
                         gridview.setAdapter(photoAdapter);
@@ -447,8 +449,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
-                        if(recipelist.size()==0){
-                            mpbu.startToast("좋아요를 누른 게시글이 없습니다.");
+                        if (recipelist.size() == 0) {
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
                         pagenum = new String[totalpage];
@@ -578,8 +581,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
-                        if(recipelist.size()==0){
-                            mpbu.startToast("댓글을 작성한 게시글이 없습니다.");
+                        if (recipelist.size() == 0) {
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
                         pagenum = new String[totalpage];

@@ -42,6 +42,7 @@ import com.example.sogong.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -216,7 +217,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
 
         //넘겨온 값으로 채워넣음
         photoAuthor.setText(photoPost.getAuthor());
-        photoDate.setText(photoPost.getUpload_time());
+        photoDate.setText(photoPost.getUpload_time().split("T")[0]);
         photoLike_cnt.setText(String.valueOf(photoPost.getLike_count()));
         byte[] encodeByte = Base64.decode(photoPost.getPhoto_link(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);

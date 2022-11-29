@@ -27,6 +27,7 @@ import com.example.sogong.Control.ControlComment_f;
 import com.example.sogong.Control.ControlIngredients_f;
 import com.example.sogong.Control.ControlLike_f;
 import com.example.sogong.Control.ControlLogin_f;
+import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlRecipe_f;
 import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.RecipePostLookUp;
@@ -78,6 +79,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     RecipeLookup_UI rlu = new RecipeLookup_UI();
 
     Boolean likedState;
+    Boolean isProgress;
 
     private ArrayList<Integer> isExist = new ArrayList<>();
 
@@ -447,54 +449,103 @@ public class RecipeLookupActivity extends AppCompatActivity {
                             commentdeletethreadFlag.set(true);
                             custon_progressDialog.show();
                             if (Objects.equals(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getNickname())) {
-                                final Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (responseCode.get() == 200) {
-                                            Log.d("댓글 삭제", "성공");
-                                            responseCode.set(-1);
-                                            commentdeletethreadFlag.set(false);
-                                            Intent intent = getIntent();
-                                            finish(); //현재 액티비티 종료 실시
-                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                            startActivity(intent); //현재 액티비티 재실행 실시
-                                            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                            custon_progressDialog.dismiss();
-                                        } else if (responseCode.get() == 500) {
 
-                                        } else if (responseCode.get() == 502) {
 
-                                        }
-                                    }
-                                };
+
+                                rlu.startDialog(1, "삭제", "정말 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
+
                                 class NewRunnable implements Runnable {
+                                    NewRunnable() {
+                                    }
+
                                     @Override
                                     public void run() {
-                                        for (int i = 0; i < 30; i++) {
+                                        while (true) {
                                             try {
-                                                Thread.sleep(1000);
+                                                Thread.sleep(100);
+                                                if (Custom_Dialog.state == 0) {
+                                                    Custom_Dialog.state = -1;
+                                                    isProgress = true;
+                                                    final Runnable progress = new Runnable(){
+                                                        @Override
+                                                        public void run() {
+                                                            if(isProgress){
+                                                                custon_progressDialog.show();
+                                                            }else custon_progressDialog.dismiss();;
+                                                        }
+                                                    };
+                                                    runOnUiThread(progress);
+
+
+                                                    Log.d("recipe", String.valueOf(position) + "번 댓글 삭제");
+                                                    final Runnable runnable = new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (responseCode.get() == 200) {
+                                                                Log.d("댓글 삭제", "성공");
+                                                                responseCode.set(-1);
+                                                                commentdeletethreadFlag.set(false);
+                                                                Intent intent = getIntent();
+                                                                finish(); //현재 액티비티 종료 실시
+                                                                overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                                                startActivity(intent); //현재 액티비티 재실행 실시
+                                                                overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+                                                                custon_progressDialog.dismiss();
+                                                            } else if (responseCode.get() == 500) {
+
+                                                            } else if (responseCode.get() == 502) {
+
+                                                            }
+                                                        }
+                                                    };
+                                                    class NewRunnable1 implements Runnable {
+                                                        @Override
+                                                        public void run() {
+                                                            for (int i = 0; i < 30; i++) {
+                                                                try {
+                                                                    Thread.sleep(1000);
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                                Log.d("레시피 열람", "responsecode = " + responseCode.get());
+
+                                                                if (commentdeletethreadFlag.get())
+                                                                    runOnUiThread(runnable);
+                                                                else {
+                                                                    i = 30;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    ControlComment_f ccf = new ControlComment_f();
+                                                    ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());
+
+                                                    NewRunnable1 nr = new NewRunnable1();
+                                                    Thread t = new Thread(nr);
+                                                    t.start();
+
+
+                                                    break;
+                                                } else if (Custom_Dialog.state == 1) {
+                                                    break;
+                                                }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            }
-                                            Log.d("레시피 열람", "responsecode = " + responseCode.get());
-
-                                            if (commentdeletethreadFlag.get())
-                                                runOnUiThread(runnable);
-                                            else {
-                                                i = 30;
                                             }
                                         }
                                     }
                                 }
-                                ControlComment_f ccf = new ControlComment_f();
-                                ccf.deleteComment(ControlLogin_f.userinfo.getNickname(), recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());
-
                                 NewRunnable nr = new NewRunnable();
                                 Thread t = new Thread(nr);
                                 t.start();
 
 
+
+
+
+
                             } else {//같지 않은 경우는 신고 로직
+                                Log.d("recipe", String.valueOf(position) + "번 댓글 신고");
                                 Intent intent = new Intent(RecipeLookupActivity.this, ReportActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 intent.putExtra("comment_id", recipePostLookUp.getRecipeInfo().getComments().get(position).getComment_id());

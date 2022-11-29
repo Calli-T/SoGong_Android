@@ -110,8 +110,9 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                             searchContent_str.append(categories);
                             searchContent.setText(searchContent_str);
                         }
-                        if(recipeList.size()==0){
-                            sru.startToast("검색결과 레시피가 존재하지 않습니다.");
+                        if (recipeList.size() == 0) {
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipeList);
                         pagenum = new String[totalpage];
@@ -273,7 +274,10 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
 
                         searchContent_str.append(keyword);
                         searchContent.setText(searchContent_str);
-
+                        if (recipeList.size() == 0) {
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
+                        }
                         recipeAdapter.setRecipeList(recipeList);
                         //레시피 리사이클러뷰 클릭 이벤트
                         recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {

@@ -41,6 +41,7 @@ public class MailSendActivity extends AppCompatActivity {
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
     private MailSendActivity_UI mui = new MailSendActivity_UI();
     Custon_ProgressDialog custon_progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,50 +70,56 @@ public class MailSendActivity extends AppCompatActivity {
             Mail mail = new Mail(0, ControlLogin_f.userinfo.getNickname(), mailReceiver.getText().toString(), mailTitle.getText().toString(), mailDescription.getText().toString(), "", false, false);
             threadFlag.set(true);
             // #38 쪽지 보내기 호출 코드
-            final Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    if (responseCode == 200) {
-                        responseCode = -1;
-                        threadFlag.set(false);
-                        custon_progressDialog.dismiss();
-                        Log.d("send","성공적으로 보냄");
-                        finish();
-                    } else if (responseCode == 400 || responseCode == 500) {
-                        responseCode = -1;
-                        threadFlag.set(false);
-                        custon_progressDialog.dismiss();
-                        List<String> temp = new ArrayList<>();
-                        temp.add("확인");
-                        mui.startDialog(0, "전송 실패", "쪽지 전송에 실패했습니다.", temp);
+            if (mailReceiver.getText().toString().equals("") || mailTitle.getText().toString().equals("") || mailDescription.getText().toString().equals("")) {
+                mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                custon_progressDialog.dismiss();
+            } else {
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseCode == 200) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            Log.d("send", "성공적으로 보냄");
+                            finish();
+                        } else if (responseCode == 400 || responseCode == 500) {
+                            responseCode = -1;
+                            threadFlag.set(false);
+                            custon_progressDialog.dismiss();
+                            List<String> temp = new ArrayList<>();
+                            temp.add("확인");
+                            mui.startDialog(0, "전송 실패", "쪽지 전송에 실패했습니다.", temp);
+                        }
                     }
-                }
-            };
+                };
 
-            class NewRunnable implements Runnable {
-                @Override
-                public void run() {
-                    for (int i = 0; i < 30; i++) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (threadFlag.get())
-                            runOnUiThread(runnable);
-                        else {
-                            i = 30;
+                class NewRunnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 30; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (threadFlag.get())
+                                runOnUiThread(runnable);
+                            else {
+                                i = 30;
+                            }
                         }
                     }
                 }
+                ControlMail_f cmf = new ControlMail_f();
+                cmf.sendMail(mail);
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
             }
-            ControlMail_f cmf = new ControlMail_f();
-            cmf.sendMail(mail);
-            NewRunnable nr = new NewRunnable();
-            Thread t = new Thread(nr);
-            t.start();
         }
     }
+
     class MailSendActivity_UI implements Control {
         @Override
         public void startToast(String message) {
@@ -128,11 +135,13 @@ public class MailSendActivity extends AppCompatActivity {
             toast.setView(layout);
             toast.show();
         }
+
         @Override
         public void startDialog(int type, String title, String message, List<String> btnTxtList) {
             Custom_Dialog cd = new Custom_Dialog(MailSendActivity.this);
             cd.callFunction(title, message, type, btnTxtList);
         }
+
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
