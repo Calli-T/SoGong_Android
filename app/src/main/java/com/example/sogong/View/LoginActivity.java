@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // 로그에 사용할 TAG 변수 선언
     final private String TAG = getClass().getSimpleName();
-
+    ControlLogin_f clf = new ControlLogin_f();
     // 사용할 컴포넌트 선언
     EditText userid_et, passwd_et;
     Button login_button, join_button;
@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                     custon_progressDialog.show();
                     String id = userid_et.getText().toString();
                     String pw = passwd_et.getText().toString();
+                    String hashpw = String.valueOf(clf.hashCode(pw));
                     boolean auto_login = checkbox.isChecked();
                     // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
                 /*
@@ -139,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (responseCode != -1) {
                         ControlLogin_f clf = new ControlLogin_f();
-                        clf.login(id, pw, auto_login);
+                        clf.login(id, hashpw, auto_login);
                         responseCode = -1;
                     }
 

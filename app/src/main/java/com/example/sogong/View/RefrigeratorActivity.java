@@ -53,6 +53,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
 
     // UI controller
     Refrigerator_UI rfu = new Refrigerator_UI();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,12 +139,13 @@ public class RefrigeratorActivity extends AppCompatActivity {
                                             if (Custom_Dialog.state == 0) {
                                                 Custom_Dialog.state = -1;
                                                 isProgress = true;
-                                                final Runnable progress = new Runnable(){
+                                                final Runnable progress = new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        if(isProgress){
+                                                        if (isProgress) {
                                                             custon_progressDialog.show();
-                                                        }else custon_progressDialog.dismiss();;
+                                                        } else custon_progressDialog.dismiss();
+                                                        ;
                                                     }
                                                 };
                                                 runOnUiThread(progress);
@@ -166,14 +168,14 @@ public class RefrigeratorActivity extends AppCompatActivity {
                                                             deletethreadFlag = false;
                                                             isProgress = false;
                                                             runOnUiThread(progress);
-                                                            rfu.startDialog(0,"삭제 실패","삭제 요청에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                            rfu.startDialog(0, "삭제 실패", "삭제 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
 
                                                         } else if (responseCode == 500) {
                                                             responseCode = -1;
                                                             deletethreadFlag = false;
                                                             isProgress = false;
                                                             runOnUiThread(progress);
-                                                            rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                            rfu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                                         }
                                                     }
                                                 };
@@ -225,15 +227,18 @@ public class RefrigeratorActivity extends AppCompatActivity {
                 } else if (responseCode == 401) {
                     responseCode = -1;
                     threadFlag = false;
-                    rfu.startDialog(0,"서버 오류","보유 재료 조회에 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                    custon_progressDialog.dismiss();
+                    rfu.startDialog(0, "서버 오류", "보유 재료 조회에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 404) {
                     responseCode = -1;
                     threadFlag = false;
+                    custon_progressDialog.dismiss();
                     rfu.startToast("보유한 재료가 없습니다.");
                 } else if (responseCode == 500) {
                     responseCode = -1;
                     threadFlag = false;
-                    rfu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                    custon_progressDialog.dismiss();
+                    rfu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
         };

@@ -53,164 +53,171 @@ public class ReportActivity extends AppCompatActivity {
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
+        //신고창 null 처리하기
+
         report_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 custon_progressDialog.show();
-                switch (posttype) {
-                    //댓글 신고
-                    case -1:
-                        final Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (responseCode == 200) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    onBackPressed();
-                                } else if (responseCode == 500) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                } else if (responseCode == 502) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                }
-                            }
-                        };
-
-                        class NewRunnable implements Runnable {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < 30; i++) {
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    if (threadFlag.get())
-                                        runOnUiThread(runnable);
-                                    else {
-                                        i = 30;
+                if (reportReason.getText().toString().equals("")) {
+                    ru.startDialog(0, "양식 오류", "신고 내용을 입력해주세요.", new ArrayList<>(Arrays.asList("확인")));
+                } else {
+                    switch (posttype) {
+                        //댓글 신고
+                        case -1:
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode == 200) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        onBackPressed();
+                                    } else if (responseCode == 500) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                    } else if (responseCode == 502) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
                                     }
                                 }
-                            }
-                        }
-                        Report commentReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), comment_id, -1);
-                        crf.reportComment(commentReport);
-                        threadFlag.set(true);
-                        NewRunnable nr = new NewRunnable();
-                        Thread t = new Thread(nr);
-                        t.start();
-                        //cref.reportComment(reportInfo);
-                        Log.d("report", "댓글 신고하러 왔어요");
-                        break;
-                    case 1:
-                        final Runnable runnable1 = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (responseCode == 200) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    onBackPressed();
-                                } else if (responseCode == 500) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    ru.startDialog(0, "서버 오류", "신고 정보 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                                } else if (responseCode == 502) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    ru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                                }
-                            }
-                        };
+                            };
 
-                        class NewRunnable1 implements Runnable {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < 30; i++) {
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                            class NewRunnable implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
 
-                                    if (threadFlag.get())
-                                        runOnUiThread(runnable1);
-                                    else {
-                                        i = 30;
+                                        if (threadFlag.get())
+                                            runOnUiThread(runnable);
+                                        else {
+                                            i = 30;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        Report recipeReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), recipe_id, 1);
-                        crf.reportPost(recipeReport);
-                        threadFlag.set(true);
-                        NewRunnable1 nr1 = new NewRunnable1();
-                        Thread t1 = new Thread(nr1);
-                        t1.start();
-
-                        Log.d("report", "레시피 신고하러 왔어요");
-                        break;
-                    case 2:
-                        Log.d("report", "사진 신고하러 왔어요");
-                        /* #22 요리 사진 게시글 신고 */
-                        final Runnable runnable2 = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (responseCode == 200) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    onBackPressed();
-                                } else if (responseCode == 500) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    ru.startDialog(0, "서버 오류", "신고 정보 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                                } else if (responseCode == 502) {
-                                    responseCode = -1;
-                                    threadFlag.set(false);
-                                    custon_progressDialog.dismiss();
-                                    ru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-
-                                }
-                            }
-                        };
-
-                        class NewRunnable2 implements Runnable {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < 30; i++) {
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                            Report commentReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), comment_id, -1);
+                            crf.reportComment(commentReport);
+                            threadFlag.set(true);
+                            NewRunnable nr = new NewRunnable();
+                            Thread t = new Thread(nr);
+                            t.start();
+                            //cref.reportComment(reportInfo);
+                            Log.d("report", "댓글 신고하러 왔어요");
+                            break;
+                        case 1:
+                            final Runnable runnable1 = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode == 200) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        onBackPressed();
+                                    } else if (responseCode == 500) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        ru.startDialog(0, "서버 오류", "신고 정보 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                    } else if (responseCode == 502) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        ru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                     }
+                                }
+                            };
 
-                                    if (threadFlag.get())
-                                        runOnUiThread(runnable2);
-                                    else {
-                                        i = 30;
+                            class NewRunnable1 implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (threadFlag.get())
+                                            runOnUiThread(runnable1);
+                                        else {
+                                            i = 30;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        Report photoReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), 1, 2);
-                        crf.reportPost(photoReport);
-                        threadFlag.set(true);
-                        NewRunnable2 nr2 = new NewRunnable2();
-                        Thread t2 = new Thread(nr2);
-                        t2.start();
-                        break;
+                            Report recipeReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), recipe_id, 1);
+                            crf.reportPost(recipeReport);
+                            threadFlag.set(true);
+                            NewRunnable1 nr1 = new NewRunnable1();
+                            Thread t1 = new Thread(nr1);
+                            t1.start();
+
+                            Log.d("report", "레시피 신고하러 왔어요");
+                            break;
+                        case 2:
+                            Log.d("report", "사진 신고하러 왔어요");
+                            /* #22 요리 사진 게시글 신고 */
+                            final Runnable runnable2 = new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (responseCode == 200) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        onBackPressed();
+                                    } else if (responseCode == 500) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        ru.startDialog(0, "서버 오류", "신고 정보 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                    } else if (responseCode == 502) {
+                                        responseCode = -1;
+                                        threadFlag.set(false);
+                                        custon_progressDialog.dismiss();
+                                        ru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+
+                                    }
+                                }
+                            };
+
+                            class NewRunnable2 implements Runnable {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < 30; i++) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (threadFlag.get())
+                                            runOnUiThread(runnable2);
+                                        else {
+                                            i = 30;
+                                        }
+                                    }
+                                }
+                            }
+                            Report photoReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), 1, 2);
+                            crf.reportPost(photoReport);
+                            threadFlag.set(true);
+                            NewRunnable2 nr2 = new NewRunnable2();
+                            Thread t2 = new Thread(nr2);
+                            t2.start();
+                            break;
+                    }
                 }
             }
         });
+
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

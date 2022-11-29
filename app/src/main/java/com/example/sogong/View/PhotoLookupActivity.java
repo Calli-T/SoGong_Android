@@ -100,7 +100,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                     case 0:
                         //게시글 삭제 로직 추가
                         Log.d("recipe", "삭제하기 menu click");
-                        plu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("레시피", "사진")));
+                        plu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("삭제", "취소")));
                         class NewRunnable implements Runnable {
                             NewRunnable() {
                             }
@@ -112,7 +112,6 @@ public class PhotoLookupActivity extends AppCompatActivity {
                                         Thread.sleep(100);
                                         if (Custom_Dialog.state == 0) {//삭제를 누른 경우
                                             Custom_Dialog.state = -1;
-                                            custon_progressDialog.show();
                                             threadFlag.set(true);
                                             final Runnable runnable = new Runnable() {
                                                 @Override
@@ -121,20 +120,20 @@ public class PhotoLookupActivity extends AppCompatActivity {
                                                         responseCode = -1;
                                                         threadFlag.set(false);
                                                         Log.d("사진 삭제", "성공");
-                                                        custon_progressDialog.dismiss();
+//                                                        custon_progressDialog.dismiss();
                                                         onBackPressed();
                                                     } else if (responseCode == 500) {
                                                         responseCode = -1;
                                                         threadFlag.set(false);
                                                         Log.d("사진 삭제", "실패");
-                                                        custon_progressDialog.dismiss();
+                                                       // custon_progressDialog.dismiss();
                                                         plu.startDialog(0,"서버 오류","게시글 삭제를 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
 
                                                     } else if (responseCode == 502) {
                                                         responseCode = -1;
                                                         threadFlag.set(false);
                                                         Log.d("사진 삭제", "실패");
-                                                        custon_progressDialog.dismiss();
+                                                       // custon_progressDialog.dismiss();
                                                         plu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
                                                     }
                                                 }
@@ -232,19 +231,19 @@ public class PhotoLookupActivity extends AppCompatActivity {
                     threadFlag.set(false);
                     Log.d("사진 좋아요 정보", "좋아요 = "+photoLookUp.isLikeInfo());
                     if (photoLookUp.isLikeInfo()) {
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                        like_btn.setBackground(getDrawable(R.drawable.thumb_up_fill));
                     } else {
-                        like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                        like_btn.setBackground(getDrawable(R.drawable.thumb_up));
                     }
                     likedState = photoLookUp.isLikeInfo();
                     like_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (likedState) {
-                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                                like_btn.setBackground(getDrawable(R.drawable.thumb_up));
                                 likedState = false;
                             } else {
-                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                                like_btn.setBackground(getDrawable(R.drawable.thumb_up_fill));
                                 likedState = true;
                             }
                         }

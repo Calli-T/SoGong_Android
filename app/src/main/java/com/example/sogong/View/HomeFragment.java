@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener  {
+public class HomeFragment extends Fragment  {
     public static int totalpage;
     public static List<RecipePost_f> recipelist;
     public static int responseCode = 0;
@@ -63,9 +63,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
         
-        //swipe 레이아웃
-        swipeRefreshLayout = rootview.findViewById(R.id.home_swipeLayout);
-        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+//        //swipe 레이아웃
+//        swipeRefreshLayout = rootview.findViewById(R.id.home_swipeLayout);
+//        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         //레시피 Recycler 선언
         recipeRecyclerView = (RecyclerView) rootview.findViewById(R.id.home_recipe_recyclerview);
@@ -189,14 +189,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         isInHome = false;
     }
 
-    // swipe에 사용할 함수
-    @Override
-    public void onRefresh() {
-        //새로 고침 코드
-        updateLayoutView();
-        //새로 고침 완료
-        swipeRefreshLayout.setRefreshing(false);
-    }
+//    // swipe에 사용할 함수
+//    @Override
+//    public void onRefresh() {
+//        //새로 고침 코드
+//        updateLayoutView();
+//        //새로 고침 완료
+//        swipeRefreshLayout.setRefreshing(false);
+//    }
 
     public void updateLayoutView(){
         Log.d("homefragment", "새로고침");

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="search_option">
-        <item>레시피 이름</item>
+        <item>요리 이름</item>
         <item>작성자</item>
+        <item>재료</item>
     </string-array>
 </resources>

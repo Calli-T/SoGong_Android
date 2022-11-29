@@ -45,7 +45,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-
+        cu.startToast("yoha babo");
         // 닉네임 변경
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +60,9 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                             if (responseCode == 200) {
                                 responseCode = -2;
                                 threadFlag.set(false);
-                                //custon_progressDialog.dismiss();
+                                custon_progressDialog.dismiss();
                                 cu.startToast("닉네임이 변경되었습니다.");
-                                //finish();
+                                finish();
                             } else if (responseCode == 400) {
                                 responseCode = 0;
                                 threadFlag.set(false);
@@ -71,12 +71,12 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                             } else if (responseCode == 500) {
                                 responseCode = 0;
                                 threadFlag.set(false);
-                                //custon_progressDialog.dismiss();
+                                custon_progressDialog.dismiss();
                                 cu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
                                 threadFlag.set(false);
-                                //custon_progressDialog.dismiss();
+                                custon_progressDialog.dismiss();
                                 cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
@@ -95,20 +95,19 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                                     runOnUiThread(runnable);
                                 else {
                                     i = 30;
-                                    custon_progressDialog.dismiss();
-                                    finish();
+
                                 }
                             }
                         }
                     }
 
-                    if (responseCode == 0) {
-                        responseCode = -1;
-                        custon_progressDialog.show();
 
-                        ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                        cef.editNickname(nickname);
-                    }
+                    responseCode = -1;
+                    custon_progressDialog.show();
+                    threadFlag.set(true);
+                    ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
+                    cef.editNickname(nickname);
+
 
                     NewRunnable nr = new NewRunnable();
                     Thread t = new Thread(nr);
@@ -147,7 +146,8 @@ public class ChangeNicknameActivity extends AppCompatActivity {
 
         @Override
         public void startDialog(int type, String title, String message, List<String> btnTxtList) {
-
+            Custom_Dialog cd = new Custom_Dialog(ChangeNicknameActivity.this);
+            cd.callFunction(title, message, type, btnTxtList);
         }
 
         @Override

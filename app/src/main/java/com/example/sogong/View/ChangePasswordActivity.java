@@ -33,6 +33,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
     // UI controller
     CP_UI cu = new CP_UI();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,68 +54,75 @@ public class ChangePasswordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String passwd = passwd_et.getText().toString();
                 String passwdcheck = passwdcheck_et.getText().toString();
-
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -2;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            cu.startToast("비밀번호가 변경되었습니다.");
-                            finish();
-                        } else if (responseCode == 500) {
-                            responseCode = 0;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            cu.startToast("비밀번호 변경요청 실패했습니다.");
-                        } else if (responseCode == 502) {
-                            responseCode = 0;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                        }
-                    }
-                };
-
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        int i = 30;
-                        while (i > 0) {
-                            i--;
-
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                if (passwd.equals("") | passwdcheck.equals("")) {
+                    cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
+                } else if (!passwd.equals(passwdcheck)) {
+                    cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
+                } else {
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -2;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startToast("비밀번호가 변경되었습니다.");
+                                cu.changePage(0);
+                                finish();
                             }
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                            else if (responseCode == 500) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startToast("비밀번호 변경요청 실패했습니다.");
+                            } else if (responseCode == 502) {
+                                responseCode = 0;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            int i = 30;
+                            while (i > 0) {
+                                i--;
+
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
+                            }
+                        }
                     }
+
+                    if (responseCode == 0) {
+                        responseCode = -1;
+
+                        ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
+                        if (passwd.equals(passwdcheck)) {
+                            custon_progressDialog.show();
+                            threadFlag.set(true);
+                            ControlLogin_f clf = new ControlLogin_f();
+
+                            cef.editPassword(String.valueOf(clf.hashCode(passwd)));
+                        }
+                    }
+
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
                 }
-
-                if (responseCode == 0) {
-                    responseCode = -1;
-
-                    ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                    if (passwd.equals(passwdcheck)) {
-                        custon_progressDialog.show();
-                        threadFlag.set(true);
-                        cef.editPassword(passwd);
-                    } else
-                        cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다.", new ArrayList<>(Arrays.asList("확인")));
-                }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
             }
-
         });
 
         cancel_button.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +131,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     class CP_UI implements Control {

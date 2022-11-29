@@ -517,10 +517,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             if (likedState) {
-                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up));
+                                like_btn.setBackground(getDrawable(R.drawable.thumb_up));
                                 likedState = false;
                             } else {
-                                like_btn.setImageDrawable(getDrawable(R.drawable.thumb_up_fill));
+                                like_btn.setBackground(getDrawable(R.drawable.thumb_up_fill));
                                 likedState = true;
                             }
                         }

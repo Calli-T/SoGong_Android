@@ -41,6 +41,8 @@ import com.example.sogong.Model.Recipe_Ingredients;
 import com.example.sogong.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -233,7 +235,7 @@ public class RecipeAddActivity extends AppCompatActivity {
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            custon_progressDialog.show();
+
             // FAB Click 이벤트 처리 구간
             if (!isEdit) {
                 //입력 값을 제대로 입력하지 않은 경우
@@ -243,6 +245,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         | (recipedescription.getText().toString().equals(""))) {
                     rau.startToast("모든 정보를 입력해주세요.");
                 } else {
+                    custon_progressDialog.show();
                     newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
                     newRecipe.setTitle(recipetitle.getText().toString());
                     newRecipe.setCategory(recipecate.getSelectedItem().toString());
@@ -252,15 +255,16 @@ public class RecipeAddActivity extends AppCompatActivity {
                         View tempview = linearlayout.getChildAt(i);
                         TextView nameTemp = tempview.findViewById(R.id.writtenname);
                         TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                        TextView unitTemp = tempview.findViewById(R.id.unit);
+
                         String temp_ingrename = nameTemp.getText().toString();
                         float temp_amount = Float.parseFloat(amountTemp.getText().toString());
 
                         Recipe_Ingredients tempingredients = new Recipe_Ingredients();
                         tempingredients.setName(temp_ingrename);
                         tempingredients.setAmount(temp_amount);
-                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        tempingredients.setUnit(unitTemp.getText().toString());
                         recipe_ingredients.add(tempingredients);
-
                         Log.d("레시피 재료 등록", "i =" + i);
                     }
                     newRecipe.setRecipe_Ingredients(recipe_ingredients);
@@ -326,6 +330,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         | (recipedescription.getText().toString().equals(""))) {
                     rau.startToast("모든 정보를 입력해주세요.");
                 } else {
+                    custon_progressDialog.show();
                     int index = 0;
                     newRecipe.setNickname(ControlLogin_f.userinfo.getNickname());
                     newRecipe.setTitle(recipetitle.getText().toString());
@@ -336,7 +341,9 @@ public class RecipeAddActivity extends AppCompatActivity {
                         View tempview = linearlayout.getChildAt(j);
                         TextView nameTemp = tempview.findViewById(R.id.writtenname);
                         TextView amountTemp = tempview.findViewById(R.id.writtenamount);
+                        TextView unitTemp = tempview.findViewById(R.id.unit);
                         String temp_ingrename = nameTemp.getText().toString();
+
                         float temp_amount = Float.parseFloat(amountTemp.getText().toString());
 
                         Recipe_Ingredients tempingredients = new Recipe_Ingredients();
@@ -344,7 +351,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         tempingredients.setName(temp_ingrename);
                         tempingredients.setPost_id(recipePostF.getPost_id());
                         tempingredients.setAmount(temp_amount);
-                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        tempingredients.setUnit(unitTemp.getText().toString());
                         recipe_ingredients.add(tempingredients);
                         index++;
 
@@ -355,6 +362,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         TextView nameTemp = tempview.findViewById(R.id.writtenname);
                         TextView amountTemp = tempview.findViewById(R.id.writtenamount);
                         String temp_ingrename = nameTemp.getText().toString();
+                        TextView unitTemp = tempview.findViewById(R.id.unit);
                         float temp_amount = Float.parseFloat(amountTemp.getText().toString());
 
                         Recipe_Ingredients tempingredients = new Recipe_Ingredients();
@@ -362,7 +370,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         tempingredients.setName(temp_ingrename);
                         tempingredients.setPost_id(recipePostF.getPost_id());
                         tempingredients.setAmount(temp_amount);
-                        tempingredients.setUnit(unitmap.get(temp_ingrename));
+                        tempingredients.setUnit(unitTemp.getText().toString());
                         recipe_ingredients.add(tempingredients);
 
                         Log.d("레시피 재료 등록", "i =" + i);

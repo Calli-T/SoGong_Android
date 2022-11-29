@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.sogong.Model.LikeInfo;
 import com.example.sogong.Model.Report;
 import com.example.sogong.View.RecipeLookupActivity;
+import com.example.sogong.View.ReportActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
@@ -24,7 +25,8 @@ public class ControlReport_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode.set(response.code());
+                ReportActivity.responseCode = response.code();
+
                 // 200
                 if(response.isSuccessful()) {
                     if(response.body() != null) {
@@ -50,7 +52,7 @@ public class ControlReport_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                RecipeLookupActivity.responseCode.set(response.code());
+                ReportActivity.responseCode = response.code();
 
                 // 200
                 if(response.isSuccessful()) {

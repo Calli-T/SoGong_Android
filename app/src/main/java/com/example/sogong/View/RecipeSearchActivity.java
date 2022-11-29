@@ -38,7 +38,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
     ChipGroup chipGroup2;
     StringBuilder categories;
 
-    String[] category_str = new String[]{"족발 보쌈", "찜 탕 찌개", "돈까스", "회", "일식", "피자", "고기구이", "야식", "양식", "치킨", "중식", "아시안", "백반", "죽", "국수", "도시락", "분식", "카페 디저트", "패스트푸드"};
+    String[] category_str = new String[]{"족발보쌈", "찜탕찌개", "돈까스", "회", "일식", "피자", "고기구이", "야식", "양식", "치킨", "중식", "아시안", "백반", "죽", "국수", "도시락", "분식", "카페디저트", "패스트푸드"};
 
     Search_UI su = new Search_UI();
 

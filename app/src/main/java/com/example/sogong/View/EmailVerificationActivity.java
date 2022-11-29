@@ -64,6 +64,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (email_at.getText().toString().equals("") || !isValidEmail(email_at.getText().toString())) {
+                    responseCode = 0;
                     eu.startToast("잘못된 형식의 입력입니다.");
                 } else {
                     custon_progressDialog.show();
@@ -109,7 +110,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                     Log.d("Verification thread", "working");
                                 } else {
                                     i = 30;
-                                    Log.d("Verification thread", "down");
+                                    Log.d("Verification thread", "down11");
                                 }
                             }
                         }
@@ -154,6 +155,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                         if (isFinish) {
                             if (responseCode == 200) {
                                 responseCode = -4;
+                                threadFlag.set(false);
                                 eu.startToast("인증 완료");
                                 if (destination == 0) {
                                     SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
@@ -161,15 +163,17 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 } else if (destination == 1) {
                                     eu.changePage(1);
                                 }
-
                             } else if (responseCode == 400) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 eu.startToast("잘못된 인증코드입니다.");
                             } else if (responseCode == 500) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 eu.startDialog(0, "서버 오류", "이메일 등록에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 eu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
@@ -179,9 +183,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        int i = 30;
-                        while (i > 0) {
-                            i--;
+                        int i = 0;
+                        while (i < 30) {
+                            i++;
 
                             try {
                                 Thread.sleep(1000);
@@ -200,12 +204,11 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     }
                 }
 
-                if (responseCode == -2) {
-                    ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                    threadFlag.set(true);
-                    cef.authFinish(email, code);
-                    responseCode = -3;
-                }
+
+                ControlEmailVerification_f cef = new ControlEmailVerification_f();
+                threadFlag.set(true);
+                cef.authFinish(email, code);
+
 
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
@@ -259,13 +262,14 @@ public class EmailVerificationActivity extends AppCompatActivity {
         }
 
     }
+
     //이메일 정규식
     public static boolean isValidEmail(String email) {
         boolean err = false;
         String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(email);
-        if(m.matches()) {
+        if (m.matches()) {
             err = true;
         }
         return err;

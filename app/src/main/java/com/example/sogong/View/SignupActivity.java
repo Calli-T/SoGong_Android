@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlSignup_f;
 import com.example.sogong.Model.User;
 import com.example.sogong.R;
@@ -68,29 +69,35 @@ public class SignupActivity extends AppCompatActivity {
                         | passwd_et.getText().toString().equals("")
                         | passwdcheck_et.getText().toString().equals("")
                         | nickname_et.getText().toString().equals("")) {
-                    su.startDialog(0,"양식 오류","양식에 맞지 않은 입력입니다.",new ArrayList<>(Arrays.asList("확인")));
+                    su.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else {
                     final Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
                             if (responseCode == 200) {
                                 responseCode = -2;
+                                threadFlag.set(false);
                                 su.startToast("회원가입 완료");
                                 su.changePage(0);
                             } else if (responseCode == 400) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 su.startToast("중복된 아이디입니다.");
                             } else if (responseCode == 401) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 su.startToast("중복된 닉네임입니다.");
                             } else if (responseCode == 402) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 su.startToast("중복된 아이디와 닉네임입니다.");
                             } else if (responseCode == 500) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 su.startDialog(0, "서버 오류", "정보 등록에 실패했습니다. 재시도 해주십시오.", new ArrayList<String>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
+                                threadFlag.set(false);
                                 su.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
                             }
                         }
@@ -117,22 +124,21 @@ public class SignupActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    // 비밀번호와 확인이 일치
+                    if (passwd_et.getText().toString().equals(passwdcheck_et.getText().toString())) {
+                        // 자동 로그인 default는 false
+                        ControlLogin_f clf = new ControlLogin_f();
+                        String hashpw = String.valueOf(clf.hashCode(passwd_et.getText().toString()));
+                        User temp = new User(nickname_et.getText().toString(), userid_et.getText().toString(), hashpw, authEmail, false);
+                        responseCode = -1;
+                        ControlSignup_f csf = new ControlSignup_f();
+                        csf.signUp(temp);
 
-                    if (responseCode == 0) {
-                        // 비밀번호와 확인이 일치
-                        if (passwd_et.getText().toString().equals(passwdcheck_et.getText().toString())) {
-                            // 자동 로그인 default는 false
-                            User temp = new User(nickname_et.getText().toString(), userid_et.getText().toString(), passwd_et.getText().toString(), authEmail, false);
-                            responseCode = -1;
-                            ControlSignup_f csf = new ControlSignup_f();
-                            csf.signUp(temp);
-
-                            NewRunnable nr = new NewRunnable();
-                            Thread t = new Thread(nr);
-                            t.start();
-                        } else { // 미일치
-
-                        }
+                        NewRunnable nr = new NewRunnable();
+                        Thread t = new Thread(nr);
+                        t.start();
+                    } else { // 미일치
+                        su.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             }
