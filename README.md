@@ -15,12 +15,16 @@ android frontend of se project
 
 ## 프로젝트 산출물 확인
 ### Download Project
-1. 분할 압축된 파일 2개를 압축해제
+1. 분할 압축된 파일 2개 중 SoGong_Android.zip 파일을 통해 압축해제
 2. Dolphin 2021.3.1이상 버전의 안드로이드 스튜디오를 실행
 3. Projects - Open - '프로젝트 폴더의 경로' - OK 클릭
 
 ### Git Clone
-
+1. Projects - Get from VCS
+2. Version control을 Git으로 설정
+3. URL에 https://github.com/Calli-T/SoGong_Android.git 입력
+4. 프로젝트를 받을 디렉토리 지정
+5. Clone
 
 ## 빌드와 앱 실행
 - APK Download -
@@ -31,7 +35,8 @@ android frontend of se project
 5. 실행
 
 ### Emulator
-
+1. pixel2 API30 다운로드
+2. Run - Run 'app' 클릭
 
 ## 실행방법
 1. 앱 실행
