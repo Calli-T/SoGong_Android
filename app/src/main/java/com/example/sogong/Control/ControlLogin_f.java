@@ -52,15 +52,14 @@ public class ControlLogin_f {
                         }
                     } else // 404
                         Log.d("404 Not Found", "with login");
-                } else {
-                    // 400 or anything
+                } else { // 400 or
                     LoginActivity.responseCode = response.code();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+
             }
         });
 

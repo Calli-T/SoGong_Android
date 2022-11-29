@@ -28,29 +28,9 @@ public class ControlSignup_f {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+                
             }
         });
 
     }
 }
-/*
-        retrofitService = com.example.sogong.View.Legacy.RetrofitClient.getClient().create(RetrofitService.class);
-        Call<User> call = retrofitService.setSignUp(userinfo);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()){
-                    Control control = new Control();
-//                    control.changePage();
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
-        */
