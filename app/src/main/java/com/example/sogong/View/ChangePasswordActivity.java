@@ -61,7 +61,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             responseCode = -2;
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
-                            cu.startToast("비밀번호 변경완료");
+                            cu.startToast("비밀번호가 변경되었습니다.");
                             finish();
                         } else if (responseCode == 500) {
                             responseCode = 0;

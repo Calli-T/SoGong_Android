@@ -63,7 +63,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         sendcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (email_at.getText().toString().equals("") | isValidEmail(email_at.getText().toString())) {
+                if (email_at.getText().toString().equals("") || !isValidEmail(email_at.getText().toString())) {
                     eu.startToast("잘못된 형식의 입력입니다.");
                 } else {
                     custon_progressDialog.show();
@@ -124,7 +124,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                         if (destination == 0) {
                             cef.authStart(email);
                         } else if (destination == 1) {
-                            eu.startToast("코드 전송");
+                            eu.startToast("이메일을 전송했습니다.");
                             //if(ControlLogin_f.userinfo.getEmail() == email)
                             cef.authStart(email);
                             //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
