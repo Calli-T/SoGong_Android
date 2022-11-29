@@ -14,12 +14,12 @@ android frontend of se project
 - password : sogong12!!
 
 ## 프로젝트 산출물 확인
-- Download Project -
+### Download Project
 1. 분할 압축된 파일 2개를 압축해제
 2. Dolphin 2021.3.1이상 버전의 안드로이드 스튜디오를 실행
 3. Projects - Open - '프로젝트 폴더의 경로' - OK 클릭
 
-- Git Clone -
+### Git Clone
 
 
 ## 빌드와 앱 실행
@@ -30,7 +30,7 @@ android frontend of se project
 4. 'app-debug.apk'를 설치
 5. 실행
 
-- Emulator -
+### Emulator
 
 
 ## 실행방법
