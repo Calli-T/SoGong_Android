@@ -2,12 +2,9 @@ package com.example.sogong.Control;
 
 import android.util.Log;
 
-import com.example.sogong.Model.AuthInfo;
 import com.example.sogong.Model.User;
 import com.example.sogong.View.ChangeNicknameActivity;
 import com.example.sogong.View.ChangePasswordActivity;
-import com.example.sogong.View.LoginActivity;
-import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 import com.example.sogong.View.RetrofitStringClient;
 

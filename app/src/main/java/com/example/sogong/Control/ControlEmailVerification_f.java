@@ -4,11 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.sogong.Model.AuthInfo;
-import com.example.sogong.Model.User;
+import com.example.sogong.Model.TempEmail;
 import com.example.sogong.View.EmailVerificationActivity;
-import com.example.sogong.View.LoginActivity;
-import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 import com.example.sogong.View.RetrofitStringClient;
 
@@ -20,7 +17,7 @@ public class ControlEmailVerification_f {
     public void authStart(String email) {
         Log.d("받은 email", "email = " + email);
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
-        Call<String> call = sv.AuthStart(new AuthInfo(email, "123456"));
+        Call<String> call = sv.AuthStart(new TempEmail(email, "123456"));
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -43,7 +40,7 @@ public class ControlEmailVerification_f {
     public void authFinish(String email, String code) {
         Log.d("받은 email과 code", "email = " + email + " code = " + code);
         RetrofitService sv = RetrofitStringClient.getClient().create(RetrofitService.class);
-        Call<String> call = sv.AuthFinish(new AuthInfo(email, code));
+        Call<String> call = sv.AuthFinish(new TempEmail(email, code));
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

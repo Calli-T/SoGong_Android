@@ -1,10 +1,8 @@
 package com.example.sogong.Model;
 
-import android.content.Intent;
-
 import com.google.gson.annotations.SerializedName;
 
-public class AuthInfo {
+public class TempEmail {
     @SerializedName("email")
     private String email;
 
@@ -20,7 +18,7 @@ public class AuthInfo {
     }
 
     // 2차에만 code가 있는데 아무값이나 넣으면됨
-    public AuthInfo(String email, String code) {
+    public TempEmail(String email, String code) {
         this.email = email;
         this.code = Integer.parseInt(code);
     }

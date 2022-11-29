@@ -11,6 +11,8 @@ import com.example.sogong.View.MainActivity;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
 
+import java.util.Arrays;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,8 +20,18 @@ import retrofit2.Response;
 public class ControlLogin_f {
     public static User userinfo;
 
-    public int hashCode(String pw) {
-        return pw.hashCode();
+    public String hashCode(String pw) {
+        int[] temp = new int[pw.length()];
+        for (int i = 0; i < pw.length(); i++) {
+            temp[i] = (int) pw.toCharArray()[i] + 1;
+        }
+        char[] temp_str = new char[pw.length()];
+        for (int i = 0; i < pw.length(); i++) {
+            temp_str[i] = (char)temp[i];
+        }
+        String pwHash = String.valueOf(temp_str);
+        Log.d("해쉬", pwHash);
+        return pwHash;
     }
 
     public void login(String id, String pw, boolean isAutoLogin) {

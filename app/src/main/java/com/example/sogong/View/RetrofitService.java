@@ -1,6 +1,6 @@
 package com.example.sogong.View;
 
-import com.example.sogong.Model.AuthInfo;
+import com.example.sogong.Model.TempEmail;
 import com.example.sogong.Model.Comment;
 import com.example.sogong.Model.LikeInfo;
 import com.example.sogong.Model.Mail;
@@ -23,8 +23,6 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
@@ -52,10 +50,10 @@ public interface RetrofitService {
     Call<User> Login(@Body User user);
 
     @POST("firstcheck/")
-    Call<String> AuthStart(@Body AuthInfo authInfo);
+    Call<String> AuthStart(@Body TempEmail tempEmail);
 
     @POST("secondcheck/")
-    Call<String> AuthFinish(@Body AuthInfo authInfo);
+    Call<String> AuthFinish(@Body TempEmail tempEmail);
 
     @POST("signup/")
     Call<String> SignUp(@Body User user);

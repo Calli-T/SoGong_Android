@@ -2,6 +2,7 @@ package com.example.sogong.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
     private boolean isFinish = false; // 스레드의 접근권한 제어
 
     Custon_ProgressDialog custon_progressDialog;
+    public static Activity EmailActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
-
+        EmailActivity = EmailVerificationActivity.this;
         // flags
         responseCode = 0;
         threadFlag.set(true);
