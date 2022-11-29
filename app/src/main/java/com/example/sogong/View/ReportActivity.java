@@ -31,8 +31,8 @@ public class ReportActivity extends AppCompatActivity {
     EditText reportReason;
     Button report_btn;
     Button cancel_btn;
-    private AtomicBoolean threadFlag = new AtomicBoolean();
-    public static int responseCode;
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
+    public static int responseCode; // 응답 코드
     Custon_ProgressDialog custon_progressDialog;
     ControlReport_f crf = new ControlReport_f();
     Report_UI ru = new Report_UI();
@@ -58,11 +58,12 @@ public class ReportActivity extends AppCompatActivity {
         custon_progressDialog.setCanceledOnTouchOutside(false);
         //신고창 null 처리하기
 
+        //신고 버튼
         report_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
+                // 빈 신고에 관하여
                 if (reportReason.getText().toString().equals("")) {
                     ru.startDialog(0, "양식 오류", "신고 내용을 입력해주세요.", new ArrayList<>(Arrays.asList("확인")));
                 } else {
@@ -246,7 +247,7 @@ public class ReportActivity extends AppCompatActivity {
                                                 Report photoReport = new Report(ControlLogin_f.userinfo.getNickname(), reportReason.getText().toString(), 1, 2);
                                                 crf.reportPost(photoReport);
                                                 threadFlag.set(true);
-                                                isProgress= true;
+                                                isProgress = true;
                                                 runOnUiThread(progress);
                                                 NewRunnable2 nr2 = new NewRunnable2();
                                                 Thread t2 = new Thread(nr2);
@@ -270,6 +271,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+        // 취소 버튼
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,8 +288,6 @@ public class ReportActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -300,13 +300,9 @@ public class ReportActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
-        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-//            if (dest == 0) {
-//                Intent intent = new Intent(ReportActivity.this, RefrigeratorActivity.class);
-//                startActivity(intent);
-//            }
+
         }
     }
 }

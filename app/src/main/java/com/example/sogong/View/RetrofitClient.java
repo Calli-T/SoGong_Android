@@ -5,6 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
+    // API 주소 연결용 클라이언트
+
     public static String BASE_URL = "https://recippe-sg.herokuapp.com/";
 
     private static Retrofit retrofit;

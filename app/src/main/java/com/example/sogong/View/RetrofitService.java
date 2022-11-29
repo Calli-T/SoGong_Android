@@ -29,18 +29,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
-    /*
-    @FormUrlEncoded
-    @POST("login/")
-    Call<User> Login(
-            @Field("uid") String uid,
-            @Field("nickname") String nickname,
-            @Field("password") String password,
-            @Field("email") String email,
-            @Field("auto_login") boolean auto_login
-    );
-    */
-
     //-----------------------------------------------------------case 1 ~
 
     @POST("signup/{post}")
@@ -194,64 +182,8 @@ public interface RetrofitService {
     @POST("deletemail/")
     Call<Integer> DeleteMail(@Body Mail mail);
 
-    //-----------------------------------------------------------finish
 
-    /*
-    {
-	"like_id": 0 or null,
-	"nickname": 시스템을 사용중인 사용자 닉네임,
-	"postType": 게시글 종류 1==레시피, -1==사진,
-	"postId": 게시글 아이디,
-	"task": "취소" or "등록" -> "좋아요"를 취소할지 등록할지 정하는 것
-}
-     */
-    //@POST("likerecipe/")
-    //Call<String>
-
-    //@GET("recipeboard/{page}")
-    //Call<String>
-    //사용자 보유 재료 조회
     @GET("/inquiryrefrigerator/{nickname}/")
     Call<Recipe_Ingredients> LookupIngredientsList(@Path("nickname") String nickname);
 
 }
-/*
-    // @GET( EndPoint-자원위치(URI) )
-    //가져오기
-    @GET("board/{post}")
-    Call<PostObject> getPost(@Path("post") String post);
-
-    @GET("board/")
-    Call<List<PostObject>> getAllPosts();
-
-    @GET("login/{uid}")
-    Call<User> getLogin(@Path("uid") String uid);
-
-
-    //등록
-    @POST("board/")
-    Call<PostObject> setPostBody(@Body PostObject post);
-
-    @POST("login/")
-    Call<User> setLoginBody(@Body User user);
-
-//    @FormUrlEncoded
-//    @POST("todo")
-//    Call<PostSending> setPostField(
-//            @Field("title") String title,
-//            @Field("description") String description,
-//            @Field("important") boolean important
-//
-//    );
-
-    //수정
-    @PUT("board/{id}")
-    Call<PostObject> getPutBody(
-            @Path("id") String id,
-            @Body PostObject PostObject
-    );
-
-    //삭제
-    @DELETE("board/{id}")
-    Call<Void> deletePost(@Path("id") String id);
- */
