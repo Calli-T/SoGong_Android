@@ -31,14 +31,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Refri_AddIngredientActivity extends AppCompatActivity {
-    public static int responseCode;
+    public static int responseCode; // 응답 코드
     Spinner ingreName;
     EditText ingreAmount;
     Spinner ingreUnit;
     EditText ingreExpiredate;
 
-    private AtomicBoolean threadFlag = new AtomicBoolean();
-    private AtomicBoolean editthreadFlag = new AtomicBoolean();
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
+    private AtomicBoolean editthreadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
     Custon_ProgressDialog custon_progressDialog;
     int type;
     Refrigerator ingredients;
@@ -52,6 +52,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
         ingredients = getIntent().getParcelableExtra("ingredient");
         type = getIntent().getIntExtra("edit", 0);
 
+        // 사용할 컴포넌트 등록
         ingreName = findViewById(R.id.ingretitle_spinner);
         ingreAmount = findViewById(R.id.ingreamount_edit);
         ingreUnit = findViewById(R.id.ingre_unit_spinner);
@@ -65,14 +66,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.recipe_add_button);
         fab.setOnClickListener(new FABClickListener());
-        /*
-        ingreadd_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddIngredientActivity.this)
-            }
-        });
-        */
+
         ArrayList<String> ingreName_str = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ingredients)));
         ArrayList<String> ingreUnit_str = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.unit)));
         if (type == 1) {
@@ -85,15 +79,11 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
         }
     }
 
+    //재료 추가
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             // FAB Click 이벤트 처리 구간
-
-            /* #7 사용자 보유 재료 추가 */
-            //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
-            //crf.addRefrigerator(ingredients);
-            //로딩창 구현
 
             isExist = false;
             if (RefrigeratorActivity.ingreList != null) {
@@ -280,8 +270,6 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                         Refrigerator ingredient = new Refrigerator(ingredients.getRefrigerator_id(), ingreName.getSelectedItem().toString(), ControlLogin_f.userinfo.getNickname(), ingreUnit.getSelectedItem().toString(), Float.parseFloat(ingreAmount.getText().toString()), ingreExpiredate.getText().toString());
                         crf.editRefrigerator(ingredient);
                         t.start();
-                        //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
-                        //crf.editRefrigerator(ingredients);
                     }
                 }
             }
@@ -296,8 +284,6 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -310,13 +296,9 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
-        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-//            if (dest == 0) {
-//                Intent intent = new Intent(RecipeAddActivity.this, RefrigeratorActivity.class);
-//                startActivity(intent);
-//            }
+
         }
     }
 }

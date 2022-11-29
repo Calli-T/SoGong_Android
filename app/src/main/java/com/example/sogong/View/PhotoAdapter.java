@@ -76,17 +76,6 @@ class PhotoAdapter extends BaseAdapter {
             view = (View) convertView;
         }
 
-//        //각 아이템 선택 event
-//        convertView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d("grid", photoPost.getPost_id() + " 클릭");
-//
-//
-//            }
-//        });
-
         return convertView;  //뷰 객체 반환
     }
-
 }

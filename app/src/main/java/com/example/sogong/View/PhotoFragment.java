@@ -86,31 +86,6 @@ public class PhotoFragment extends Fragment {
         gridview.setAdapter(photoAdapter);
 
         responseCode = 0;
-        /* 추가) 요리 사진 게시판 */
-        //cplf.lookupPhotoList(1);
-
-        /* #17 특정 요리 사진 게시글 */
-        //cpf.lookupPhoto(1);
-
-        /* #18 요리 사진 게시글 등록 */
-        //PhotoPost newPhoto = new PhotoPost("test", 0, "test_link", 0, null);
-        //cpf.addPhoto(newPhoto);
-
-        /* #19 요리 사진 게시글 삭제 */
-        //cpf.deletePhoto("test", 9);
-
-        /* #20 요리 사진 게시글 정렬 */
-        //cplf.sortPhotoList("좋아요 순", 1);
-
-        /* #21 요리 사진 게시글 "좋아요" 취소 */
-        //clf.unLikePost("test", -1, 1);
-
-        /* #21 요리 사진 게시글 "좋아요" 등록 */
-        //clf.likePost("test", -1, 1);
-
-        /* #22 요리 사진 게시글 신고 */
-        //Report reportInfo = new Report("test", "android test3", 1, 2);
-        //crf.reportPost(reportInfo);
 
         // UI controller
         PhotoList_UI plu = new PhotoList_UI();
@@ -126,62 +101,6 @@ public class PhotoFragment extends Fragment {
         custon_progressDialog = new Custon_ProgressDialog(requireActivity());
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
-//        final Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                if (responseCode == 200) {
-//                    responseCode = -1;
-//
-//                    if (photoList != null) {
-//                        plu.startToast(photoList.get(0).toString());
-//
-//                        photoAdapter.setPhotoList(photoList);
-//
-//                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                                Log.d("사진", "position = " + position + " id = " + id);
-//                                Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                intent.putExtra("photo_post", photoList.get(position));
-//                                startActivity(intent);
-//                            }
-//                        });
-//                    }
-//                    // UI 코드 작성해주세요
-//
-//                } else if (responseCode == 500) {
-//                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-//                } else if (responseCode == 502) {
-//                    plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-//                }
-//            }
-//        };
-//
-//        class NewRunnable implements Runnable {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 30; i++) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    if (threadFlag.get())
-//                        getActivity().runOnUiThread(runnable);
-//                    else {
-//                        i = 30;
-//                    }
-//                }
-//            }
-//        }
-//
-//        cplf.lookupPhotoList(1); // 시작은 첫 페이지 고정
-//
-//        NewRunnable nr = new NewRunnable();
-//        Thread t = new Thread(nr);
-//        t.start();
         currentSort = "최근 순";
         currentPage = 1;
 
@@ -494,8 +413,6 @@ public class PhotoFragment extends Fragment {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);

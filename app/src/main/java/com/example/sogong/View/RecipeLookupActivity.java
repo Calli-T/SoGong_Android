@@ -61,18 +61,22 @@ public class RecipeLookupActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
 
 
-    //public static int responseCode;
+    // 응답 코드
     public static AtomicInteger responseCode = new AtomicInteger();
     public static AtomicInteger responseCode2 = new AtomicInteger();
     public static AtomicInteger responseCode3 = new AtomicInteger();
+
+    // 반환값 저장
     public static RecipePostLookUp recipePostLookUp;
     public static List<Recipe_Ingredients> unExistIngredients;
     public static int commentResult;
 
+    // 스레드 제어용 플래그
     private AtomicBoolean threadFlag = new AtomicBoolean();
     private AtomicBoolean commentthreadFlag = new AtomicBoolean();
     private AtomicBoolean commenteditthreadFlag = new AtomicBoolean();
     private AtomicBoolean commentdeletethreadFlag = new AtomicBoolean();
+
     RecipePost_f recipePostF;
     PopupMenu dropDownMenu;
     Menu menu;
@@ -93,6 +97,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
         RecipeLookup_UI rlu = new RecipeLookup_UI();
 
+        //사용할 컴포넌트들 등록
         Log.d("recipe", recipePostF.toString());
         setContentView(R.layout.activity_lookuprecipe);
         recipetitle = findViewById(R.id.recipetitle_text1);
@@ -223,9 +228,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dropDownMenu.show();
             }
-        });//사용자에 따른 옵션 메뉴 로직 끝
-
-        //responseCode = 0;
+        });
 
         //댓글 리사이클러뷰 구현
         commentRecyclerView = (RecyclerView) findViewById(R.id.recipe_comment_recyclerview);
@@ -298,7 +301,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
+        // 값 변동을 고려하여 열람 시점에서 새로 API 호출
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -713,12 +716,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         }
                     });
 
-                    /*
-                    recipetitle.setText(recipePostF.getTitle());
-                    recipecategory.setText(recipePostF.getCategory());
-                    recipespicy.setText("X" + String.valueOf(recipePostF.getDegree_of_spicy()));
-                    recipedescription.setText(recipePostF.getDescription());
-                     */
                     custon_progressDialog.dismiss();
 
                 } else if (responseCode.get() == 500 && responseCode2.get() == 500) {
@@ -746,8 +743,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 }
             }
         }
-        //ControlRecipe_f crf = new ControlRecipe_f();
-        //crf.lookupRecipe(recipePost.getPost_id());
 
         ControlRecipe_f crf = new ControlRecipe_f();
         crf.lookupRecipe(recipePostF.getPost_id(), ControlLogin_f.userinfo.getNickname());
@@ -761,6 +756,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         t.start();
     }
 
+    // 뒤로가기 버튼 입력과 동시에 서버에 좋아요 등록/취소 반영
     @Override
     public void onBackPressed() {
         if (likedState != recipePostLookUp.isLikeInfo()) {
@@ -815,7 +811,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 Thread t = new Thread(nr);
                 t.start();
             } else {
-                final Runnable runnable = new Runnable() {//좋아요 등록을 하려는 경우우
+                final Runnable runnable = new Runnable() {//좋아요 등록을 하려는 경우
                     @Override
                     public void run() {
                         if (responseCode.get() == 200) {
@@ -874,8 +870,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -888,16 +882,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
-        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
             if (dest == 0) {
                 Intent intent = new Intent(RecipeLookupActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else if (dest == 1) {
-                // 회원가입에서 요청한 이메일 인증
-                EmailVerificationActivity.destination = 0;
-                Intent intent = new Intent(RecipeLookupActivity.this, EmailVerificationActivity.class);
                 startActivity(intent);
             }
         }

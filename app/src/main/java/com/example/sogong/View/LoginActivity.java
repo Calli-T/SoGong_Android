@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-
         //UI controller
         Login_UI lu = new Login_UI();
 
@@ -78,12 +77,6 @@ public class LoginActivity extends AppCompatActivity {
                     String pw = passwd_et.getText().toString();
                     String hashpw = String.valueOf(clf.hashCode(pw));
                     boolean auto_login = checkbox.isChecked();
-                    // 이하 3개 문단의 코드는 Retrofit의 비동기와 UI Thread의 동기화를 위한 코드이다
-                /*
-                컨트롤러에서 API호출을 하는동안
-                대기하다 컨트롤러에서 호출을 성공하여 activity의 static field를 채워주면
-                activity를 전환하며, 해당 field를 되돌려주는 코드이다.
-                */
 
                     final Runnable runnable = new Runnable() {
                         @Override

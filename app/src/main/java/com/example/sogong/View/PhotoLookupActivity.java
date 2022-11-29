@@ -65,6 +65,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
 
     PhotoLookup_UI plu = new PhotoLookup_UI();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,15 +128,15 @@ public class PhotoLookupActivity extends AppCompatActivity {
                                                         responseCode = -1;
                                                         threadFlag.set(false);
                                                         Log.d("사진 삭제", "실패");
-                                                       // custon_progressDialog.dismiss();
-                                                        plu.startDialog(0,"서버 오류","게시글 삭제를 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                        // custon_progressDialog.dismiss();
+                                                        plu.startDialog(0, "서버 오류", "게시글 삭제를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
 
                                                     } else if (responseCode == 502) {
                                                         responseCode = -1;
                                                         threadFlag.set(false);
                                                         Log.d("사진 삭제", "실패");
-                                                       // custon_progressDialog.dismiss();
-                                                        plu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                        // custon_progressDialog.dismiss();
+                                                        plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                                     }
                                                 }
                                             };
@@ -177,7 +178,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                         NewRunnable nr = new NewRunnable();
                         Thread t = new Thread(nr);
                         t.start();
-                   /*     */
+
                         return true;
                     case 1:
                         //게시글 수정 로직 추가
@@ -204,16 +205,14 @@ public class PhotoLookupActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         //메뉴버튼 클릭 리스너
         menubutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dropDownMenu.show();
             }
-        });//사용자에 따른 옵션 메뉴 로직 끝
-
-        //responseCode = 0;
-
+        });
 
         //넘겨온 값으로 채워넣음
         photoAuthor.setText(photoPost.getAuthor());
@@ -223,14 +222,13 @@ public class PhotoLookupActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         photoImage.setImageBitmap(bitmap);
 
-        //쓰레드로 요청해서 받는 방식. 초기화면 구성때는 오래걸려서 그냥 intent로 받아옴. 나중에 새로고침 필요할때 사용할 것
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if (responseCode == 200) {
                     responseCode = -1;
                     threadFlag.set(false);
-                    Log.d("사진 좋아요 정보", "좋아요 = "+photoLookUp.isLikeInfo());
+                    Log.d("사진 좋아요 정보", "좋아요 = " + photoLookUp.isLikeInfo());
                     if (photoLookUp.isLikeInfo()) {
                         like_btn.setBackground(getDrawable(R.drawable.thumb_up_fill));
                     } else {
@@ -291,6 +289,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
         t.start();
     }
 
+    // 뒤로가기 누르는 시점에 좋아요를 서버에 처리
     @Override
     public void onBackPressed() {
         if (likedState != photoLookUp.isLikeInfo()) {
@@ -304,12 +303,12 @@ public class PhotoLookupActivity extends AppCompatActivity {
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
                             PhotoLookupActivity.super.onBackPressed();
-                        }else if (responseCode == 500) {
+                        } else if (responseCode == 500) {
                             responseCode = -1;
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
                             plu.startDialog(0, "서버 오류", "좋아요 취소를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                        }  else if (responseCode == 502) {
+                        } else if (responseCode == 502) {
                             responseCode = -1;
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
@@ -343,11 +342,6 @@ public class PhotoLookupActivity extends AppCompatActivity {
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
                 t.start();
-                /* #21 요리 사진 게시글 "좋아요" 취소 */
-
-                /* #21 요리 사진 게시글 "좋아요" 등록 */
-                //clf.likePost("test", -1, 1);
-
             } else {
                 final Runnable runnable = new Runnable() {//좋아요 등록을 하려는 경우우
                     @Override
@@ -391,7 +385,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                 }
                 ControlLike_f clf = new ControlLike_f();
                 clf.likePost(ControlLogin_f.userinfo.getNickname(), 2, photoLookUp.getPhotoPost().getPost_id());
-                Log.d("좋아요","좋아요 누른 게시글 id = "+photoLookUp.getPhotoPost().getPost_id());
+                Log.d("좋아요", "좋아요 누른 게시글 id = " + photoLookUp.getPhotoPost().getPost_id());
 
                 threadFlag.set(true);
                 NewRunnable nr = new NewRunnable();
@@ -409,8 +403,6 @@ public class PhotoLookupActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -423,14 +415,12 @@ public class PhotoLookupActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
-        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
             if (dest == 0) {
                 Intent intent = new Intent(PhotoLookupActivity.this, MainActivity.class);
                 startActivity(intent);
             } else if (dest == 1) {
-                // 회원가입에서 요청한 이메일 인증
                 EmailVerificationActivity.destination = 0;
                 Intent intent = new Intent(PhotoLookupActivity.this, EmailVerificationActivity.class);
                 startActivity(intent);
