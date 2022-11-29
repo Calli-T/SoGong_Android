@@ -65,6 +65,7 @@ public class ControlEdittingInfo_f {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 ChangeNicknameActivity.responseCode = response.code();
+                Log.d("result", response.code()+"");
                 // 200
                 /*if (response.isSuccessful()) {
                     if (response.body() != null) {

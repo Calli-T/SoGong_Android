@@ -60,9 +60,9 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                             if (responseCode == 200) {
                                 responseCode = -2;
                                 threadFlag.set(false);
-                                custon_progressDialog.dismiss();
-                                cu.startToast("닉네임 변경 완료");
-                                finish();
+                                //custon_progressDialog.dismiss();
+                                //cu.startToast("닉네임이 변경되었습니다.");
+                                //finish();
                             } else if (responseCode == 400) {
                                 responseCode = 0;
                                 threadFlag.set(false);
@@ -71,12 +71,12 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                             } else if (responseCode == 500) {
                                 responseCode = 0;
                                 threadFlag.set(false);
-                                custon_progressDialog.dismiss();
+                                //custon_progressDialog.dismiss();
                                 cu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
                                 threadFlag.set(false);
-                                custon_progressDialog.dismiss();
+                                //custon_progressDialog.dismiss();
                                 cu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                         }
@@ -95,6 +95,8 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                                     runOnUiThread(runnable);
                                 else {
                                     i = 30;
+                                    custon_progressDialog.dismiss();
+                                    finish();
                                 }
                             }
                         }
@@ -124,6 +126,14 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(responseCode == 200){
+            cu.startToast("닉네임이 변경되었습니다.");
+        }
+        super.onDestroy();
     }
 
     class CN_UI implements Control {

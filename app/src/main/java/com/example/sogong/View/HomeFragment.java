@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.sogong.Control.Control;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.Control.ControlLogout_f;
 import com.example.sogong.Control.ControlPhotoList_f;
 import com.example.sogong.Control.ControlRecipeList_f;
@@ -53,6 +54,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
         Log.d("homefragment", "시작");
+        Log.d("homefragment", ControlLogin_f.userinfo.toString());
 
         isInHome = true;
 
