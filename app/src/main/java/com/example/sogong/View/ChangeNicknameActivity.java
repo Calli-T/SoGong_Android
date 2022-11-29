@@ -61,7 +61,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                                 responseCode = -2;
                                 threadFlag.set(false);
                                 //custon_progressDialog.dismiss();
-                                //cu.startToast("닉네임이 변경되었습니다.");
+                                cu.startToast("닉네임이 변경되었습니다.");
                                 //finish();
                             } else if (responseCode == 400) {
                                 responseCode = 0;
@@ -128,20 +128,12 @@ public class ChangeNicknameActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        if(responseCode == 200){
-            cu.startToast("닉네임이 변경되었습니다.");
-        }
-        super.onDestroy();
-    }
-
     class CN_UI implements Control {
 
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+            View layout = inflater.inflate(R.layout.custom_toast, findViewById(R.id.toast_layout));
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
