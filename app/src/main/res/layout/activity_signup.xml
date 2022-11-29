@@ -12,8 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginTop="50dp"
+        android:layout_marginRight="40dp"
         android:hint="아이디"
         app:boxStrokeErrorColor="@color/red_700"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -70,6 +70,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout4"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -79,22 +80,23 @@
         android:layout_marginRight="40dp"
         android:hint="닉네임"
         app:boxStrokeErrorColor="@color/red_700"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
         app:layout_constraintVertical_bias="0.35">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/nickname_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nickname_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <android.widget.Button
         android:id="@+id/join_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/roundedrectangle"
         android:text="회원가입"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,12 +104,13 @@
         app:layout_constraintRight_toLeftOf="@id/cancel_button"
         app:layout_constraintTop_toBottomOf="@id/textInputLayout4"
         app:layout_constraintVertical_bias="0.259">
-    </Button>
+    </android.widget.Button>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/roundedrectangle"
         android:text="취소"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@id/textInputLayout4"
         app:layout_constraintVertical_bias="0.259">
 
-    </Button>
+    </android.widget.Button>
 
     <ImageView
         android:id="@+id/imageView"

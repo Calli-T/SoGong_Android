@@ -12,8 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp"
         android:hint="이메일 입력"
         app:boxStrokeErrorColor="@color/red_700"
         app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
@@ -50,25 +50,26 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/sendcode_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/roundedrectangle"
         android:text="코드 전송"
         android:textColor="@color/blue"
-        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
         app:layout_constraintRight_toRightOf="@+id/textInputLayout"
-        app:layout_constraintTop_toTopOf="@id/textInputLayout"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintTop_toTopOf="@id/textInputLayout">
 
-    </Button>
+    </android.widget.Button>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/check_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:background="@drawable/roundedrectangle"
         android:text="인증 확인"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@id/textInputLayout2"
         app:layout_constraintVertical_bias="0.198">
 
-    </Button>
+    </android.widget.Button>
 
     <ImageView
         android:id="@+id/imageView"

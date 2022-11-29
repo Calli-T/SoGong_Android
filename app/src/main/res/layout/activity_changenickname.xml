@@ -28,13 +28,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-
-    <Button
+    <android.widget.Button
         android:id="@+id/change_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/roundedrectangle"
         android:text="변경"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,14 +43,15 @@
         app:layout_constraintTop_toBottomOf="@id/textInputLayout"
         app:layout_constraintVertical_bias="0.01">
 
-    </Button>
+    </android.widget.Button>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/roundedrectangle"
         android:text="취소"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/textInputLayout"
         app:layout_constraintVertical_bias="0.01">
 
-    </Button>
+    </android.widget.Button>
 
     <ImageView
         android:id="@+id/imageView"

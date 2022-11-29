@@ -12,8 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp"
         android:hint="아이디"
         app:boxStrokeErrorColor="@color/red_700"
         app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
@@ -50,12 +50,13 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/roundedrectangle"
         android:text="로그인"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,14 +65,15 @@
         app:layout_constraintTop_toBottomOf="@id/find_button"
         app:layout_constraintVertical_bias="0.01">
 
-    </Button>
+    </android.widget.Button>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/join_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
+        android:background="@drawable/roundedrectangle"
         android:text="회원가입"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@id/find_button"
         app:layout_constraintVertical_bias="0.01">
 
-    </Button>
+    </android.widget.Button>
 
     <ImageView
         android:id="@+id/imageView"
@@ -99,11 +101,11 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
         android:text="아이디/비밀번호 찾기"
         android:textColor="@color/blue"
         android:textSize="15sp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 

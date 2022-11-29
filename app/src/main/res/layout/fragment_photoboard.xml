@@ -91,29 +91,29 @@
         android:background="#808080"
         app:layout_constraintTop_toBottomOf="@id/photo_page_spinner" />
 
-        <GridView
-            android:id="@+id/photo_grid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:numColumns="3"
-            android:nestedScrollingEnabled="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sub_line2"
-            app:layout_constraintVertical_bias="0" />
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/home_photo_recyclerview"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:nestedScrollingEnabled="true"-->
-        <!--            app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"-->
-        <!--            app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"-->
-        <!--            app:layout_constraintStart_toStartOf="@id/recipe_scrollview"-->
-        <!--            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />-->
+    <GridView
+        android:id="@+id/photo_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:nestedScrollingEnabled="true"
+        android:numColumns="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_line2"
+        app:layout_constraintVertical_bias="0" />
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:id="@+id/home_photo_recyclerview"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:nestedScrollingEnabled="true"-->
+    <!--            app:layout_constraintBottom_toBottomOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintEnd_toEndOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintStart_toStartOf="@id/recipe_scrollview"-->
+    <!--            app:layout_constraintTop_toTopOf="@id/recipe_scrollview" />-->
 
-        <!--    </androidx.core.widget.NestedScrollView>-->
+    <!--    </androidx.core.widget.NestedScrollView>-->
     <!--id를 recipe->photo로 단어 하나를 바꿔놨음-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/photo_add_button"
