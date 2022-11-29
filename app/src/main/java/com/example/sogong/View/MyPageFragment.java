@@ -35,11 +35,6 @@ public class MyPageFragment extends Fragment {
 
     Boolean isProgress;
 
-    ControlRefrigerator_f crf = new ControlRefrigerator_f();
-    ControlMyPhoto_f cmpf = new ControlMyPhoto_f();
-    ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
-    ControlPost_f cpf = new ControlPost_f();
-
     Custon_ProgressDialog custon_progressDialog;
 
     @Override
@@ -69,26 +64,23 @@ public class MyPageFragment extends Fragment {
                 class NewRunnable implements Runnable {
                     NewRunnable() {
                     }
-
                     @Override
                     public void run() {
                         while (true) {
                             try {
                                 Thread.sleep(100);
-                                if (Custom_Dialog.state == 0) {
+                                if (Custom_Dialog.state == 0) {//자기가 작성한 레시피 조회
                                     Custom_Dialog.state = -1;
                                     /* #12 사용자 작성 레시피 조회 */
-//                                    cmrf.lookupMyRecipeList(ControlLogin_f.userinfo.getNickname());
-                                    Log.d("mypagefragment", "게시글? state = " + Custom_Dialog.state);
+                                    Log.d("mypagefragment", "게시글 state = " + Custom_Dialog.state);
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     intent.putExtra("post_type", 0);
                                     startActivity(intent);
                                     break;
-                                } else if (Custom_Dialog.state == 1) {
-                                    Log.d("mypagefragment", "사진? state = " + Custom_Dialog.state);
+                                } else if (Custom_Dialog.state == 1) {//자기가 작성한 사진 조회
+                                    Log.d("mypagefragment", "사진 state = " + Custom_Dialog.state);
                                     /* #11 사용자 작성 요리사진 조회 */
-                                    //cmpf.lookupMyPhotoList(ControlLogin_f.userinfo.getNickname());
                                     Custom_Dialog.state = -1;
                                     Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -104,6 +96,7 @@ public class MyPageFragment extends Fragment {
                 }
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
+                //자기가 작성한 레시피인지 사진인지를 선택할 때까지 기다리는 쓰레드
                 t.start();
             }
         });
@@ -112,7 +105,6 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 /* #15 "좋아요"를 누른 게시글 리스트 조회 */
-                //cpf.lookupMyLikeList("test", 1);
                 Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent.putExtra("post_type", 2);
@@ -124,21 +116,20 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 /* #16 댓글을 작성한 게시글들의 리스트 조회 */
-                //cpf.lookupMyCommentList("test");
                 Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent.putExtra("post_type", 3);
                 startActivity(intent);
             }
         });
-        refrigerator.setOnClickListener(new View.OnClickListener() {
+        refrigerator.setOnClickListener(new View.OnClickListener() {//냉장고 버튼 클릭
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), RefrigeratorActivity.class);
                 startActivity(intent);
             }
         });
-        mailbox.setOnClickListener(new View.OnClickListener() {
+        mailbox.setOnClickListener(new View.OnClickListener() {//쪽지함 버튼 클릭
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MailBoxActivity.class);
@@ -150,9 +141,7 @@ public class MyPageFragment extends Fragment {
         pwdchange_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mu.startToast("Test1");
                 EmailVerificationActivity.destination = 1; // 이메일 인증 Activity의 분기 결정 Flag
-
                 Intent intent = new Intent(getActivity(), EmailVerificationActivity.class);
                 startActivity(intent);
             }
@@ -170,9 +159,7 @@ public class MyPageFragment extends Fragment {
         logout_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mu.startDialog(1, "로그아웃", "정말 로그아웃하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
-
                 class NewRunnable implements Runnable {
                     NewRunnable() {
                     }
@@ -233,7 +220,6 @@ public class MyPageFragment extends Fragment {
                                             }
                                         }
                                     }
-
                                     if (MainActivity.responseCode == 0) {
                                         MainActivity.responseCode = -1;
 
@@ -242,6 +228,7 @@ public class MyPageFragment extends Fragment {
                                     }
                                     NewRunnable1 nr = new NewRunnable1();
                                     Thread t = new Thread(nr);
+                                    //로그아웃 정보를 서버에 전송됐는지 확인하는 쓰레드
                                     t.start();
                                     break;
                                 } else if (Custom_Dialog.state == 1) {
@@ -255,6 +242,7 @@ public class MyPageFragment extends Fragment {
                 }
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
+                //로그아웃 할건지 되묻는 다이얼로그에서 선택을 기다리는 쓰레드
                 t.start();
             }
         });

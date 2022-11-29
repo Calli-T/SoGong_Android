@@ -57,7 +57,7 @@ public class MailSendActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        if (receiver != null) {
+        if (receiver != null) {//게시글을 통해서 쪽지 보내기 화면으로 온 경우 게시글 작성자의 닉네임으로 채워넣음.
             mailReceiver.setText(receiver);
         }
     }
@@ -71,6 +71,7 @@ public class MailSendActivity extends AppCompatActivity {
             threadFlag.set(true);
             // #38 쪽지 보내기 호출 코드
             if (mailReceiver.getText().toString().equals("") || mailTitle.getText().toString().equals("") || mailDescription.getText().toString().equals("")) {
+               //양식에 맞지 않은 경우
                 mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                 custon_progressDialog.dismiss();
             } else {
@@ -115,6 +116,7 @@ public class MailSendActivity extends AppCompatActivity {
                 cmf.sendMail(mail);
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
+                //쪽지 보냈는지 확인하는 쓰레드
                 t.start();
             }
         }
@@ -128,8 +130,6 @@ public class MailSendActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -145,10 +145,6 @@ public class MailSendActivity extends AppCompatActivity {
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-            if (dest == 0) {
-                Intent intent = new Intent(MailSendActivity.this, MailSendActivity.class);
-                startActivity(intent);
-            }
         }
     }
 }

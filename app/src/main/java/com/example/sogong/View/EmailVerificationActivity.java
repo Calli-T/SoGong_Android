@@ -76,7 +76,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (!isFinish) {
-                                if (responseCode == 200) {
+                                if (responseCode == 200) {//이메일로 코드를 성공적으로 보냄
                                     responseCode = -2;
                                     threadFlag.set(false);
                                     eu.startToast("이메일을 전송했습니다.");

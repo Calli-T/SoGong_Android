@@ -65,24 +65,14 @@ public class MyPageBoardActivity extends AppCompatActivity {
     public RecipeAdapter recipeAdapter;
     public RecyclerView recipeRecyclerView;
     Custon_ProgressDialog custon_progressDialog;
-    ControlRecipeList_f crlf = new ControlRecipeList_f();
-    ControlRecipe_f crf = new ControlRecipe_f();
-    ControlLike_f clf = new ControlLike_f();
-    ControlReport_f cref = new ControlReport_f();
-    ControlIngredients_f cif = new ControlIngredients_f();
-    ControlComment_f ccf = new ControlComment_f();
-    ControlMail_f cmf = new ControlMail_f();
     ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
     ControlMyPhoto_f cmpf = new ControlMyPhoto_f();
-    Spinner pagespinner;
+
     Spinner sortspinner;
     ImageButton searchButton;
-    private View view;
+
     Boolean firstpage;
     String currentSort;
-
-    public int requestCode;
-    private Uri mImageCaptureUri;
 
     private GridView gridview = null;
     private PhotoAdapter photoAdapter = null;
@@ -95,7 +85,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
         type = getIntent().getIntExtra("post_type", -1);
         Log.d("type", "type = " + type);
 
-        if (type == 0) {//레시피 게시판
+        if (type == 0) {//자기가 작성한 레시피 게시판
             Log.d("mypageRecipe", "시작");
             setContentView(R.layout.activity_myboard);
             searchButton = findViewById(R.id.search_button);//검색 버튼
@@ -114,9 +104,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
             custon_progressDialog.setCanceledOnTouchOutside(false);
             custon_progressDialog.show();
 
+            //현재 정렬 기준
             currentSort = "";
-
-
             // 추가) 레시피 게시판 조회 호출 코드
             threadFlag.set(true);
             firstpage = true;
@@ -148,6 +137,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
 //
 //                            }
 //                        });
+                        //자기가 작성한 레시피 게시글에만 정렬 기준이 있으므로 visible로 바꿈
                         sortspinner = findViewById(R.id.sort_spinner);
                         sortspinner.setVisibility(View.VISIBLE);
                         sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -155,7 +145,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
                                 String sort_str = sortspinner.getSelectedItem().toString();
-                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
                                 if (!firstpage) {//기본적으로 1페이지로 설정되어있어서 1페이지를 다시 불러오게 되서 제일 처음에 불러오는 경우는 무시하도록 불리언값 주었음
                                     currentSort = sort_str;
                                     SortInfo sortInfo = new SortInfo(ControlLogin_f.userinfo.getNickname(), sort_str);
@@ -177,7 +166,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                                         intent.putExtra("recipe_post", recipelist.get(position));
                                                         startActivity(intent);
-                                                        //+조회수 관련 로직 추가할 것
                                                     }
                                                 });
                                                 custon_progressDialog.dismiss();
@@ -185,12 +173,12 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                                 responseCode = -1;
                                                 sortthreadFlag.set(false);
                                                 custon_progressDialog.dismiss();
-                                                mpbu.startDialog(0,"요청 실패","정렬 정보 요청을 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                mpbu.startDialog(0, "요청 실패", "정렬 정보 요청을 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                                             } else if (responseCode == 500) {
                                                 responseCode = -1;
                                                 sortthreadFlag.set(false);
                                                 custon_progressDialog.dismiss();
-                                                mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                                mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                             }
 
                                         }
@@ -220,6 +208,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                     NewRunnable nr = new NewRunnable();
                                     Thread t = new Thread(nr);
                                     sortthreadFlag.set(true);
+                                    //정렬 기준을 선택하였을 때 작동하는 쓰레드
                                     t.start();
                                     //업데이트된 레시피 리스트로 전환
                                     recipeAdapter.setRecipeList(recipelist);
@@ -261,9 +250,9 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 intent.putExtra("isMyPage", true);
                                 startActivity(intent);
+                                //recipesearchActivity로 마이페이지에서 왔다는 정보를 보내줌
                             }
                         });
-
                         custon_progressDialog.dismiss();//로딩창 종료
                         Thread.currentThread().interrupt();
                     } else if (responseCode == 400) {
@@ -310,6 +299,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
 
             NewRunnable nr = new NewRunnable();
             Thread t = new Thread(nr);
+            //자기가 작성한 레시피를 요청받는 쓰레드
             t.start();
         } else if (type == 1) {
             //사진게시판
@@ -338,18 +328,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             noResult.setVisibility(View.VISIBLE);
                         }
                         photoAdapter.setPhotoList(photolist);
-                        gridview.setAdapter(photoAdapter);
-                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("사진", "position = " + position + " id = " + id);
-                                Intent intent = new Intent(MyPageBoardActivity.this, PhotoLookupActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                intent.putExtra("photo_post", photolist.get(position));
-                                startActivity(intent);
-                            }
-                        });
-
+                        //전달받은 사진리스트 설정
                         gridview.setAdapter(photoAdapter);
                         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -418,13 +397,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
 
             responseCode = 0;
 
-//                //swipe레이아웃
-//                swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
-//                swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
-            // UI controller
-//                RecipeList_UI rlu = new RecipeFragment.RecipeList_UI();
-
             //로딩창 구현
             custon_progressDialog = new Custon_ProgressDialog(this);
             custon_progressDialog.setCanceledOnTouchOutside(false);
@@ -449,7 +421,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
-                        if (recipelist.size() == 0) {
+                        if (recipelist.size() == 0) {//좋아요한 게시글이 없는 경우
                             TextView noResult = findViewById(R.id.noResult);
                             noResult.setVisibility(View.VISIBLE);
                         }
@@ -459,22 +431,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             pagenum[i - 1] = String.valueOf(i);
                         }
 
-//                        sortspinner = findViewById(R.id.sort_spinner);
-//                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                            @Override
-//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
-//                                String sort_str = sortspinner.getSelectedItem().toString();
-//                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
-//                                //crlf.sortRecipeList(sort_str, 1);
-//                            }
-//
-//                            @Override
-//                            public void onNothingSelected(AdapterView<?> parent) {
-//
-//                            }
-//                        });
-
                         //레시피 리사이클러뷰 클릭 이벤트
                         recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
                             @Override
@@ -483,7 +439,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 intent.putExtra("recipe_post", recipelist.get(position));
                                 startActivity(intent);
-                                //+조회수 관련 로직 추가할 것
                             }
                         });
                         sortspinner = findViewById(R.id.sort_spinner);
@@ -499,7 +454,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-                        mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };
@@ -529,11 +484,11 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     Log.d("thread1", "thread1");
                 }
             }
-            ControlRecipeList_f crlf = new ControlRecipeList_f();
             ControlPost_f cpf = new ControlPost_f();
-            cpf.lookupMyLikeList("test", 1);
+            cpf.lookupMyLikeList(ControlLogin_f.userinfo.getNickname(), 1);
             NewRunnable nr = new NewRunnable();
             Thread t = new Thread(nr);
+            //좋아요 누른 리스트를 확인하는 쓰레드
             t.start();
         } else if (type == 3) {
             //댓글을 작성한 리스트
@@ -549,13 +504,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
             recipeRecyclerView.setLayoutManager(layoutManager);
 
             responseCode = 0;
-
-//                //swipe레이아웃
-//                swipeRefreshLayout = view.findViewById(R.id.swipeLayout);
-//                swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
-            // UI controller
-//                RecipeList_UI rlu = new RecipeFragment.RecipeList_UI();
 
             //로딩창 구현
             custon_progressDialog = new Custon_ProgressDialog(this);
@@ -581,7 +529,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         threadFlag.set(false);
                         responseCode = -1;
-                        if (recipelist.size() == 0) {
+                        if (recipelist.size() == 0) {//댓글 작성한 게시글이 없는 경우
                             TextView noResult = findViewById(R.id.noResult);
                             noResult.setVisibility(View.VISIBLE);
                         }
@@ -598,7 +546,6 @@ public class MyPageBoardActivity extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 intent.putExtra("recipe_post", recipelist.get(position));
                                 startActivity(intent);
-                                //+조회수 관련 로직 추가할 것
                             }
                         });
                         sortspinner = findViewById(R.id.sort_spinner);
@@ -609,14 +556,12 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-                        mpbu.startDialog(0,"요청 실패","정보 요청에 실패함.",new ArrayList<>(Arrays.asList("확인")));
-//                            rlu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "요청 실패", "정보 요청에 실패함.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 502) {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-                        mpbu.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
-//                            rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                     }
                 }
             };
@@ -650,6 +595,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
             cpf.lookupMyCommentList(ControlLogin_f.userinfo.getNickname());
             NewRunnable nr = new NewRunnable();
             Thread t = new Thread(nr);
+            //댓글을 작성한 게시글을 확인하는 쓰레드
             t.start();
         }
 

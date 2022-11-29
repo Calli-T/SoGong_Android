@@ -102,16 +102,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
                         noResult.setVisibility(View.VISIBLE);
                     }
 
-                    //레시피 리사이클러뷰 클릭 이벤트
-                    refri_ingre_Adapter.setOnItemClickListener(new Refri_Ingre_Adapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClicked(int position, String data) {
-//                            Intent intent = new Intent(RefrigeratorActivity.this, IngredientLookupActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                            intent.putExtra("recipe_post", ingreList.get(position));
-//                            startActivity(intent);
-                        }
-                    });
+
                     //재료리스트에 있는 버튼들의 클릭 이벤트 처리
                     //재료 수정
                     refri_ingre_Adapter.setOnItemLeftButtonClickListener(new Refri_Ingre_Adapter.OnItemLeftButtonClickListener() {

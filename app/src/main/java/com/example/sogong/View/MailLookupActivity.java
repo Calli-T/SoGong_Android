@@ -51,6 +51,8 @@ public class MailLookupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lookupmail);
         Mail mail = getIntent().getParcelableExtra("mail");
+
+        //넘겨온 값으로 값 입력
         mailTitle = findViewById(R.id.mailtitle_text1);
         mailAuthor = findViewById(R.id.mailauthor_text1);
         mailDate = findViewById(R.id.maildate_text1);
@@ -66,9 +68,12 @@ public class MailLookupActivity extends AppCompatActivity {
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
         MailLookupActivity_UI mlau = new MailLookupActivity_UI();
+
+        //삭제 버튼 클릭
         deleteMail_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //삭제 여부 되묻기
                 mlau.startDialog(1, "쪽지 삭제", "쪽지를 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("확인", "취소")));
 
                 class NewRunnable implements Runnable {
@@ -77,6 +82,7 @@ public class MailLookupActivity extends AppCompatActivity {
                         while(true){
                             try {
                                 Thread.sleep(100);
+                                //확인을 누른 경우
                                 if(Custom_Dialog.state== 0){
                                     Custom_Dialog.state = -1;
                                     inProgress = true;
@@ -84,12 +90,12 @@ public class MailLookupActivity extends AppCompatActivity {
                                     final Runnable progress = new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(inProgress){
+                                            if(inProgress){//isProgress가 참이면 로딩창 띄우고 거짓이면 로딩창 사라진다.
                                                 custon_progressDialog.show();
                                             } else custon_progressDialog.dismiss();
                                         }
                                     };
-                                    runOnUiThread(progress);
+                                    runOnUiThread(progress);//로딩창 띄우기
                                     final Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
@@ -130,9 +136,11 @@ public class MailLookupActivity extends AppCompatActivity {
                                     }
                                     NewRunnable1 nr = new NewRunnable1();
                                     Thread t = new Thread(nr);
+                                    //삭제된 것을 확인하는 쓰레드
                                     t.start();
                                     break;
                                 } else if(Custom_Dialog.state == 1){
+                                    //취소를 누른 경우 작동하지 않음
                                     break;
                                 }
                             } catch (Exception e) {
@@ -144,61 +152,10 @@ public class MailLookupActivity extends AppCompatActivity {
 
                 NewRunnable nr = new NewRunnable();
                 Thread t = new Thread(nr);
+                //되묻는 다이얼로그에서의 버튼 클릭을 기다리는 쓰레드
                 t.start();
             }
         });
-
-        /*
-        deleteMail_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // #39 쪽지 삭제하기 호출 코드
-                custon_progressDialog.show();
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            onBackPressed();
-                        } else if (responseCode == 500) {
-
-                        } else if (responseCode == 502) {
-
-                        }
-                    }
-                };
-
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
-                            }
-                        }
-                    }
-                }
-
-                ControlMail_f cmf = new ControlMail_f();
-                cmf.deleteMail(ControlLogin_f.userinfo.getNickname(), mail.getMail_id());
-                threadFlag.set(true);
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
-
-            }
-        });
-        */
     }
 
     class MailLookupActivity_UI implements Control {
@@ -209,8 +166,6 @@ public class MailLookupActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -233,104 +188,3 @@ public class MailLookupActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-/*
-public void onClick(View view) {
-                // #39 쪽지 삭제하기 호출 코드
-                responseCode = 0;
-                List<String> temp = new ArrayList<>();
-                temp.add("확인");
-                temp.add("취소");
-                mlau.startDialog(1, "쪽지 삭제", "쪽지를 삭제하시겠습니까?", temp);
-
-                class NewRunnable implements Runnable {
-                    NewRunnable() {
-                    }
-
-                    @Override
-                    public void run() {
-                        while (true) {
-                            try {
-                                Thread.sleep(100);
-                                Log.d("Thread", "돌아가고 있어요");
-                                if (Custom_Dialog.state == 0) {
-                                    Custom_Dialog.state = -1;
-
-                                    custon_progressDialog.show();
-
-                                    Log.d("Thread", "왼쪽 버튼 눌림");
-                                    ControlMail_f cmf = new ControlMail_f();
-                                    cmf.deleteMail(ControlLogin_f.userinfo.getNickname(), mail.getMail_id());
-//                                    final Runnable runnable = new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            if (responseCode == 200) {
-//                                                responseCode = -1;
-//                                                threadFlag.set(false);
-//                                                custon_progressDialog.dismiss();
-//                                                onBackPressed();
-//                                            } else if (responseCode == 404 || responseCode == 500) {
-//                                                List<String> temp = new ArrayList<>();
-//                                                temp.add("확인");
-//                                                mlau.startDialog(0, "삭제 실패", "삭제에 실패했습니다.", temp);
-//                                            }
-//                                        }
-//                                    };
-//
-//                                    class NeoRunnable implements Runnable {
-//                                        @Override
-//                                        public void run() {
-//                                            for (int i = 0; i < 30; i++) {
-//                                                try {
-//                                                    Thread.sleep(1000);
-//                                                } catch (Exception e) {
-//                                                    e.printStackTrace();
-//                                                }
-//
-//                                                if (threadFlag.get())
-//                                                    runOnUiThread(runnable);
-//                                                else {
-//                                                    i = 30;
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-
-
-//                                    threadFlag.set(true);
-//                                    NeoRunnable nr = new NeoRunnable();
-//                                    Thread t = new Thread(nr);
-//                                    t.start();
-                                    if(responseCode != 0){
-                                            if (responseCode == 200) {
-                                            responseCode = -1;
-                                            threadFlag.set(false);
-                                            custon_progressDialog.dismiss();
-                                            onBackPressed();
-                                            } else if (responseCode == 404 || responseCode == 500) {
-                                            List<String> temp = new ArrayList<>();
-        temp.add("확인");
-        mlau.startDialog(0, "삭제 실패", "삭제에 실패했습니다.", temp);
-        }
-        break;
-        }
-
-
-        } else if (Custom_Dialog.state == 1) {
-        break;
-        }
-        } catch (Exception e) {
-        e.printStackTrace();
-        }
-        }
-        }
-        }
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
-        }
- */
-/**/

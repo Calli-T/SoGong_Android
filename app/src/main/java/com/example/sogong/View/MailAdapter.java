@@ -33,6 +33,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> {
             author = itemView.findViewById(R.id.author);
         }
 
+        //어댑터에 띄울 내용 설정
         void onBind(Mail mail) {
             title.setText(mail.getTitle());
             String time = mail.getSend_time();

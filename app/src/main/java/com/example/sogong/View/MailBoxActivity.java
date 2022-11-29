@@ -64,7 +64,7 @@ public class MailBoxActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(MailBoxActivity.this);
@@ -82,15 +82,15 @@ public class MailBoxActivity extends AppCompatActivity {
                     threadFlag.set(false);
                     pagenum = new String[totalpage];
 
-                    if (maillist.size() == 0) {
+                    if (maillist.size() == 0) {//쪽지가 없는 경우
                         TextView noResult = findViewById(R.id.noResult);
                         noResult.setVisibility(View.VISIBLE);
                     }
 
-
                     for (int i = 1; i <= totalpage; i++) {
                         pagenum[i - 1] = String.valueOf(i);
-                    }
+                    }//전체 페이지 수 만큼 String 배열 생성
+
                     //페이지 수 스피너 설정
                     Spinner pagespinner = findViewById(R.id.mailbox_page_spinner);
                     ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MailBoxActivity.this, android.R.layout.simple_spinner_item, pagenum);
@@ -105,6 +105,7 @@ public class MailBoxActivity extends AppCompatActivity {
                                 ControlMailList_f cmlf = new ControlMailList_f();
                                 cmlf.lookupMailList(position + 1, ControlLogin_f.userinfo.getNickname());
                                 custon_progressDialog.show();
+
                                 final Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
@@ -155,6 +156,7 @@ public class MailBoxActivity extends AppCompatActivity {
                                 Thread t = new Thread(nr);
                                 pagethreadFlag.set(true);
                                 threadFlag.set(true);
+                                //페이지 이동을 확인하는 쓰레드 실행
                                 t.start();
                                 //업데이트된 레시피 리스트로 전환
                                 mailAdapter.setRecipeList(maillist);
@@ -168,25 +170,8 @@ public class MailBoxActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
-                                Log.d("recipefragment", "page spinner " + position + " 클릭");
                             }
                             firstpage = false;
-//                            //페이지 클릭 시 해당 페이지에 맞는 레시피 리스트로 전환
-//                            cmlf.lookupMailList(position+1,ControlLogin_f.userinfo.getNickname(););
-//                            //업데이트된 레시피 리스트로 전환
-//                            mailAdapter.setRecipeList(maillist);
-//                            //레시피 리사이클러뷰 클릭 이벤트
-//                            //메일 리사이클러뷰 클릭 이벤트
-//                            mailAdapter.setOnItemClickListener(new MailAdapter.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClicked(int position, String data) {
-//                            Intent intent = new Intent(MailBoxActivity.this, MailLookupActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                            intent.putExtra("mail", maillist.get(position));
-//                            startActivity(intent);
-//                        }
-//                    });
-                            Log.d("recipefragment", "page spinner " + position + " 클릭");
                         }
 
                         @Override
@@ -204,7 +189,8 @@ public class MailBoxActivity extends AppCompatActivity {
                             intent.putExtra("mail", maillist.get(position));
                             startActivity(intent);
                         }
-                    });custon_progressDialog.dismiss();
+                    });
+                    custon_progressDialog.dismiss();
 
                 } else if (responseCode == 404 || responseCode == 500) {
                     List<String> temp = new ArrayList<>();
@@ -238,8 +224,10 @@ public class MailBoxActivity extends AppCompatActivity {
 
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
+        //1페이지 쪽지 보는 쓰레드
         t.start();
     }
+
     class FABClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -258,8 +246,6 @@ public class MailBoxActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -275,10 +261,6 @@ public class MailBoxActivity extends AppCompatActivity {
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-            if (dest == 0) {
-                Intent intent = new Intent(MailBoxActivity.this, MailBoxActivity.class);
-                startActivity(intent);
-            }
         }
     }
 }
