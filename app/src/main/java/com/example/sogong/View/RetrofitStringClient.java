@@ -17,10 +17,8 @@ public class RetrofitStringClient {
     public static String BASE_URL = "https://recippe-sg.herokuapp.com/";
     private static Retrofit retrofit;
 
+    // // API 주소 연결용 클라이언트 (String 응답 전용)
     public static Retrofit getClient(){
-
-        // https://velog.io/@flexin/Android-Retrofit2-Empty-Response참조
-        // 빈 response를 null로 처리
         class NullOnEmptyConverterFactory extends Converter.Factory {
             @Override
             public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {

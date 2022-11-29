@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
 
     public static int responseCode;
     public static String authEmail;
-    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 쓰레드 제어용 플래그
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +65,13 @@ public class SignupActivity extends AppCompatActivity {
         join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 공백 검출
                 if (userid_et.getText().toString().equals("")
                         | passwd_et.getText().toString().equals("")
                         | passwdcheck_et.getText().toString().equals("")
                         | nickname_et.getText().toString().equals("")) {
                     su.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
-                } else {
+                } else { // 양식 검출
                     if (!passwd_et.getText().toString().matches("(?=.*[0-9]{1,})(?=.*[?!@<>]{1,})(?=.*[a-z]{1,}).{6,}$")) {
                         Log.d("비밀번호",passwd_et.getText().toString());
                         su.startDialog(0, "양식 오류", "비번 양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
@@ -165,8 +166,6 @@ public class SignupActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -178,14 +177,12 @@ public class SignupActivity extends AppCompatActivity {
             Custom_Dialog cd = new Custom_Dialog(SignupActivity.this);
             cd.callFunction(title, message, type, btnTxtList);
         }
-
-        // 0은
+        
         @Override
         public void changePage(int dest) {
             if (dest == 0) {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
-                // stack식 액티비티 천환 해결방식을 생각해둘것
             }
         }
 
