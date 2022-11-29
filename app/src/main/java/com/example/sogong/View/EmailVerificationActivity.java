@@ -63,7 +63,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         sendcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (email_at.getText().toString().equals("") | isValidEmail(email_at.getText().toString())) {
+                if (email_at.getText().toString().equals("") || !isValidEmail(email_at.getText().toString())) {
                     eu.startToast("잘못된 형식의 입력입니다.");
                 } else {
                     custon_progressDialog.show();
