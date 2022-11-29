@@ -56,14 +56,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String passwd = passwd_et.getText().toString();
                 String passwdcheck = passwdcheck_et.getText().toString();
+                //양식에 맞지 않게 입력한 경우
                 if (passwd.equals("") | passwdcheck.equals("")) {
                     cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
                 } else if (!passwd.equals(passwdcheck)) {
+                    //비밀번호가 다른 경우
                     cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
                 } else {
                     if (!passwd.matches("(?=.*[0-9]{1,})(?=.*[?!@<>]{1,})(?=.*[a-z]{1,}).{6,}$")) {
+                        //비밀번호 정규식과 맞지 않은 경우
                         cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
                     } else {
+                        //비밀번호 변경 api 호출
                         final Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
@@ -150,8 +154,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
+
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);

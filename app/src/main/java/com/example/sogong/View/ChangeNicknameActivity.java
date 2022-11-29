@@ -45,15 +45,16 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        cu.startToast("yoha babo");
-        // 닉네임 변경
+        //닉네임 변경
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //닉네임을 비우고 클릭한 경우
                 if (nickname_et.getText().toString().equals("")) {
                     cu.startDialog(0, "입력", "새로운 닉네임을 입력해주세요.", new ArrayList<>(Arrays.asList("확인")));
                 } else {
                     String nickname = nickname_et.getText().toString();
+                    //입력한 닉네임으로 api 호출
                     final Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
@@ -100,8 +101,6 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                             }
                         }
                     }
-
-
                     responseCode = -1;
                     custon_progressDialog.show();
                     threadFlag.set(true);
@@ -117,6 +116,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
 
         });
 
+        //취소 버튼
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,8 +136,6 @@ public class ChangeNicknameActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);

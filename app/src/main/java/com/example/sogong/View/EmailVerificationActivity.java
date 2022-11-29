@@ -65,13 +65,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
         sendcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //이메일 입력 양식과 다른 경우와 입력하지 않은 경우
                 if (email_at.getText().toString().equals("") || !isValidEmail(email_at.getText().toString())) {
                     responseCode = 0;
                     eu.startToast("잘못된 형식의 입력입니다.");
                 } else {
                     custon_progressDialog.show();
                     String email = email_at.getText().toString();
-
                     final Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
@@ -112,7 +112,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                     Log.d("Verification thread", "working");
                                 } else {
                                     i = 30;
-                                    Log.d("Verification thread", "down11");
+                                    Log.d("Verification thread", "down");
                                 }
                             }
                         }
@@ -123,14 +123,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
                         ControlEmailVerification_f cef = new ControlEmailVerification_f();
                         // 비밀변경에는 사용자의 email과 대조하는 과정이 추가로 필요하다.
-                        // 아예 자동으로 userinfo에서 꺼내와서 code 전송하고 잠궈라
                         if (destination == 0) {
                             cef.authStart(email);
                         } else if (destination == 1) {
                             eu.startToast("이메일을 전송했습니다.");
-                            //if(ControlLogin_f.userinfo.getEmail() == email)
                             cef.authStart(email);
-                            //userinfo와 다를경우도 토스트? 다이얼로그? 뭐든 메시지를 띄워야한다.
+
                         }
 
                     }
@@ -154,6 +152,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        //코드 전송을 성공하였을 때 실행
                         if (isFinish) {
                             if (responseCode == 200) {
                                 responseCode = -4;
@@ -256,7 +255,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
             if (dest == 0) {
                 Intent intent = new Intent(EmailVerificationActivity.this, SignupActivity.class);
                 startActivity(intent);
-                // stack식 액티비티 천환 해결방식을 생각해둘것
             } else if (dest == 1) {
                 Intent intent = new Intent(EmailVerificationActivity.this, ChangePasswordActivity.class);
                 startActivity(intent);
@@ -277,5 +275,3 @@ public class EmailVerificationActivity extends AppCompatActivity {
         return err;
     }
 }
-
-// responseCode가 -1이면 authStart전송, -2이면 authStart정상처리, -3이면 authFinish전송, -4면 authFinish정상처리

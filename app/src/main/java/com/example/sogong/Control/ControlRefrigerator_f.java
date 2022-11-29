@@ -166,6 +166,8 @@ public class ControlRefrigerator_f {
     }
 
     public void noResult(String message) {
+
+
     }//이거랑 control의 startToast랑 뭐가 다름?
     // -> 화면에 텍스트뷰에다가 메세지를 입력해서 보여주는거에여 쀼잉><
 }

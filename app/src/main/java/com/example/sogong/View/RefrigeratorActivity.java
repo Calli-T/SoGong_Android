@@ -96,6 +96,12 @@ public class RefrigeratorActivity extends AppCompatActivity {
                     refri_ingre_Adapter.setRefriIngreList(ingreList);
                     threadFlag = false;
 
+
+                    if (ingreList.size() == 0) {
+                        TextView noResult = findViewById(R.id.noResult);
+                        noResult.setVisibility(View.VISIBLE);
+                    }
+
                     //레시피 리사이클러뷰 클릭 이벤트
                     refri_ingre_Adapter.setOnItemClickListener(new Refri_Ingre_Adapter.OnItemClickListener() {
                         @Override

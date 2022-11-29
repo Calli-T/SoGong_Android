@@ -68,13 +68,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
         void onBind(Comment comment) {
+            //댓글 작성자가 본인인 경우
             if (Objects.equals(ControlLogin_f.userinfo.getNickname(), comment.getNickname())) {
                 author.setText(comment.getNickname());
                 comment1.setText(comment.getComments());
                 String time = comment.getComment_time();
                 String[] time1 = time.split("T");
                 date.setText(time1[0]);
-            } else {
+            } else {//댓글 작성자가 본인이 아닌 경우
                 author.setText(comment.getNickname());
                 comment1.setText(comment.getComments());
                 String time = comment.getComment_time();

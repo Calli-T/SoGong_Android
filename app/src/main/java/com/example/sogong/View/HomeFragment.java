@@ -62,10 +62,6 @@ public class HomeFragment extends Fragment  {
         custon_progressDialog = new Custon_ProgressDialog(requireActivity());
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
-        
-//        //swipe 레이아웃
-//        swipeRefreshLayout = rootview.findViewById(R.id.home_swipeLayout);
-//        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         //레시피 Recycler 선언
         recipeRecyclerView = (RecyclerView) rootview.findViewById(R.id.home_recipe_recyclerview);
@@ -82,7 +78,6 @@ public class HomeFragment extends Fragment  {
         //맨 앞으로
         gridview.bringToFront();
 
-        Log.d("homefragment", "재시작");
         // UI controller
         Home_UI hu = new Home_UI();
         custon_progressDialog.show();
@@ -127,7 +122,6 @@ public class HomeFragment extends Fragment  {
                             startActivity(intent);
                         }
                     });
-
                     custon_progressDialog.dismiss();//로딩창 종료
                 } else if (RecipeFragment.responseCode == 500 || PhotoFragment.responseCode == 500) {
                     RecipeFragment.responseCode = 0;
@@ -160,7 +154,6 @@ public class HomeFragment extends Fragment  {
 
                     } else {
                         i = 30;
-                        //Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -190,106 +183,6 @@ public class HomeFragment extends Fragment  {
         isInHome = false;
     }
 
-//    // swipe에 사용할 함수
-//    @Override
-//    public void onRefresh() {
-//        //새로 고침 코드
-//        updateLayoutView();
-//        //새로 고침 완료
-//        swipeRefreshLayout.setRefreshing(false);
-//    }
-
-    public void updateLayoutView(){
-        Log.d("homefragment", "새로고침");
-        Home_UI hu = new Home_UI();
-        custon_progressDialog.show();
-        threadFlag.set(true);
-
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (RecipeFragment.responseCode == 200 && PhotoFragment.responseCode == 200) {
-                    RecipeFragment.responseCode = 0;
-                    PhotoFragment.responseCode = 0;
-                    threadFlag.set(false);
-                    Log.d("homefragment", "레시피리스트와 포토리스트 가져옴");
-
-                    // 레시피 리사이클러뷰 생성
-                    recipeAdapter.setRecipeList(RecipeFragment.recipelist);
-
-                    // 레시피 리사이클러뷰 클릭 이벤트
-                    recipeAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
-                        // 원소 번호와 정보를 긁어다 intent에 넣어 lookup으로 이동?
-                        @Override
-                        public void onItemClicked(int position, String data) {
-                            Intent intent = new Intent(getActivity(), RecipeLookupActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("recipe_post", recipelist.get(position));
-                            //startActivity(intent);
-                        }
-                    });
-
-                    // 사진 그리드뷰의 생성 및 클릭 이벤트
-                    photoAdapter.setPhotoList(PhotoFragment.photoList);
-                    gridview.setAdapter(photoAdapter);
-                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.d("사진", PhotoFragment.photoList.get(position).toString());
-                            Intent intent = new Intent(getActivity(), PhotoLookupActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            intent.putExtra("photo_post", PhotoFragment.photoList.get(position));
-                            //startActivity(intent);
-                        }
-                    });
-
-                    custon_progressDialog.dismiss();//로딩창 종료
-                } else if (RecipeFragment.responseCode == 500 || PhotoFragment.responseCode == 500) {
-                    RecipeFragment.responseCode = 0;
-                    PhotoFragment.responseCode = 0;
-                    threadFlag.set(false);
-                    custon_progressDialog.dismiss();//로딩창 종료
-                    hu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
-                } else if (RecipeFragment.responseCode == 502 || PhotoFragment.responseCode == 502) {
-                    RecipeFragment.responseCode = 0;
-                    PhotoFragment.responseCode = 0;
-                    threadFlag.set(false);
-                    custon_progressDialog.dismiss();//로딩창 종료
-                    hu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (threadFlag.get()) {
-                        getActivity().runOnUiThread(runnable);
-
-                    } else {
-                        i = 30;
-                        //Thread.currentThread().interrupt();
-                    }
-                }
-            }
-        }
-
-
-        crlf.sortRecipeList("최근 순", 1);
-        cplf.sortPhotoList("최근 순", 1);
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
-    }
-
     class Home_UI implements Control {
         @Override
         public void startToast(String message) {
@@ -316,79 +209,3 @@ public class HomeFragment extends Fragment  {
         }
     }
 }
-/*
-final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                hu.startToast(str);
-                if (MainActivity.responseCode == 200) {
-                    MainActivity.responseCode = -1;
-                    hu.startToast(str);
-                } else {
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    getActivity().runOnUiThread(runnable);
-                }
-            }
-        }
-
-        ControlRecipeList_f crlf = new ControlRecipeList_f();
-        crlf.lookupRecipeList(1);
-
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
- */
-
-// json object
-// java json parser
-
-/*
-final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                hu.startToast(str);
-                if (MainActivity.responseCode == 200) {
-                    MainActivity.responseCode = -1;
-                    hu.startToast(str);
-                } else {
-                }
-            }
-        };
-
-        class NewRunnable implements Runnable {
-            @Override
-            public void run() {
-                for (int i = 0; i < 30; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    getActivity().runOnUiThread(runnable);
-                }
-            }
-        }
-
-        ControlRecipeList_f crlf = new ControlRecipeList_f();
-        crlf.lookupRecipeList(1);
-
-
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
-        t.start();
- */
