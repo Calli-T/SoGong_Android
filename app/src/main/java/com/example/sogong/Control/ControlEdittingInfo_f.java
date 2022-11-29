@@ -24,30 +24,16 @@ public class ControlEdittingInfo_f {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                // 200
+                // 코드 전송
                 ChangePasswordActivity.responseCode = response.code();
-                if (response.isSuccessful()) {
-                    /*if (response.body() != null) {
-                        if (response.code() == 200) {
-                            ControlLogin_f.userinfo.setPassword(pw);
-                            ChangePasswordActivity.responseCode = response.code();
-                        }
-                    } else // 404
-                        Log.d("404 Not Found", "with editPassword");
-                    */
-                } else {
-                    // 500 or 502
-
-                    //LoginActivity.responseCode = response.code();
-                }
+                Log.d("result", response.code()+"");
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
+                Log.d("result", "실패");
             }
         });
-
     }
 
     public void editNickname(String new_nickname) {
@@ -63,26 +49,9 @@ public class ControlEdittingInfo_f {
             public void onResponse(Call<String> call, Response<String> response) {
                 ChangeNicknameActivity.responseCode = response.code();
                 Log.d("result", response.code()+"");
-                // 200
-                /*if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.code() == 200) {
-                            //ControlLogin_f.userinfo = new User(response.body().getNickname(), response.body().getUid(), response.body().getPassword(), response.body().getEmail(), response.body().isAuto_login());
-                            ControlLogin_f.userinfo.setNickname(new_nickname);
-                            //LoginActivity.responseCode = response.code();
-                        }
-                    } else // 404
-                        Log.d("404 Not Found", "with editNickname");
-                } else {
-                    // 400 or more
-
-                    //LoginActivity.responseCode = response.code();
-                }*/
             }
-
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                //Toast.makeText(LoginActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
 

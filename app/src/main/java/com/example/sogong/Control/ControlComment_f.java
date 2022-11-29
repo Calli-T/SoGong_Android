@@ -83,10 +83,7 @@ public class ControlComment_f {
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
-                Log.d("댓글삭제control","responseCode = "+  RecipeLookupActivity.responseCode.get() );
-                //RecipeLookupActivity.responseCode = response.code();
                 RecipeLookupActivity.responseCode.set(response.code());
-                Log.d("댓글삭제control","responseCode = "+  RecipeLookupActivity.responseCode.get() );
 
                 // 200
                 if(response.isSuccessful()) {
