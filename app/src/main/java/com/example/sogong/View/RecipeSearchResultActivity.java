@@ -40,12 +40,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RecipeSearchResultActivity extends AppCompatActivity {
-    public static int responseCode;
-    public static List<RecipePost_f> recipeList;
+    public static int responseCode; // 응답 코드
+    public static List<RecipePost_f> recipeList; // 반환값 저장
     public static int totalpage;
     String[] pagenum;
-    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
-    private AtomicBoolean pagethreadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
+    private AtomicBoolean pagethreadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
     TextView searchContent;
     Spinner pageSpinner;
     Button researchButton;
@@ -71,6 +71,8 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
+
+        //사용할 컴포넌트들 등록ㄴ
         searchType = getIntent().getStringExtra("searchType");
         categories = getIntent().getStringExtra("categories");
         keywordType = getIntent().getStringExtra("keywordType");
@@ -93,6 +95,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
         firstpage = true;
+
         if (!isMyPage) {
             final Runnable runnable = new Runnable() {
                 @Override
@@ -345,8 +348,6 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);

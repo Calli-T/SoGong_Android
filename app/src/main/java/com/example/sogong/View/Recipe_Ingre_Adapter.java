@@ -40,6 +40,7 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
             Log.d("amount", "재료 및 양 " + amountstr);
             amount.setText(amountstr);
 
+            // 없는 재료는 붉은 글씨로
             if(!exist){
                 name.setTextColor(Color.parseColor("#FF0000"));
                 amount.setTextColor(Color.parseColor("#FF0000"));
@@ -58,20 +59,6 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.recycler_recipe_ingre, parent, false);
         Recipe_Ingre_Adapter.ViewHolder vh = new Recipe_Ingre_Adapter.ViewHolder(view);
-
-        //리사이클러 클릭 이벤트
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String data = "";
-//                int position = vh.getAbsoluteAdapterPosition();
-//                if (position != RecyclerView.NO_POSITION) {
-//                    data = vh.getAuthor().getText().toString();
-//                }
-//                itemClickListener.onItemClicked(position, data);
-//
-//            }
-//        });
 
         return vh;
     }
@@ -93,13 +80,14 @@ public class Recipe_Ingre_Adapter extends RecyclerView.Adapter<Recipe_Ingre_Adap
         if (isExist == null)
             holder.onBind(mData.get(position), true);
         else{
+            // 재료를 가지고 있을 때와 없을 때를 다르게 처리
             if(!isExist.contains(mData.get(position).getId())) {
-                Log.d("언젠가 그가 너를", position+ " " + mData.get(position).getId());
+                Log.d("ingre_adapter", position+ " " + mData.get(position).getId());
                 holder.onBind(mData.get(position), true);
             }
             else{
+                Log.d("ingre_adapter", position+ " " + mData.get(position).getId());
                 holder.onBind(mData.get(position), false);
-                Log.d("맘아프게 혼자", position+ " " + mData.get(position).getId());
             }
         }
     }

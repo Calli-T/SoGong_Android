@@ -49,6 +49,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
         categories = new StringBuilder();
         Boolean isMyPage = getIntent().getBooleanExtra("isMyPage", false);
 
+        // 사용할 컴포넌트 들
         searchOption = findViewById(R.id.searchoption_spinner);
         searchEdit = findViewById(R.id.search_edit);
         searchButton = findViewById(R.id.search_button);
@@ -157,8 +158,6 @@ public class RecipeSearchActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -174,10 +173,6 @@ public class RecipeSearchActivity extends AppCompatActivity {
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-//            if (dest == 0) {
-//                Intent intent = new Intent(RecipeSearchResultActivity.this, RefrigeratorActivity.class);
-//                startActivity(intent);
-//            }
         }
     }
 }

@@ -66,7 +66,6 @@ public class RecipeAddActivity extends AppCompatActivity {
     TextView ingreunit;
     Spinner ingrename_spinner;
     TextView ingrename_selectText;
-    //ArrayList<TextView> ingrename_selectText;
     EditText ingreamount_edit;
     TextView ingreamount_text;
     private AtomicBoolean threadFlag = new AtomicBoolean();
@@ -210,6 +209,7 @@ public class RecipeAddActivity extends AppCompatActivity {
             }
         });
 
+        //등록이 아닌 수정일 경우 기존 값 채워넣어줌
         if (isEdit) {
             recipetitle.setText(recipePostF.getTitle());
             ArrayList<String> category_str = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.category)));
@@ -277,9 +277,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     newRecipe.setRecipe_Ingredients(recipe_ingredients);
 
                     Log.d("recipe", newRecipe.toString());
-                    //newRecipe로 게시글 등록 함수에 넣으면 됨
 
-                    // #24 레시피 게시글 등록 호출 코드
                     threadFlag.set(true);
                     final Runnable runnable = new Runnable() {
                         @Override
@@ -385,9 +383,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     newRecipe.setRecipe_Ingredients(recipe_ingredients);
 
                     Log.d("recipe", newRecipe.toString());
-                    //newRecipe로 게시글 등록 함수에 넣으면 됨
 
-                    // #24 레시피 게시글 등록 호출 코드
                     threadFlag.set(true);
                     final Runnable runnable = new Runnable() {
                         @Override
@@ -482,8 +478,6 @@ public class RecipeAddActivity extends AppCompatActivity {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getApplicationContext());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -499,10 +493,6 @@ public class RecipeAddActivity extends AppCompatActivity {
         // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-//            if (dest == 0) {
-//                Intent intent = new Intent(RecipeAddActivity.this, RefrigeratorActivity.class);
-//                startActivity(intent);
-//            }
         }
     }
 
