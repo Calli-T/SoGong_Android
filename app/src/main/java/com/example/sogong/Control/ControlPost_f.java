@@ -9,6 +9,7 @@ import com.example.sogong.Model.Post;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.View.MyPageBoardActivity;
 import com.example.sogong.View.PhotoFragment;
+import com.example.sogong.View.RecipeAddActivity;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
 import com.example.sogong.View.RetrofitService;
@@ -51,6 +52,7 @@ public class ControlPost_f {
 
                 @Override
                 public void onFailure(@NonNull Call<List<RecipePost_f>> call, @NonNull Throwable t) { // 500
+                    MyPageBoardActivity.responseCode = 500;
                     Log.d("result", "알 수 없는 오류");
                 }
             });
@@ -78,6 +80,7 @@ public class ControlPost_f {
 
                 @Override
                 public void onFailure(@NonNull Call<List<PhotoPost>> call, @NonNull Throwable t) { // 500
+                    MyPageBoardActivity.responseCode = 500;
                     Log.d("result", "알 수 없는 오류");
                 }
             });
@@ -110,6 +113,7 @@ public class ControlPost_f {
 
             @Override
             public void onFailure(@NonNull Call<List<RecipePost_f>> call, @NonNull Throwable t) { // 500
+                MyPageBoardActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });

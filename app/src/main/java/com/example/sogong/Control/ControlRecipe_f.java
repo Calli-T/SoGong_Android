@@ -49,6 +49,7 @@ public class ControlRecipe_f {
             }
             @Override
             public void onFailure(@NonNull Call<RecipePostLookUp> call, @NonNull Throwable t) { // 502
+                RecipeLookupActivity.responseCode.set(502);
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -80,6 +81,7 @@ public class ControlRecipe_f {
             }
             @Override
             public void onFailure(@NonNull Call<RecipePost_f> call, @NonNull Throwable t) { // 502
+                RecipeAddActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -111,6 +113,7 @@ public class ControlRecipe_f {
             }
             @Override
             public void onFailure(@NonNull Call<RecipePost_f> call, @NonNull Throwable t) { // 502
+                RecipeAddActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -142,6 +145,7 @@ public class ControlRecipe_f {
             }
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 502
+                RecipeLookupActivity.responseCode.set(502);
                 Log.d("result", "알 수 없는 오류");
             }
         });

@@ -53,6 +53,7 @@ public class ControlPhotoList_f {
 
             @Override
             public void onFailure(@NonNull Call<PhotoList> call, @NonNull Throwable t) { // 502
+                PhotoFragment.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -89,6 +90,8 @@ public class ControlPhotoList_f {
             @Override
             public void onFailure(Call<PhotoList> call, Throwable t) { // 502
                 Log.d("result", "알 수 없는 오류");
+                PhotoFragment.responseCode = 502;
+                HomeFragment.responseCode = 502;
             }
         });
     }
