@@ -146,74 +146,79 @@ public class EmailVerificationActivity extends AppCompatActivity {
         check_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = email_at.getText().toString();
-                String code = code_at.getText().toString();
+                if (email_at.getText().toString().equals("") | code_at.getText().toString().equals("")) {
+                    eu.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                } else {
 
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        //코드 전송을 성공하였을 때 실행
-                        if (isFinish) {
-                            if (responseCode == 200) {
-                                responseCode = -4;
-                                threadFlag.set(false);
-                                eu.startToast("인증 완료");
-                                if (destination == 0) {
-                                    SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
-                                    eu.changePage(0);
-                                } else if (destination == 1) {
-                                    eu.changePage(1);
+                    String email = email_at.getText().toString();
+                    String code = code_at.getText().toString();
+
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            //코드 전송을 성공하였을 때 실행
+                            if (isFinish) {
+                                if (responseCode == 200) {
+                                    responseCode = -4;
+                                    threadFlag.set(false);
+                                    eu.startToast("인증 완료");
+                                    if (destination == 0) {
+                                        SignupActivity.authEmail = email; // 회원가입 페이지에 email 넘겨줌, Intent 방식으로 할까?
+                                        eu.changePage(0);
+                                    } else if (destination == 1) {
+                                        eu.changePage(1);
+                                    }
+                                } else if (responseCode == 400) {
+                                    responseCode = 0;
+                                    threadFlag.set(false);
+                                    eu.startToast("잘못된 인증코드입니다.");
+                                } else if (responseCode == 500) {
+                                    responseCode = 0;
+                                    threadFlag.set(false);
+                                    eu.startDialog(0, "서버 오류", "이메일 등록에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                } else if (responseCode == 502) {
+                                    responseCode = 0;
+                                    threadFlag.set(false);
+                                    eu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                 }
-                            } else if (responseCode == 400) {
-                                responseCode = 0;
-                                threadFlag.set(false);
-                                eu.startToast("잘못된 인증코드입니다.");
-                            } else if (responseCode == 500) {
-                                responseCode = 0;
-                                threadFlag.set(false);
-                                eu.startDialog(0, "서버 오류", "이메일 등록에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
-                            } else if (responseCode == 502) {
-                                responseCode = 0;
-                                threadFlag.set(false);
-                                eu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                            }
+                        }
+                    };
+
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            int i = 0;
+                            while (i < 30) {
+                                i++;
+
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (threadFlag.get()) {
+                                    runOnUiThread(runnable);
+                                    Log.d("Verification thread", "working");
+                                } else {
+                                    i = 30;
+                                    Log.d("Verification thread", "down");
+                                }
                             }
                         }
                     }
-                };
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        int i = 0;
-                        while (i < 30) {
-                            i++;
 
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    ControlEmailVerification_f cef = new ControlEmailVerification_f();
+                    threadFlag.set(true);
+                    cef.authFinish(email, code);
 
-                            if (threadFlag.get()) {
-                                runOnUiThread(runnable);
-                                Log.d("Verification thread", "working");
-                            } else {
-                                i = 30;
-                                Log.d("Verification thread", "down");
-                            }
-                        }
-                    }
+
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    t.start();
                 }
-
-
-                ControlEmailVerification_f cef = new ControlEmailVerification_f();
-                threadFlag.set(true);
-                cef.authFinish(email, code);
-
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
             }
         });
 

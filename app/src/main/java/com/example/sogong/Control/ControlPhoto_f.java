@@ -83,6 +83,7 @@ public class ControlPhoto_f {
 
             @Override
             public void onFailure(@NonNull Call<PhotoPost> call, @NonNull Throwable t) { // 502
+                PhotoAddActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });

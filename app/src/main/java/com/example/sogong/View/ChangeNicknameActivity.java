@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.sogong.Control.Control;
 import com.example.sogong.Control.ControlEdittingInfo_f;
+import com.example.sogong.Control.ControlLogin_f;
 import com.example.sogong.R;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                                 responseCode = -2;
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
+                                ControlLogin_f.userinfo.setNickname(nickname);
                                 cu.startToast("닉네임이 변경되었습니다.");
                                 finish();
                             } else if (responseCode == 400) {

@@ -34,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
     public static String authEmail;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 쓰레드 제어용 플래그
     Custon_ProgressDialog custon_progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class SignupActivity extends AppCompatActivity {
                     su.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else { // 양식 검출
                     if (!passwd_et.getText().toString().matches("(?=.*[0-9]{1,})(?=.*[?!@<>]{1,})(?=.*[a-z]{1,}).{6,}$")) {
-                        Log.d("비밀번호",passwd_et.getText().toString());
+                        Log.d("비밀번호", passwd_et.getText().toString());
                         su.startDialog(0, "양식 오류", "비번 양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else {
                         custon_progressDialog.show();
@@ -155,6 +156,7 @@ public class SignupActivity extends AppCompatActivity {
                             t.start();
                         } else { // 미일치
                             su.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                            custon_progressDialog.dismiss();
                         }
                     }
                 }
@@ -188,7 +190,7 @@ public class SignupActivity extends AppCompatActivity {
             Custom_Dialog cd = new Custom_Dialog(SignupActivity.this);
             cd.callFunction(title, message, type, btnTxtList);
         }
-        
+
         @Override
         public void changePage(int dest) {
             if (dest == 0) {

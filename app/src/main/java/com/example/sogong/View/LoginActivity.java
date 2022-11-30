@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                 responseCode = 0;
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
-                                lu.startToast("아이디 또는 비밀번호를 잘못 입력했습니다.");
+                                lu.startToast("아이디 또는 비밀번호가 잘못되었습니다.");
                             } else if (responseCode == 500) {
                                 responseCode = 0;
                                 threadFlag.set(false);
