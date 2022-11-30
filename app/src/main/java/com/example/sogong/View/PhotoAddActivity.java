@@ -54,6 +54,7 @@ public class PhotoAddActivity extends AppCompatActivity {
     private boolean threadFlag; // 프래그먼트 전환에서 스레드를 잠재울 플래그
     Custon_ProgressDialog custon_progressDialog;
     PhotoAdd_UI pau = new PhotoAdd_UI();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,7 @@ public class PhotoAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 threadFlag = true;
                 if (state == 1) {
+                    custon_progressDialog.show();
                     Log.d("photoadd", "이미지 있는 상태");
                     Log.d("photoadd", "" + base64Img.length());
                     Log.d("photoadd", "" + base64Img.substring(0, 100));
@@ -93,18 +95,21 @@ public class PhotoAddActivity extends AppCompatActivity {
                             if (responseCode == 200) {
                                 responseCode = -1;
                                 threadFlag = false;
+                                custon_progressDialog.dismiss();
                                 Log.d("photoadd", "responseCode = " + responseCode);
                                 onBackPressed();
                             } else if (responseCode == 500) {
                                 responseCode = -1;
                                 threadFlag = false;
+                                custon_progressDialog.dismiss();
                                 Log.d("photoadd", "responseCode = " + responseCode);
-                                pau.startDialog(0,"서버 오류","게시글 등록을 실패하였습니다.",new ArrayList<>(Arrays.asList("확인")));
+                                pau.startDialog(0, "서버 오류", "게시글 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = -1;
                                 threadFlag = false;
+                                custon_progressDialog.dismiss();
                                 Log.d("photoadd", "responseCode = " + responseCode);
-                                pau.startDialog(0,"서버 오류","알 수 없는 오류입니다.",new ArrayList<>(Arrays.asList("확인")));
+                                pau.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                             }
                             // UI 코드 작성해주세요
 
@@ -136,7 +141,7 @@ public class PhotoAddActivity extends AppCompatActivity {
                     t.start();
 
                 } else {
-                    pau.startDialog(0,"사진 등록","등록할 이미지를 선택하시오.",new ArrayList<>(Arrays.asList("확인")));
+                    pau.startDialog(0, "사진 등록", "등록할 이미지를 선택하시오.", new ArrayList<>(Arrays.asList("확인")));
                     Log.d("photoadd", "이미지 없는 상태");
                 }
             }
@@ -144,6 +149,7 @@ public class PhotoAddActivity extends AppCompatActivity {
 
 
     }
+
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {

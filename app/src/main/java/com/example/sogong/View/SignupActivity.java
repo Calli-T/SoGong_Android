@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     public static int responseCode;
     public static String authEmail;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 쓰레드 제어용 플래그
-
+    Custon_ProgressDialog custon_progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,10 @@ public class SignupActivity extends AppCompatActivity {
 
         //UI controler
         SignupActivity_UI su = new SignupActivity_UI();
+
+        //로딩창 구현
+        custon_progressDialog = new Custon_ProgressDialog(this);
+        custon_progressDialog.setCanceledOnTouchOutside(false);
 
         // 사용할 컴포넌트 초기화
         userid_et = findViewById(R.id.userid_et);
@@ -76,33 +80,40 @@ public class SignupActivity extends AppCompatActivity {
                         Log.d("비밀번호",passwd_et.getText().toString());
                         su.startDialog(0, "양식 오류", "비번 양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else {
+                        custon_progressDialog.show();
                         final Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
                                 if (responseCode == 200) {
                                     responseCode = -2;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startToast("회원가입 완료");
                                     su.changePage(0);
                                 } else if (responseCode == 400) {
                                     responseCode = 0;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startToast("중복된 아이디입니다.");
                                 } else if (responseCode == 401) {
                                     responseCode = 0;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startToast("중복된 닉네임입니다.");
                                 } else if (responseCode == 402) {
                                     responseCode = 0;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startToast("중복된 아이디와 닉네임입니다.");
                                 } else if (responseCode == 500) {
                                     responseCode = 0;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startDialog(0, "서버 오류", "정보 등록에 실패했습니다. 재시도 해주십시오.", new ArrayList<String>(Arrays.asList("확인")));
                                 } else if (responseCode == 502) {
                                     responseCode = 0;
                                     threadFlag.set(false);
+                                    custon_progressDialog.dismiss();
                                     su.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
                                 }
                             }
@@ -190,6 +201,6 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
     }
 }

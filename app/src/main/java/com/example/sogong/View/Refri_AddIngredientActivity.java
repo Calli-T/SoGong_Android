@@ -76,6 +76,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             if (!ingredients.getExpiry_date().equals("")) {
                 ingreExpiredate.setText(ingredients.getExpiry_date());
             }
+            ingreName.setEnabled(false);
         }
     }
 
@@ -88,6 +89,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             isExist = false;
             if (RefrigeratorActivity.ingreList != null) {
                 for (int i = 0; i < RefrigeratorActivity.ingreList.size(); i++) {
+                    Log.d("ingrelist", RefrigeratorActivity.ingreList.toString());
                     Refrigerator temp = RefrigeratorActivity.ingreList.get(i);
                     if (temp.getName().equals(ingreName.getSelectedItem().toString())) {
                         isExist = true;

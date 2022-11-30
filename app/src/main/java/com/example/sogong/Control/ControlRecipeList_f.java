@@ -9,6 +9,7 @@ import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.RecipePost_f;
 import com.example.sogong.Model.SearchInfo;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.HomeFragment;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RecipeSearchResultActivity;
 import com.example.sogong.View.RetrofitClient;
@@ -99,7 +100,7 @@ public class ControlRecipeList_f {
             @Override
             public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
                 RecipeFragment.responseCode = response.code();
-
+                HomeFragment.responseCode = response.code();
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {

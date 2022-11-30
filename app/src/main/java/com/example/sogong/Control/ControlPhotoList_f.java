@@ -8,6 +8,7 @@ import com.example.sogong.Model.PhotoList;
 import com.example.sogong.Model.PhotoPost;
 import com.example.sogong.Model.RecipeList;
 import com.example.sogong.Model.SortInfo;
+import com.example.sogong.View.HomeFragment;
 import com.example.sogong.View.PhotoFragment;
 import com.example.sogong.View.RecipeFragment;
 import com.example.sogong.View.RetrofitClient;
@@ -68,6 +69,7 @@ public class ControlPhotoList_f {
             @Override
             public void onResponse(Call<PhotoList> call, Response<PhotoList> response) {
                 PhotoFragment.responseCode = response.code();
+                HomeFragment.responseCode = response.code();
 
                 // 200
                 if (response.isSuccessful()) {

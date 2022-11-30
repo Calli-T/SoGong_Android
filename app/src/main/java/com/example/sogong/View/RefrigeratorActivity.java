@@ -48,7 +48,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
     private boolean deletethreadFlag; // 스레드 제어용 플래그
     public static int responseResult;
     Custon_ProgressDialog custon_progressDialog;
-
+    TextView noResult;
     Boolean isProgress;
 
     // UI controller
@@ -59,6 +59,8 @@ public class RefrigeratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refrigerator);
 
+        noResult = findViewById(R.id.noResult);
+        noResult.setVisibility(View.INVISIBLE);
         responseCode = 0;
 
         threadFlag = true;
@@ -67,8 +69,6 @@ public class RefrigeratorActivity extends AppCompatActivity {
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
-        custon_progressDialog.show();
-
 
     }
 
@@ -93,16 +93,10 @@ public class RefrigeratorActivity extends AppCompatActivity {
             public void run() {
                 if (responseCode == 200) {
                     responseCode = -1;
+                    Log.d("냉장고", ingreList.toString());
                     refri_ingre_Adapter.setRefriIngreList(ingreList);
                     threadFlag = false;
-
-
-                    if (ingreList.size() == 0) {
-                        TextView noResult = findViewById(R.id.noResult);
-                        noResult.setVisibility(View.VISIBLE);
-                    }
-
-
+                    noResult.setVisibility(View.INVISIBLE);
                     //재료리스트에 있는 버튼들의 클릭 이벤트 처리
                     //재료 수정
                     refri_ingre_Adapter.setOnItemLeftButtonClickListener(new Refri_Ingre_Adapter.OnItemLeftButtonClickListener() {
@@ -225,16 +219,22 @@ public class RefrigeratorActivity extends AppCompatActivity {
                     responseCode = -1;
                     threadFlag = false;
                     custon_progressDialog.dismiss();
+                    noResult.setVisibility(View.INVISIBLE);
                     rfu.startDialog(0, "서버 오류", "보유 재료 조회에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 404) {
                     responseCode = -1;
                     threadFlag = false;
                     custon_progressDialog.dismiss();
-                    rfu.startToast("보유한 재료가 없습니다.");
+                    if (ingreList != null) {
+                        Log.d("냉장고", ingreList.toString());
+                    }
+                    noResult.setVisibility(View.VISIBLE);
+
                 } else if (responseCode == 500) {
                     responseCode = -1;
                     threadFlag = false;
                     custon_progressDialog.dismiss();
+                    noResult.setVisibility(View.INVISIBLE);
                     rfu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
             }
@@ -262,6 +262,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
         ControlRefrigerator_f crff = new ControlRefrigerator_f();
         crff.lookupRefrigerator(ControlLogin_f.userinfo.getNickname());
         threadFlag = true;
+        custon_progressDialog.show();
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         t.start();
