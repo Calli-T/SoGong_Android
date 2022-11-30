@@ -48,6 +48,8 @@ public class ControlLike_f {
 
             @Override
             public void onFailure(Call<Integer> call, Throwable t) { // 502
+                RecipeLookupActivity.responseCode.set(502);
+                PhotoLookupActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -82,6 +84,8 @@ public class ControlLike_f {
 
             @Override
             public void onFailure(Call<Integer> call, Throwable t) { // 502
+                RecipeLookupActivity.responseCode.set(502);
+                PhotoLookupActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });

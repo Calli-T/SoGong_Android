@@ -54,6 +54,8 @@ public class MailBoxActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.mail_add_button);
         fab.setOnClickListener(new MailBoxActivity.FABClickListener());
 
+        TextView noResult = findViewById(R.id.noResult);
+        noResult.setVisibility(View.INVISIBLE);
         mailRecyclerView = (RecyclerView) findViewById(R.id.mail_recyclerview);
 
         mailAdapter = new MailAdapter();
@@ -85,6 +87,9 @@ public class MailBoxActivity extends AppCompatActivity {
                     if (maillist.size() == 0) {//쪽지가 없는 경우
                         TextView noResult = findViewById(R.id.noResult);
                         noResult.setVisibility(View.VISIBLE);
+                    } else {
+                        TextView noResult = findViewById(R.id.noResult);
+                        noResult.setVisibility(View.INVISIBLE);
                     }
 
                     for (int i = 1; i <= totalpage; i++) {
@@ -193,8 +198,17 @@ public class MailBoxActivity extends AppCompatActivity {
                     custon_progressDialog.dismiss();
 
                 } else if (responseCode == 404 || responseCode == 500) {
+                    if (maillist.size() == 0) {//쪽지가 없는 경우
+                        TextView noResult = findViewById(R.id.noResult);
+                        noResult.setVisibility(View.VISIBLE);
+                    } else {
+                        TextView noResult = findViewById(R.id.noResult);
+                        noResult.setVisibility(View.INVISIBLE);
+                    }
+
                     List<String> temp = new ArrayList<>();
                     temp.add("확인");
+
                     mui.startDialog(0, "쪽지 조회 실패", "쪽지를 가져오는데 실패했습니다.", temp);
                 }
             }

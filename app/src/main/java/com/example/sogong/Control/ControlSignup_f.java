@@ -28,7 +28,7 @@ public class ControlSignup_f {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                
+                SignupActivity.responseCode = 502;
             }
         });
 

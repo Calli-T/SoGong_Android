@@ -46,6 +46,7 @@ public class ControlMyPhoto_f {
             }
             @Override
             public void onFailure(@NonNull Call<List<PhotoPost>> call, @NonNull Throwable t) { // 500
+                MyPageBoardActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });

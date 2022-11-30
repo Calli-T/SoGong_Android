@@ -45,11 +45,12 @@ public class ControlIngredients_f {
             }
             @Override
             public void onFailure(@NonNull Call<List<Recipe_Ingredients>> call, @NonNull Throwable t) { // 502
+                RecipeLookupActivity.responseCode2.set(502);
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void showUnExistIngredients(List<Recipe_Ingredients> unExistIngredients){}
+
     public void remainAmmounts(String nickname, int postId){
         Log.d("받은 nickname과 postId","nickname = "+ nickname + " postId = "+postId);
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
@@ -73,6 +74,7 @@ public class ControlIngredients_f {
             }
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 502
+                RecipeLookupActivity.responseCode3.set(502);
                 Log.d("result", "알 수 없는 오류");
             }
         });

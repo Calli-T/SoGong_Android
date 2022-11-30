@@ -176,7 +176,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (existName.contains(editText.getText().toString())) {
-                            rau.startDialog(0,"중복 오류","이미 존재하는 재료입니다.",new ArrayList<>(Arrays.asList("확인")));
+                            rau.startDialog(0, "중복 오류", "이미 존재하는 재료입니다.", new ArrayList<>(Arrays.asList("확인")));
                         } else {
                             View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
                             TextView name = view.findViewById(R.id.name);
@@ -342,26 +342,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     newRecipe.setCategory(recipecate.getSelectedItem().toString());
                     newRecipe.setDegree_of_spicy(Integer.parseInt(recipespicy.getSelectedItem().toString()));
                     newRecipe.setDescription(recipedescription.getText().toString());
-                    for (int j = 0; j < recipePostF.getRecipe_Ingredients().size(); j++) {
-                        View tempview = linearlayout.getChildAt(j);
-                        TextView nameTemp = tempview.findViewById(R.id.writtenname);
-                        TextView amountTemp = tempview.findViewById(R.id.writtenamount);
-                        TextView unitTemp = tempview.findViewById(R.id.unit);
-                        String temp_ingrename = nameTemp.getText().toString();
 
-                        float temp_amount = Float.parseFloat(amountTemp.getText().toString());
-
-                        Recipe_Ingredients tempingredients = new Recipe_Ingredients();
-                        tempingredients.setId(recipePostF.getRecipe_Ingredients().get(j).getId());
-                        tempingredients.setName(temp_ingrename);
-                        tempingredients.setPost_id(recipePostF.getPost_id());
-                        tempingredients.setAmount(temp_amount);
-                        tempingredients.setUnit(unitTemp.getText().toString());
-                        recipe_ingredients.add(tempingredients);
-                        index++;
-
-                        Log.d("레시피 재료 등록", "i =" + j);
-                    }
                     for (int i = index; i < linearlayout.getChildCount(); i++) {
                         View tempview = linearlayout.getChildAt(i);
                         TextView nameTemp = tempview.findViewById(R.id.writtenname);

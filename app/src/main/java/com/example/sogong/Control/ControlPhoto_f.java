@@ -53,6 +53,7 @@ public class ControlPhoto_f {
 
             @Override
             public void onFailure(@NonNull Call<PhotoLookUp> call, @NonNull Throwable t) { // 502
+                PhotoLookupActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -116,6 +117,7 @@ public class ControlPhoto_f {
 
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 502
+                PhotoLookupActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });

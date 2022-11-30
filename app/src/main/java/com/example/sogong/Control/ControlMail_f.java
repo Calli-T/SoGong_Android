@@ -29,9 +29,9 @@ public class ControlMail_f {
             public void onResponse(@NonNull Call<Mail> call, @NonNull Response<Mail> response) {
                 MailLookupActivity.responseCode = response.code();
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             mail = response.body();
                             Log.d("result", mail.toString());
                             MailLookupActivity.mail = response.body();
@@ -41,12 +41,15 @@ public class ControlMail_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Mail> call, @NonNull Throwable t) { // 500
+                MailLookupActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
+
     public void sendMail(Mail mail) {
 
         RetrofitService sv = RetrofitClient.getClient().create(RetrofitService.class);
@@ -58,9 +61,9 @@ public class ControlMail_f {
                 MailSendActivity.responseCode = response.code();
 
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
                             Log.d("result", response.body().toString());
                         }
                     }
@@ -68,8 +71,10 @@ public class ControlMail_f {
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Mail> call, @NonNull Throwable t) { // 500
+                MailSendActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -88,21 +93,25 @@ public class ControlMail_f {
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
                 MailLookupActivity.responseCode = response.code();
                 // 200
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        if(response.code() == 200) {
-                            Log.d("result", ""+response.body());
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.code() == 200) {
+                            Log.d("result", "" + response.body());
                         }
                     }
                 } else { // 404
                     Log.d("result", "디비 오류");
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                MailLookupActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
     }
-    public void showMail(Mail mail) {}
+
+    public void showMail(Mail mail) {
+    }
 }

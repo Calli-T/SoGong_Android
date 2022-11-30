@@ -39,6 +39,7 @@ public class ControlComment_f {
             }
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                RecipeLookupActivity.responseCode.set(500);
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -68,6 +69,7 @@ public class ControlComment_f {
             }
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                RecipeLookupActivity.responseCode.set(500);
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -99,6 +101,7 @@ public class ControlComment_f {
             }
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                RecipeLookupActivity.responseCode.set(500);
                 Log.d("result", "알 수 없는 오류");
             }
         });

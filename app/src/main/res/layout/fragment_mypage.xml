@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="좋아요 누른 레시피"
+        android:text="좋아요 누른 게시글"
         android:textColor="@color/blue"
         android:textSize="18sp"
         android:background="@drawable/visibility"
