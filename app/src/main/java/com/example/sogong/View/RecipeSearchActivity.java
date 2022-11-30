@@ -113,6 +113,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
                     if (chipGroup2.getChildCount() == 0) {
                         su.startToast("카테고리를 선택해주세요.");
                     } else {
+                        categories = new StringBuilder("");
                         for (int i = 0; i < chipGroup2.getChildCount(); i++) {
                             Chip chip = (Chip) chipGroup2.getChildAt(i);
                             categories.append(chip.getText().toString()).append("-");

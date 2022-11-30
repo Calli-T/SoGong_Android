@@ -72,7 +72,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
 
-        //사용할 컴포넌트들 등록ㄴ
+        //사용할 컴포넌트들 등록
         searchType = getIntent().getStringExtra("searchType");
         categories = getIntent().getStringExtra("categories");
         keywordType = getIntent().getStringExtra("keywordType");
@@ -105,11 +105,13 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         responseCode = -1;
 
                         if (searchType.equals("키워드")) {
+                            searchContent.setText("");
                             searchContent_str.append(keywordType);
                             searchContent_str.append(" : ");
                             searchContent_str.append(keyword);
                             searchContent.setText(searchContent_str);
                         } else if (searchType.equals("카테고리")) {
+                            searchContent.setText("");
                             searchContent_str.append(categories);
                             searchContent.setText(searchContent_str);
                         }
@@ -275,6 +277,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
 
+                        searchContent.setText("");
                         searchContent_str.append(keyword);
                         searchContent.setText(searchContent_str);
                         if (recipeList.size() == 0) {

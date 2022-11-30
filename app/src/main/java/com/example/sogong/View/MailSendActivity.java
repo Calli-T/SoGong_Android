@@ -71,53 +71,58 @@ public class MailSendActivity extends AppCompatActivity {
             threadFlag.set(true);
             // #38 쪽지 보내기 호출 코드
             if (mailReceiver.getText().toString().equals("") || mailTitle.getText().toString().equals("") || mailDescription.getText().toString().equals("")) {
-               //양식에 맞지 않은 경우
+                //양식에 맞지 않은 경우
                 mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
                 custon_progressDialog.dismiss();
             } else {
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (responseCode == 200) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            Log.d("send", "성공적으로 보냄");
-                            finish();
-                        } else if (responseCode == 400 || responseCode == 500) {
-                            responseCode = -1;
-                            threadFlag.set(false);
-                            custon_progressDialog.dismiss();
-                            List<String> temp = new ArrayList<>();
-                            temp.add("확인");
-                            mui.startDialog(0, "전송 실패", "쪽지 전송에 실패했습니다.", temp);
+                if (mailReceiver.getText().toString().equals(ControlLogin_f.userinfo.getNickname())) {
+                    mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                    custon_progressDialog.dismiss();
+                } else {
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseCode == 200) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                Log.d("send", "성공적으로 보냄");
+                                finish();
+                            } else if (responseCode == 404 || responseCode == 500) {
+                                responseCode = -1;
+                                threadFlag.set(false);
+                                custon_progressDialog.dismiss();
+                                List<String> temp = new ArrayList<>();
+                                temp.add("확인");
+                                mui.startDialog(0, "전송 실패", "쪽지 전송에 실패했습니다.", temp);
+                            }
                         }
-                    }
-                };
+                    };
 
-                class NewRunnable implements Runnable {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 30; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (threadFlag.get())
-                                runOnUiThread(runnable);
-                            else {
-                                i = 30;
+                    class NewRunnable implements Runnable {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < 30; i++) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (threadFlag.get())
+                                    runOnUiThread(runnable);
+                                else {
+                                    i = 30;
+                                }
                             }
                         }
                     }
+                    ControlMail_f cmf = new ControlMail_f();
+                    cmf.sendMail(mail);
+                    NewRunnable nr = new NewRunnable();
+                    Thread t = new Thread(nr);
+                    //쪽지 보냈는지 확인하는 쓰레드
+                    t.start();
                 }
-                ControlMail_f cmf = new ControlMail_f();
-                cmf.sendMail(mail);
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                //쪽지 보냈는지 확인하는 쓰레드
-                t.start();
             }
         }
     }

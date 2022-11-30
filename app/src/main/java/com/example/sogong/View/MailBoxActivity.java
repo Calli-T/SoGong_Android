@@ -235,7 +235,7 @@ public class MailBoxActivity extends AppCompatActivity {
 
         ControlMailList_f cmlf = new ControlMailList_f();
         cmlf.lookupMailList(1, ControlLogin_f.userinfo.getNickname());
-
+        threadFlag.set(true);
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         //1페이지 쪽지 보는 쓰레드

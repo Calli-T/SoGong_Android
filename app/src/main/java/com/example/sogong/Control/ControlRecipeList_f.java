@@ -86,6 +86,7 @@ public class ControlRecipeList_f {
 
             @Override
             public void onFailure(Call<RecipeList> call, Throwable t) { // 502
+                RecipeSearchResultActivity.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -119,6 +120,8 @@ public class ControlRecipeList_f {
 
             @Override
             public void onFailure(Call<RecipeList> call, Throwable t) { // 502
+                RecipeFragment.responseCode = 502;
+                HomeFragment.responseCode = 502;
                 Log.d("result", "알 수 없는 오류");
             }
         });

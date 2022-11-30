@@ -79,18 +79,18 @@ public class MailLookupActivity extends AppCompatActivity {
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        while(true){
+                        while (true) {
                             try {
                                 Thread.sleep(100);
                                 //확인을 누른 경우
-                                if(Custom_Dialog.state== 0){
+                                if (Custom_Dialog.state == 0) {
                                     Custom_Dialog.state = -1;
                                     inProgress = true;
 
                                     final Runnable progress = new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(inProgress){//isProgress가 참이면 로딩창 띄우고 거짓이면 로딩창 사라진다.
+                                            if (inProgress) {//isProgress가 참이면 로딩창 띄우고 거짓이면 로딩창 사라진다.
                                                 custon_progressDialog.show();
                                             } else custon_progressDialog.dismiss();
                                         }
@@ -99,15 +99,17 @@ public class MailLookupActivity extends AppCompatActivity {
                                     final Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(MailLookupActivity.responseCode == 200){
+                                            if (MailLookupActivity.responseCode == 200) {
                                                 MailLookupActivity.responseCode = -1;
                                                 inProgress = false;
+                                                threadFlag.set(false);
                                                 runOnUiThread(progress);
                                                 onBackPressed();
-                                            } else if(MailLookupActivity.responseCode == 404 || MailLookupActivity.responseCode == 500){
+                                            } else if (MailLookupActivity.responseCode == 404 || MailLookupActivity.responseCode == 500) {
                                                 MailLookupActivity.responseCode = 0;
                                                 mlau.startDialog(0, "삭제 실패", "삭제에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                                                 inProgress = false;
+                                                threadFlag.set(false);
                                                 runOnUiThread(progress);
                                             }
                                         }
@@ -122,24 +124,25 @@ public class MailLookupActivity extends AppCompatActivity {
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
                                                 }
-
-                                                runOnUiThread(runnable);
+                                                if (threadFlag.get()) {
+                                                    runOnUiThread(runnable);
+                                                } else {
+                                                    i = 30;
+                                                }
                                             }
                                         }
                                     }
 
-                                    if(MailLookupActivity.responseCode == 0){
-                                        MailLookupActivity.responseCode = -1;
-
-                                        ControlMail_f cmf = new ControlMail_f();
-                                        cmf.deleteMail(ControlLogin_f.userinfo.getNickname(), mail.getMail_id());
-                                    }
+                                    MailLookupActivity.responseCode = -1;
+                                    ControlMail_f cmf = new ControlMail_f();
+                                    cmf.deleteMail(ControlLogin_f.userinfo.getNickname(), mail.getMail_id());
                                     NewRunnable1 nr = new NewRunnable1();
                                     Thread t = new Thread(nr);
+                                    threadFlag.set(true);
                                     //삭제된 것을 확인하는 쓰레드
                                     t.start();
                                     break;
-                                } else if(Custom_Dialog.state == 1){
+                                } else if (Custom_Dialog.state == 1) {
                                     //취소를 누른 경우 작동하지 않음
                                     break;
                                 }
