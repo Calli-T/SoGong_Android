@@ -31,6 +31,7 @@ public class ControlEdittingInfo_f {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                ChangePasswordActivity.responseCode = 502;
                 Log.d("result", "실패");
             }
         });
@@ -52,6 +53,7 @@ public class ControlEdittingInfo_f {
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                ChangeNicknameActivity.responseCode = 502;
             }
         });
 

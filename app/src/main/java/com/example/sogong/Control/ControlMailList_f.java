@@ -50,6 +50,7 @@ public class ControlMailList_f {
 
             @Override
             public void onFailure(@NonNull Call<MailList> call, @NonNull Throwable t) { // 500
+                MailBoxActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });

@@ -28,7 +28,7 @@ public class ControlLogout_f {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                MainActivity.responseCode = 502;
             }
         });
 

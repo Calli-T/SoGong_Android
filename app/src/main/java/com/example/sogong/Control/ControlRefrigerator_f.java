@@ -118,6 +118,7 @@ public class ControlRefrigerator_f {
 
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                RefrigeratorActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -148,6 +149,7 @@ public class ControlRefrigerator_f {
 
             @Override
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) { // 500
+                Refri_AddIngredientActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });

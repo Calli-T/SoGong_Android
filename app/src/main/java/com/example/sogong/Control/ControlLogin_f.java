@@ -44,6 +44,7 @@ public class ControlLogin_f {
             public void onResponse(Call<User> call, Response<User> response) {
                 LoginActivity.responseCode = response.code();
 
+
                 // 200
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
@@ -59,7 +60,7 @@ public class ControlLogin_f {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                LoginActivity.responseCode = 500;
             }
         });
 

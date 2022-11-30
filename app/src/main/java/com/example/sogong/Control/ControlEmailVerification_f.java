@@ -32,6 +32,7 @@ public class ControlEmailVerification_f {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                EmailVerificationActivity.responseCode = 501;
                 //Log.e(TAG, t.getLocalizedMessage());
             }
         });
@@ -50,7 +51,7 @@ public class ControlEmailVerification_f {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-
+                EmailVerificationActivity.responseCode = 502;
             }
         });
     }

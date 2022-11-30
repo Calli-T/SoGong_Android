@@ -94,6 +94,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
                 if (responseCode == 200) {
                     responseCode = -1;
                     Log.d("냉장고", ingreList.toString());
+
                     refri_ingre_Adapter.setRefriIngreList(ingreList);
                     threadFlag = false;
                     noResult.setVisibility(View.INVISIBLE);

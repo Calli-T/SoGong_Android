@@ -48,6 +48,7 @@ public class ControlMyRecipe_f {
 
             @Override
             public void onFailure(@NonNull Call<List<RecipePost_f>> call, @NonNull Throwable t) { // 500
+                MyPageBoardActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -79,6 +80,7 @@ public class ControlMyRecipe_f {
 
             @Override
             public void onFailure(@NonNull Call<List<RecipePost_f>> call, @NonNull Throwable t) { // 500
+                RecipeSearchResultActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
@@ -109,6 +111,7 @@ public class ControlMyRecipe_f {
 
             @Override
             public void onFailure(@NonNull Call<List<RecipePost_f>> call, @NonNull Throwable t) { // 500
+                MyPageBoardActivity.responseCode = 500;
                 Log.d("result", "알 수 없는 오류");
             }
         });
