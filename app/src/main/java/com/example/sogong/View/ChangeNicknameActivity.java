@@ -75,7 +75,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                                 responseCode = 0;
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
-                                cu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                cu.startDialog(0, "서버 오류", "닉네임 변경에 실패했습니다. 재시도 해주십시오.", new ArrayList<>(Arrays.asList("확인")));
                             } else if (responseCode == 502) {
                                 responseCode = 0;
                                 threadFlag.set(false);

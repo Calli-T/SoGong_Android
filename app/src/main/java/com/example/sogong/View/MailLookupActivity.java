@@ -68,13 +68,15 @@ public class MailLookupActivity extends AppCompatActivity {
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
         MailLookupActivity_UI mlau = new MailLookupActivity_UI();
-
+        if(mail == null){
+            mlau.startDialog(0,"쪽지 조회 실패","쪽지를 가져오는데 실패했습니다.",new ArrayList<>(Arrays.asList("확인")));
+        }
         //삭제 버튼 클릭
         deleteMail_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //삭제 여부 되묻기
-                mlau.startDialog(1, "쪽지 삭제", "쪽지를 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("확인", "취소")));
+                mlau.startDialog(1, "쪽지 삭제", "쪽지를 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
 
                 class NewRunnable implements Runnable {
                     @Override

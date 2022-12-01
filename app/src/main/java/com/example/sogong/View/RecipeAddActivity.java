@@ -69,8 +69,6 @@ public class RecipeAddActivity extends AppCompatActivity {
     EditText ingreamount_edit;
     TextView ingreamount_text;
     private AtomicBoolean threadFlag = new AtomicBoolean();
-    String[] ingrename_str = new String[]{"아스파라거스", "닭고기", "계란", "쪽파"};
-    String[] ingrecate_str = new String[]{"한식", "중식", "양식", "일식", "레시피 종류"};
     String[] spicy_int = new String[]{"0", "1", "2", "3", "4", "5", "매운맛 단계"};
     HashMap<String, String> unitmap = new HashMap<>();//재료에 맞는 단위를 위한 map
     Dialog ingreSelectDialog;
@@ -107,11 +105,6 @@ public class RecipeAddActivity extends AppCompatActivity {
         fab.setOnClickListener(new FABClickListener());//플로팅버튼 클릭 이벤트
 
         ingre_cnt = 0;//재료의 수
-        //임시로 단위들 추가
-        unitmap.put("아스파라거스", "T");
-        unitmap.put("닭고기", "g");
-        unitmap.put("계란", "g");
-        unitmap.put("쪽파", "g");
 
         //레시피 종류 스피너
         SpinnerWithHintAdapter spinnerArrayAdapter1 = new SpinnerWithHintAdapter(context, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.category));
@@ -176,7 +169,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (existName.contains(editText.getText().toString())) {
-                            rau.startDialog(0, "중복 오류", "이미 존재하는 재료입니다.", new ArrayList<>(Arrays.asList("확인")));
+                            rau.startToast("이미 추가한 재료입니다.");
                         } else {
                             View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
                             TextView name = view.findViewById(R.id.name);
@@ -191,6 +184,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                             removeButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    existName.remove(selectName.getText().toString());
                                     linearlayout.removeView(view);
                                 }
                             });

@@ -352,10 +352,9 @@ public class PhotoFragment extends Fragment {
                     });
                     custon_progressDialog.dismiss();//로딩창 종료
                     Thread.currentThread().interrupt();
-                    // UI 코드 작성해주세요
                 } else if (responseCode == 500) {
                     custon_progressDialog.dismiss();//로딩창 종료
-                    plu.startDialog(0, "서버 오류", "서버 연결에 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                    plu.startDialog(0, "요청 실패", "게시글을 불러오지 못했습니다.", new ArrayList<>(Arrays.asList("확인")));
                 } else if (responseCode == 502) {
                     custon_progressDialog.dismiss();//로딩창 종료
                     plu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));

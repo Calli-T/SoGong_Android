@@ -194,7 +194,7 @@ public class MyPageFragment extends Fragment {
         logout_text.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mu.startDialog(1, "로그아웃", "정말 로그아웃하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
+                mu.startDialog(1, "로그아웃", "정말 로그아웃 하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
                 class NewRunnable implements Runnable {
                     NewRunnable() {
                     }

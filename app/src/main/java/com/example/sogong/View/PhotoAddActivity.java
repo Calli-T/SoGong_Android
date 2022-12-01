@@ -141,7 +141,7 @@ public class PhotoAddActivity extends AppCompatActivity {
                     t.start();
 
                 } else {
-                    pau.startDialog(0, "사진 등록", "등록할 이미지를 선택하시오.", new ArrayList<>(Arrays.asList("확인")));
+                    pau.startDialog(0, "사진 등록", "사진을 추가해주세요.", new ArrayList<>(Arrays.asList("확인")));
                     Log.d("photoadd", "이미지 없는 상태");
                 }
             }

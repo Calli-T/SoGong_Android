@@ -38,6 +38,8 @@ public class RecipeSearchActivity extends AppCompatActivity {
     ChipGroup chipGroup2;
     StringBuilder categories;
 
+    TextView ingre_cate_text;
+    TextView selected_cate_text;
     String[] category_str = new String[]{"족발보쌈", "찜탕찌개", "돈까스", "회", "일식", "피자", "고기구이", "야식", "양식", "치킨", "중식", "아시안", "백반", "죽", "국수", "도시락", "분식", "카페디저트", "패스트푸드"};
 
     Search_UI su = new Search_UI();
@@ -49,6 +51,7 @@ public class RecipeSearchActivity extends AppCompatActivity {
         categories = new StringBuilder();
         Boolean isMyPage = getIntent().getBooleanExtra("isMyPage", false);
 
+
         // 사용할 컴포넌트 들
         searchOption = findViewById(R.id.searchoption_spinner);
         searchEdit = findViewById(R.id.search_edit);
@@ -56,8 +59,11 @@ public class RecipeSearchActivity extends AppCompatActivity {
         cateSearchButton = findViewById(R.id.cate_search_button);
         chipGroup = findViewById(R.id.chipgroup);
         chipGroup2 = findViewById(R.id.chipgroup2);
-
+        ingre_cate_text = findViewById(R.id.ingre_cate_text);
+        selected_cate_text = findViewById(R.id.selected_cate_text);
         if (!isMyPage) {
+            ingre_cate_text.setVisibility(View.VISIBLE);
+            selected_cate_text.setVisibility(View.VISIBLE);
             for (String s : category_str) {//카테고리 버튼들 추가
                 Chip chip = new Chip(RecipeSearchActivity.this);
                 chip.setText(s);
@@ -129,6 +135,8 @@ public class RecipeSearchActivity extends AppCompatActivity {
                 }
             });
         } else {
+            ingre_cate_text.setVisibility(View.INVISIBLE);
+            selected_cate_text.setVisibility(View.INVISIBLE);
             cateSearchButton.setVisibility(View.INVISIBLE);
             //타이핑 검색 버튼 클릭 시
             searchButton.setOnClickListener(new View.OnClickListener() {

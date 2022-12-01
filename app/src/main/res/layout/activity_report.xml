@@ -94,7 +94,7 @@
                 android:layout_margin="10dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
-                android:hint="신고 사유를 작성하세요."
+                android:hint="이곳에 신고 사유를 작성하세요."
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (userid_et.getText().toString().equals("") | passwd_et.getText().toString().equals("")) {
-                    lu.startToast("ID 또는 비밀번호를 입력해주세요");
+                    lu.startToast("아이디와 비밀번호를 모두 입력해주세요");
                 } else {
                     lu.startToast("로그인 중");
                     custon_progressDialog.show();
@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
                                 lu.startToast("로그인 성공");
-
                                 //자동로그인을 체크한 경우
                                 if (auto_login) {
                                     SharedPreferences auto = getSharedPreferences("auto_login", Activity.MODE_PRIVATE);
@@ -108,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                 responseCode = 0;
                                 threadFlag.set(false);
                                 custon_progressDialog.dismiss();
-                                lu.startDialog(0, "서버 오류", "서버 연결에 실패했습니다.", new ArrayList<String>(Arrays.asList("확인")));
+                                lu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<String>(Arrays.asList("확인")));
                             }
                         }
                     };

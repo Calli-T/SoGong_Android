@@ -83,7 +83,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     responseCode = 0;
                                     threadFlag.set(false);
                                     custon_progressDialog.dismiss();
-                                    cu.startToast("비밀번호 변경요청 실패했습니다.");
+                                    cu.startToast("비밀번호 변경 요청 실패했습니다.");
                                 } else if (responseCode == 502) {
                                     responseCode = 0;
                                     threadFlag.set(false);
