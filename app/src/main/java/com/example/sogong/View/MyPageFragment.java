@@ -104,11 +104,46 @@ public class MyPageFragment extends Fragment {
         likedRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /* #15 "좋아요"를 누른 게시글 리스트 조회 */
-                Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("post_type", 2);
-                startActivity(intent);
+                mu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("레시피", "사진")));
+                class NewRunnable implements Runnable {
+                    NewRunnable() {
+                    }
+                    @Override
+                    public void run() {
+                        while (true) {
+                            try {
+                                Thread.sleep(100);
+                                if (Custom_Dialog.state == 0) {//자기가 작성한 레시피 조회
+                                    Custom_Dialog.state = -1;
+                                    Log.d("mypagefragment", "게시글 state = " + Custom_Dialog.state);
+                                    /* #15 "좋아요"를 누른 게시글 리스트 조회 */
+                                    Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("post_type", 2);
+                                    startActivity(intent);
+                                    break;
+                                } else if (Custom_Dialog.state == 1) {//자기가 작성한 사진 조회
+                                    Log.d("mypagefragment", "사진 state = " + Custom_Dialog.state);
+                                    /* #11 사용자 작성 요리사진 조회 */
+                                    Custom_Dialog.state = -1;
+                                    Intent intent = new Intent(getActivity(), MyPageBoardActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    intent.putExtra("post_type", 4);
+                                    startActivity(intent);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                //자기가 작성한 레시피인지 사진인지를 선택할 때까지 기다리는 쓰레드
+                t.start();
+
+
             }
         });
 

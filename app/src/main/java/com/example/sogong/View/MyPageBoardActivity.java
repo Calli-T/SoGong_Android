@@ -597,6 +597,86 @@ public class MyPageBoardActivity extends AppCompatActivity {
             Thread t = new Thread(nr);
             //댓글을 작성한 게시글을 확인하는 쓰레드
             t.start();
+        } else if (type == 4) {
+            //좋아요 누른 사진 게시글 조회
+            setContentView(R.layout.activity_myphotoboard);
+            gridview = (GridView) findViewById(R.id.photo_grid);
+            photoAdapter = new PhotoAdapter();
+            gridview.setAdapter(photoAdapter);
+
+            responseCode = 0;
+            //로딩창 구현
+            custon_progressDialog = new Custon_ProgressDialog(this);
+            custon_progressDialog.setCanceledOnTouchOutside(false);
+            custon_progressDialog.show();
+
+            threadFlag.set(true);
+            firstpage = true;
+
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (responseCode == 200) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        if (photolist.size() == 0) {
+                            TextView noResult = findViewById(R.id.noResult);
+                            noResult.setVisibility(View.VISIBLE);
+                        }
+                        photoAdapter.setPhotoList(photolist);
+                        //전달받은 사진리스트 설정
+                        gridview.setAdapter(photoAdapter);
+                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("사진", "position = " + position + " id = " + id);
+                                Intent intent = new Intent(MyPageBoardActivity.this, PhotoLookupActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                intent.putExtra("photo_post", photolist.get(position));
+                                startActivity(intent);
+                            }
+                        });
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        Thread.currentThread().interrupt();
+                    } else if (responseCode == 404) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0, "사진 요청 실패", "사진 게시글 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                    } else if (responseCode == 500) {
+                        threadFlag.set(false);
+                        responseCode = -1;
+                        custon_progressDialog.dismiss();//로딩창 종료
+                        mpbu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
+                    }
+                }
+            };
+
+            class NewRunnable implements Runnable {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 30; i++) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (threadFlag.get())
+                            runOnUiThread(runnable);
+                        else {
+                            i = 30;
+                        }
+                    }
+                }
+            }
+            ControlPost_f cpf = new ControlPost_f();
+            cpf.lookupMyLikeList(ControlLogin_f.userinfo.getNickname(), 2);
+            threadFlag.set(true);
+            NewRunnable nr = new NewRunnable();
+            Thread t = new Thread(nr);
+            t.start();
+
         }
 
     }
