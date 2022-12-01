@@ -121,22 +121,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
-//                        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                            @Override
-//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                Log.d("recipefragment", "sort spinner " + sortspinner.getSelectedItem().toString() + " 클릭");
-//                                String sort_str = sortspinner.getSelectedItem().toString();
-//                                // #29 레시피 게시글 정렬 별표 주석으로 바꿀것
-//                                //crlf.sortRecipeList(sort_str, 1);
-//                                SortInfo sortInfo = new SortInfo(ControlLogin_f.userinfo.getNickname(),sortspinner.getSelectedItem().toString());
-//                                cmrf.sortMyRecipeList(sortInfo);
-//                            }
-//
-//                            @Override
-//                            public void onNothingSelected(AdapterView<?> parent) {
-//
-//                            }
-//                        });
+
                         //자기가 작성한 레시피 게시글에만 정렬 기준이 있으므로 visible로 바꿈
                         sortspinner = findViewById(R.id.sort_spinner);
                         sortspinner.setVisibility(View.VISIBLE);
@@ -704,13 +689,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
             cd.callFunction(title, message, type, btnTxtList);
         }
 
-        // 0은 홈, 1은 회원가입(바로 이메일 인증으로)
         @Override
         public void changePage(int dest) {
-            /*if (dest == 0) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }*/
         }
     }
 }

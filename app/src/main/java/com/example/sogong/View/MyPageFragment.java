@@ -282,47 +282,6 @@ public class MyPageFragment extends Fragment {
             }
         });
 
-        /* #6 사용자 보유 재료 조회 */
-        //crf.lookupRefrigerator("test");
-
-        /* #7 사용자 보유 재료 추가 */
-        //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
-        //crf.addRefrigerator(ingredients);
-
-        /* #8 사용자 보유 재료 삭제 */
-        //crf.deleteRefrigerator(15);
-
-        /* #9 사용자 보유 재료 수정 */
-        //Refrigerator ingredients = new Refrigerator(0, "yangpa", "test", "Kg", 1, "2022-11-11");
-        //crf.editRefrigerator(ingredients);
-
-        /* #10 유통기한 표시 */
-        // -> 시각적 표시라 따로 DB와의 처리는 없음
-
-        /* #11 사용자 작성 요리사진 조회 */
-        //cmpf.lookupMyPhotoList("test");
-
-        /* #12 사용자 작성 레시피 조회 */
-        //cmrf.lookupMyRecipeList("test");
-
-        /* #13 사용자 작성 레시피 검색 */
-        /*SearchInfo searchInfo = new SearchInfo();
-        searchInfo.setNickname("test");
-        searchInfo.setKeyword("test");
-        cmrf.searchMyRecipeList(searchInfo);*/
-
-        /* #14 사용자 작성 레시피 정렬 */
-        /*SortInfo sortInfo = new SortInfo();
-        sortInfo.setNickname("test");
-        sortInfo.setArrangeBy("좋아요 순");
-        cmrf.sortMyRecipeList(sortInfo);*/
-
-        /* #15 "좋아요"를 누른 게시글 리스트 조회 */
-        //cpf.lookupMyLikeList("test", 1);
-
-        /* #16 댓글을 작성한 게시글들의 리스트 조회 */
-        //cpf.lookupMyCommentList("test");
-
         return rootview;
     }
 
@@ -336,8 +295,6 @@ public class MyPageFragment extends Fragment {
             TextView toast_textview = layout.findViewById(R.id.toast_textview);
             toast_textview.setText(String.valueOf(message));
             Toast toast = new Toast(getActivity());
-            //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0); //TODO 메시지가 표시되는 위치지정 (가운데 표시)
-            //toast.setGravity(Gravity.TOP, 0, 0); //TODO 메시지가 표시되는 위치지정 (상단 표시)
             toast.setGravity(Gravity.BOTTOM, 0, 50); //TODO 메시지가 표시되는 위치지정 (하단 표시)
             toast.setDuration(Toast.LENGTH_SHORT); //메시지 표시 시간
             toast.setView(layout);
@@ -362,10 +319,3 @@ public class MyPageFragment extends Fragment {
         }
     }
 }
-
-/*
-Intent intent = new Intent(getActivity(), Ready.class);
-                intent.putExtra("exerciseCode", 3);
-
-                startActivity(intent);
- */
