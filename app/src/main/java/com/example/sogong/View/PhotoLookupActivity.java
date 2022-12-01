@@ -102,7 +102,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                     case 0:
                         //게시글 삭제 로직 추가
                         Log.d("recipe", "삭제하기 menu click");
-                        plu.startDialog(1, "게시글 종류", "보실 게시글 종류를 선택하세요.", new ArrayList<>(Arrays.asList("삭제", "취소")));
+                        plu.startDialog(1, "요리 사진 게시글 삭제", "게시글을 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
                         class NewRunnable implements Runnable {
                             NewRunnable() {
                             }
@@ -307,7 +307,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                             responseCode = -1;
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
-                            plu.startDialog(0, "서버 오류", "좋아요 취소를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            plu.startDialog(0, "서버 오류", "\"좋아요\" 취소를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                         } else if (responseCode == 502) {
                             responseCode = -1;
                             threadFlag.set(false);
@@ -355,7 +355,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
                             responseCode = -1;
                             threadFlag.set(false);
                             custon_progressDialog.dismiss();
-                            plu.startDialog(0, "서버 오류", "좋아요 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                            plu.startDialog(0, "서버 오류", "\"좋아요\" 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                         } else if (responseCode == 502) {
                             responseCode = -1;
                             threadFlag.set(false);

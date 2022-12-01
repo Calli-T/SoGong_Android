@@ -72,11 +72,11 @@ public class MailSendActivity extends AppCompatActivity {
             // #38 쪽지 보내기 호출 코드
             if (mailReceiver.getText().toString().equals("") || mailTitle.getText().toString().equals("") || mailDescription.getText().toString().equals("")) {
                 //양식에 맞지 않은 경우
-                mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                mui.startToast("쪽지 내용을 입력해주세요");
                 custon_progressDialog.dismiss();
             } else {
-                if (mailReceiver.getText().toString().equals(ControlLogin_f.userinfo.getNickname())) {
-                    mui.startDialog(0, "양식 오류", "양식에 맞지 않은 입력입니다.", new ArrayList<>(Arrays.asList("확인")));
+                if (mailReceiver.getText().toString().equals(ControlLogin_f.userinfo.getNickname())) {//본인에게 보내는 경우
+                    mui.startToast("쪽지 내용을 입력해주세요");
                     custon_progressDialog.dismiss();
                 } else {
                     final Runnable runnable = new Runnable() {

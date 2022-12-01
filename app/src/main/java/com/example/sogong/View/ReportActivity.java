@@ -67,7 +67,10 @@ public class ReportActivity extends AppCompatActivity {
                 if (reportReason.getText().toString().equals("")) {
                     ru.startDialog(0, "양식 오류", "신고 내용을 입력해주세요.", new ArrayList<>(Arrays.asList("확인")));
                 } else {
-                    ru.startDialog(1, "신고", "정말 신고하시겠습니까?", new ArrayList<>(Arrays.asList("신고", "취소")));
+                    if (posttype == -1) {
+                        ru.startDialog(1, "신고 확인", "댓글을 신고하시겠습니까?", new ArrayList<>(Arrays.asList("신고", "취소")));
+                    } else
+                        ru.startDialog(1, "신고 확인", "게시글을 신고하시겠습니까?", new ArrayList<>(Arrays.asList("신고", "취소")));
                     class NewRunnable implements Runnable {
                         NewRunnable() {
                         }
@@ -106,11 +109,13 @@ public class ReportActivity extends AppCompatActivity {
                                                             threadFlag.set(false);
                                                             isProgress = false;
                                                             runOnUiThread(progress);
+                                                            ru.startDialog(0, "댓글 신고", "댓글 신고를 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
                                                         } else if (responseCode == 502) {
                                                             responseCode = -1;
                                                             threadFlag.set(false);
                                                             isProgress = false;
                                                             runOnUiThread(progress);
+                                                            ru.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                                                         }
                                                     }
                                                 };
@@ -158,7 +163,7 @@ public class ReportActivity extends AppCompatActivity {
                                                             threadFlag.set(false);
                                                             isProgress = false;
                                                             runOnUiThread(progress);
-                                                            ru.startDialog(0, "서버 오류", "신고 정보 등록을 실패하였습니다.", new ArrayList<>(Arrays.asList("확인")));
+                                                            ru.startDialog(0, "등록 실패", "신고 등록에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                                                         } else if (responseCode == 502) {
                                                             responseCode = -1;
                                                             threadFlag.set(false);

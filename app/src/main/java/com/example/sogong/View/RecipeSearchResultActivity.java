@@ -104,7 +104,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
 
-                        if (searchType.equals("키워드")) {
+                        if (searchType.equals("타이핑")) {
                             searchContent.setText("");
                             searchContent_str.append(keywordType);
                             searchContent_str.append(" : ");
@@ -117,6 +117,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         }
                         if (recipeList.size() == 0) {
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("검색결과 레시피가 존재하지 않습니다.");
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipeList);
@@ -282,6 +283,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
                         searchContent.setText(searchContent_str);
                         if (recipeList.size() == 0) {
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("검색결과 레시피가 존재하지 않습니다.");
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipeList);

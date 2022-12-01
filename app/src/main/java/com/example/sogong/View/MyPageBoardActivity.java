@@ -118,6 +118,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
 
                         if (recipelist.size() == 0) {
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("작성한 레시피 게시글이 없습니다.");
+                            noResult.setTextSize(30);
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
@@ -310,6 +312,8 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         responseCode = -1;
                         if (photolist.size() == 0) {
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("작성한 요리 사진 게시글이 없습니다.");
+                            noResult.setTextSize(30);
                             noResult.setVisibility(View.VISIBLE);
                         }
                         photoAdapter.setPhotoList(photolist);
@@ -408,6 +412,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         responseCode = -1;
                         if (recipelist.size() == 0) {//좋아요한 게시글이 없는 경우
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("좋아요를 누른 게시글이 없습니다");
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
@@ -516,6 +521,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         responseCode = -1;
                         if (recipelist.size() == 0) {//댓글 작성한 게시글이 없는 경우
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("댓글을 작성한 게시글이 없습니다.");
                             noResult.setVisibility(View.VISIBLE);
                         }
                         recipeAdapter.setRecipeList(recipelist);
@@ -541,7 +547,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-                        mpbu.startDialog(0, "요청 실패", "정보 요청에 실패함.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "요청 실패", "정보 요청에 실패함", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 502) {
                         threadFlag.set(false);
                         responseCode = -1;
@@ -606,6 +612,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         responseCode = -1;
                         if (photolist.size() == 0) {
                             TextView noResult = findViewById(R.id.noResult);
+                            noResult.setText("좋아요를 누른 게시글이 없습니다");
                             noResult.setVisibility(View.VISIBLE);
                         }
                         photoAdapter.setPhotoList(photolist);
@@ -627,7 +634,7 @@ public class MyPageBoardActivity extends AppCompatActivity {
                         threadFlag.set(false);
                         responseCode = -1;
                         custon_progressDialog.dismiss();//로딩창 종료
-                        mpbu.startDialog(0, "사진 요청 실패", "사진 게시글 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
+                        mpbu.startDialog(0, "정보 요청 실패", "정보 요청에 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
                     } else if (responseCode == 500) {
                         threadFlag.set(false);
                         responseCode = -1;

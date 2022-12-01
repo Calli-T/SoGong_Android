@@ -36,6 +36,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
     EditText ingreAmount;
     Spinner ingreUnit;
     EditText ingreExpiredate;
+    TextView ingreText;
 
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
     private AtomicBoolean editthreadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
@@ -57,6 +58,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
         ingreAmount = findViewById(R.id.ingreamount_edit);
         ingreUnit = findViewById(R.id.ingre_unit_spinner);
         ingreExpiredate = findViewById(R.id.ingre_expiredate_edit);
+        ingreText = findViewById(R.id.ingre_add_text);
         ArrayAdapter<String> nameAdapter = new ArrayAdapter<String>(Refri_AddIngredientActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ingredients));
         nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingreName.setAdapter(nameAdapter);
@@ -77,6 +79,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
                 ingreExpiredate.setText(ingredients.getExpiry_date());
             }
             ingreName.setEnabled(false);
+            ingreText.setText("재료 수정");
         }
     }
 
