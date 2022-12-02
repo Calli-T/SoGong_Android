@@ -335,7 +335,6 @@ public class RecipeFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     });
 
                     custon_progressDialog.dismiss();//로딩창 종료
-                    Log.d("recipefragment", recipelist.get(0).toString());
                     Thread.currentThread().interrupt();
                 } else if (responseCode == 500) {
                     custon_progressDialog.dismiss();//로딩창 종료

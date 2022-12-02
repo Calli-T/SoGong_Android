@@ -138,6 +138,8 @@ public class RecipeSearchActivity extends AppCompatActivity {
             ingre_cate_text.setVisibility(View.INVISIBLE);
             selected_cate_text.setVisibility(View.INVISIBLE);
             cateSearchButton.setVisibility(View.INVISIBLE);
+            searchOption.setSelection(0);
+            searchOption.setEnabled(false);
             //타이핑 검색 버튼 클릭 시
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
