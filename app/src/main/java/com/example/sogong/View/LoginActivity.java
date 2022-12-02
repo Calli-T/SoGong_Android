@@ -122,7 +122,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Thread.sleep(1000);
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                } if (threadFlag.get())
+                                }
+                                if (threadFlag.get())
                                     runOnUiThread(runnable);
                                 else {
                                     i = 30;
