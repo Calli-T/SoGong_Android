@@ -50,6 +50,7 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
     Spinner pageSpinner;
     Button researchButton;
     Custon_ProgressDialog custon_progressDialog;
+    ImageButton back_button;
 
     ControlRecipeList_f crlf = new ControlRecipeList_f();
     ControlMyRecipe_f cmrf = new ControlMyRecipe_f();
@@ -78,6 +79,15 @@ public class RecipeSearchResultActivity extends AppCompatActivity {
         keywordType = getIntent().getStringExtra("keywordType");
         keyword = getIntent().getStringExtra("keyword");
         isMyPage = getIntent().getBooleanExtra("isMyPage", false);
+
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         searchContent = findViewById(R.id.search_text);
         researchButton = findViewById(R.id.re_search_button);

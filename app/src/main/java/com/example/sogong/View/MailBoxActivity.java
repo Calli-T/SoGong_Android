@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class MailBoxActivity extends AppCompatActivity {
     public RecyclerView mailRecyclerView;
     Custon_ProgressDialog custon_progressDialog;
     private MailBoxActivity_UI mui = new MailBoxActivity_UI();
+    ImageButton back_button;
 
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
     private AtomicBoolean pagethreadFlag = new AtomicBoolean();

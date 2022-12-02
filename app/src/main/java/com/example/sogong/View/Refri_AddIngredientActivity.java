@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
     Spinner ingreUnit;
     EditText ingreExpiredate;
     TextView ingreText;
+    ImageButton back_button;
 
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
     private AtomicBoolean editthreadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
@@ -59,6 +61,7 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
         ingreUnit = findViewById(R.id.ingre_unit_spinner);
         ingreExpiredate = findViewById(R.id.ingre_expiredate_edit);
         ingreText = findViewById(R.id.ingre_add_text);
+        back_button = findViewById(R.id.back_button);
         ArrayAdapter<String> nameAdapter = new ArrayAdapter<String>(Refri_AddIngredientActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ingredients));
         nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingreName.setAdapter(nameAdapter);
@@ -81,6 +84,13 @@ public class Refri_AddIngredientActivity extends AppCompatActivity {
             ingreName.setEnabled(false);
             ingreText.setText("재료 수정");
         }
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     //재료 추가
