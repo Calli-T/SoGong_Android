@@ -30,8 +30,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
     EditText passwd_et, passwdcheck_et;
     Button change_button, cancel_button;
     Custon_ProgressDialog custon_progressDialog;
+
     public static int responseCode = 0;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    
     // UI controller
     CP_UI cu = new CP_UI();
 
