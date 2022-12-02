@@ -171,6 +171,7 @@ public class RecipeAddActivity extends AppCompatActivity {
                         if (existName.contains(editText.getText().toString())) {
                             rau.startToast("이미 추가한 재료입니다.");
                         } else {
+
                             View view = getLayoutInflater().inflate(R.layout.dynamic_ingre_item, null);
                             TextView name = view.findViewById(R.id.name);
                             TextView selectName = view.findViewById(R.id.writtenname);
@@ -188,9 +189,13 @@ public class RecipeAddActivity extends AppCompatActivity {
                                     linearlayout.removeView(view);
                                 }
                             });
-                            linearlayout.addView(view);
-                            existName.add(selectName.getText().toString());
-                            ingreSelectDialog.dismiss();
+                            if (selectName.getText().toString().equals("") | editAmount.getText().toString().equals("")) {
+                                rau.startToast("양식을 모두 입력하세요.");
+                            } else {
+                                linearlayout.addView(view);
+                                existName.add(selectName.getText().toString());
+                                ingreSelectDialog.dismiss();
+                            }
                         }
                     }
                 });

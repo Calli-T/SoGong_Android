@@ -46,7 +46,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        //닉네임 변경
+        //닉네임 변경 버튼 클릭 시
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,8 +107,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                     custon_progressDialog.show();
                     threadFlag.set(true);
                     ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                    cef.editNickname(nickname);
-
+                    cef.editNickname(nickname);//닉네임 변경 로직
 
                     NewRunnable nr = new NewRunnable();
                     Thread t = new Thread(nr);

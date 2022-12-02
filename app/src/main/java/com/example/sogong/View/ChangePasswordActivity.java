@@ -47,10 +47,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
         change_button = findViewById(R.id.change_button);
         cancel_button = findViewById(R.id.cancel_button);
 
+        //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        // 비밀번호 변경
+        // 비밀번호 변경 버튼 클릭 시
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +68,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         //비밀번호 정규식과 맞지 않은 경우
                         cu.startDialog(0, "양식 오류", "양식에 맞지않은 비밀번호입니다", new ArrayList<>(Arrays.asList("확인")));
                     } else {
-                        //비밀번호 변경 api 호출
                         final Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
@@ -76,7 +76,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     threadFlag.set(false);
                                     custon_progressDialog.dismiss();
                                     cu.startToast("비밀번호가 변경되었습니다.");
-//                                cu.changePage(0);
                                     emailActivity.finish();
                                     finish();
                                 } else if (responseCode == 500) {
@@ -114,19 +113,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             }
                         }
 
-                        if (responseCode == 0) {
-                            responseCode = -1;
 
-                            ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                            if (passwd.equals(passwdcheck)) {
-                                custon_progressDialog.show();
-                                threadFlag.set(true);
-                                ControlLogin_f clf = new ControlLogin_f();
+                        responseCode = -1;
 
-                                cef.editPassword(String.valueOf(clf.hashCode(passwd)));
-                            }
-                        }
-
+                        ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
+                        ControlLogin_f clf = new ControlLogin_f();
+                        custon_progressDialog.show();
+                        threadFlag.set(true);
+                        cef.editPassword(String.valueOf(clf.hashCode(passwd)));//비밀번호 변경 api 호출
                         NewRunnable nr = new NewRunnable();
                         Thread t = new Thread(nr);
                         t.start();
@@ -135,6 +129,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             }
         });
 
+        //취소 버튼 클릭 시
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +137,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     class CP_UI implements Control {

@@ -171,7 +171,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                                 } else if (responseCode == 400) {
                                     responseCode = 0;
                                     threadFlag.set(false);
-                                    eu.startToast("잘못된 인증코드입니다.");
+                                    eu.startToast("잘못된 이메일 또는 인증코드입니다.");
                                 } else if (responseCode == 500) {
                                     responseCode = 0;
                                     threadFlag.set(false);
