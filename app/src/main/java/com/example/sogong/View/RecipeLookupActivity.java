@@ -153,7 +153,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         Log.d("recipe", "삭제하기 menu click");
 
 
-                        rlu.startDialog(1, "로그아웃", "정말 로그아웃 하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
+                        rlu.startDialog(1, "게시글 삭제", "게시글을 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
                         class NewRunnable implements Runnable {
                             NewRunnable() {
                             }
