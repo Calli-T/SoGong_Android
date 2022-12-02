@@ -54,6 +54,7 @@ public class PhotoLookupActivity extends AppCompatActivity {
     ImageView photoImage;
     ImageButton menubutton;
     ImageButton like_btn;
+    ImageButton back_button;
 
     Boolean likedState;
 
@@ -73,6 +74,15 @@ public class PhotoLookupActivity extends AppCompatActivity {
         responseCode = 0;
 
         PhotoPost photoPost = getIntent().getParcelableExtra("photo_post");
+
+        //뒤로가기 버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         photoAuthor = findViewById(R.id.photoauthor_text1);
         photoDate = findViewById(R.id.photodate_text1);

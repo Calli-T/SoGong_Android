@@ -56,6 +56,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     Button comment_add_btn;
     Button remain_amount_btn;
     EditText comment_edit;
+    ImageButton back_button;
 
     public Recipe_Ingre_Adapter recipeIngreAdapter;
     public RecyclerView recipeIngreRecyclerView;
@@ -91,6 +92,10 @@ public class RecipeLookupActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //뒤로가기 버튼
+        back_button = findViewById(R.id.back_button);
+
         recipePostF = getIntent().getParcelableExtra("recipe_post");
 
         responseCode.set(0);

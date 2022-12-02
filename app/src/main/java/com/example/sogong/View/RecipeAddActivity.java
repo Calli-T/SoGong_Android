@@ -68,6 +68,7 @@ public class RecipeAddActivity extends AppCompatActivity {
     TextView ingrename_selectText;
     EditText ingreamount_edit;
     TextView ingreamount_text;
+    ImageButton back_button;
     private AtomicBoolean threadFlag = new AtomicBoolean();
     String[] spicy_int = new String[]{"0", "1", "2", "3", "4", "5", "매운맛 단계"};
     HashMap<String, String> unitmap = new HashMap<>();//재료에 맞는 단위를 위한 map
@@ -100,6 +101,16 @@ public class RecipeAddActivity extends AppCompatActivity {
         addingre = findViewById(R.id.ingreadd_btn);
         recipedescription = findViewById(R.id.recipedescription_edit);
         linearlayout = findViewById(R.id.ingre_linear);//재료추가부분의 레이아웃
+        back_button = findViewById(R.id.back_button);
+
+        //뒤로가기 버튼
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //플로팅버튼
         FloatingActionButton fab = findViewById(R.id.recipe_add_button);
         fab.setOnClickListener(new FABClickListener());//플로팅버튼 클릭 이벤트

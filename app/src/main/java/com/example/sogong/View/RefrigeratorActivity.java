@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class RefrigeratorActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
     TextView noResult;
     Boolean isProgress;
+    ImageButton back_button;
 
     // UI controller
     Refrigerator_UI rfu = new Refrigerator_UI();
@@ -64,6 +66,15 @@ public class RefrigeratorActivity extends AppCompatActivity {
         responseCode = 0;
 
         threadFlag = true;
+        
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
         //로딩창 구현

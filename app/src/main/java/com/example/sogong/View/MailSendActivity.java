@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class MailSendActivity extends AppCompatActivity {
     EditText mailReceiver;
     EditText mailTitle;
     EditText mailDescription;
+    ImageButton back_button;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
     private MailSendActivity_UI mui = new MailSendActivity_UI();
     Custon_ProgressDialog custon_progressDialog;
@@ -47,6 +49,15 @@ public class MailSendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmail);
         String receiver = getIntent().getStringExtra("mail_receiver");
+
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mailReceiver = findViewById(R.id.mailreceiver_edit);
         mailTitle = findViewById(R.id.mailtitle_edit);

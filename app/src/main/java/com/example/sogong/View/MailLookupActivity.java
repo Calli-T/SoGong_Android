@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class MailLookupActivity extends AppCompatActivity {
     TextView mailDate;
     TextView mailDescription;
     Button deleteMail_Button;
+    ImageButton back_button;
     private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
     Custon_ProgressDialog custon_progressDialog;
 
@@ -51,6 +53,15 @@ public class MailLookupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lookupmail);
         Mail mail = getIntent().getParcelableExtra("mail");
+
+        //뒤로가기 버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //넘겨온 값으로 값 입력
         mailTitle = findViewById(R.id.mailtitle_text1);
