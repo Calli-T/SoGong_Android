@@ -93,9 +93,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //뒤로가기 버튼
-        back_button = findViewById(R.id.back_button);
-
         recipePostF = getIntent().getParcelableExtra("recipe_post");
 
         responseCode.set(0);
@@ -125,6 +122,16 @@ public class RecipeLookupActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
+
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //사용자에 따른 옵션 메뉴 로직 시작
         menubutton = findViewById(R.id.menu_button);
         dropDownMenu = new PopupMenu(this, menubutton);
