@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class ReportActivity extends AppCompatActivity {
     Custon_ProgressDialog custon_progressDialog;
     ControlReport_f crf = new ControlReport_f();
     Report_UI ru = new Report_UI();
+    ImageButton back_button;
 
     Boolean isProgress;
 
@@ -52,6 +54,15 @@ public class ReportActivity extends AppCompatActivity {
         cancel_btn = findViewById(R.id.cancel_button);
         responseCode = 0;
         threadFlag.set(true);
+
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);

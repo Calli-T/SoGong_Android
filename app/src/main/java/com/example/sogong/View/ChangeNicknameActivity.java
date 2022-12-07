@@ -27,8 +27,10 @@ public class ChangeNicknameActivity extends AppCompatActivity {
     EditText nickname_et;
     Button change_button, cancel_button;
     Custon_ProgressDialog custon_progressDialog;
+
     public static int responseCode;
-    private AtomicBoolean threadFlag = new AtomicBoolean(); // 프래그먼트 전환에서 스레드를 잠재울 플래그
+    private AtomicBoolean threadFlag = new AtomicBoolean(); // 스레드 제어용 플래그
+
     //UI controller
     CN_UI cu = new CN_UI();
 
@@ -46,7 +48,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
 
-        //닉네임 변경
+        //닉네임 변경 버튼 클릭 시
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,8 +109,7 @@ public class ChangeNicknameActivity extends AppCompatActivity {
                     custon_progressDialog.show();
                     threadFlag.set(true);
                     ControlEdittingInfo_f cef = new ControlEdittingInfo_f();
-                    cef.editNickname(nickname);
-
+                    cef.editNickname(nickname);//닉네임 변경 로직
 
                     NewRunnable nr = new NewRunnable();
                     Thread t = new Thread(nr);
@@ -126,11 +127,9 @@ public class ChangeNicknameActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     class CN_UI implements Control {
-
         @Override
         public void startToast(String message) {
             LayoutInflater inflater = getLayoutInflater();
@@ -154,6 +153,5 @@ public class ChangeNicknameActivity extends AppCompatActivity {
         public void changePage(int dest) {
 
         }
-
     }
 }

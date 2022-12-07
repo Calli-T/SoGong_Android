@@ -92,27 +92,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
     }
 
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public CommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.recycler_commentlist, parent, false);
         CommentAdapter.ViewHolder vh = new CommentAdapter.ViewHolder(view);
-
-        //리사이클러 클릭 이벤트
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String data = "";
-//                int position = vh.getAbsoluteAdapterPosition();
-//                if (position != RecyclerView.NO_POSITION) {
-//                    data = vh.getAuthor().getText().toString();
-//                }
-//                itemClickListener.onItemClicked(position, data);
-//
-//            }
-//        });
 
         return vh;
     }

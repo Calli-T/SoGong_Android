@@ -56,6 +56,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     Button comment_add_btn;
     Button remain_amount_btn;
     EditText comment_edit;
+    ImageButton back_button;
 
     public Recipe_Ingre_Adapter recipeIngreAdapter;
     public RecyclerView recipeIngreRecyclerView;
@@ -91,6 +92,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         recipePostF = getIntent().getParcelableExtra("recipe_post");
 
         responseCode.set(0);
@@ -120,6 +122,16 @@ public class RecipeLookupActivity extends AppCompatActivity {
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
         custon_progressDialog.show();
+
+        //뒤로가기버튼
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //사용자에 따른 옵션 메뉴 로직 시작
         menubutton = findViewById(R.id.menu_button);
         dropDownMenu = new PopupMenu(this, menubutton);
@@ -141,7 +153,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                         Log.d("recipe", "삭제하기 menu click");
 
 
-                        rlu.startDialog(1, "로그아웃", "정말 로그아웃 하시겠습니까?", new ArrayList<>(Arrays.asList("로그아웃", "취소")));
+                        rlu.startDialog(1, "게시글 삭제", "게시글을 삭제하시겠습니까?", new ArrayList<>(Arrays.asList("삭제", "취소")));
                         class NewRunnable implements Runnable {
                             NewRunnable() {
                             }
