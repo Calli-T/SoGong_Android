@@ -121,7 +121,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
         //로딩창 구현
         custon_progressDialog = new Custon_ProgressDialog(this);
         custon_progressDialog.setCanceledOnTouchOutside(false);
-        custon_progressDialog.show();
 
         //뒤로가기버튼
         back_button = findViewById(R.id.back_button);
@@ -353,7 +352,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
+custon_progressDialog.show();
         // 값 변동을 고려하여 열람 시점에서 새로 API 호출
         final Runnable runnable = new Runnable() {
             @Override
@@ -361,6 +360,8 @@ public class RecipeLookupActivity extends AppCompatActivity {
                 if (responseCode.get() == 200 && responseCode2.get() == 200) {
                     responseCode.set(-1);
                     responseCode2.set(-1);
+                    threadFlag.set(false);
+                    custon_progressDialog.dismiss();
                     //댓글 리사이클러뷰 구현
                     commentRecyclerView = (RecyclerView) findViewById(R.id.recipe_comment_recyclerview);
                     commentAdapter = new CommentAdapter();
@@ -768,6 +769,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
 
                 } else if (responseCode.get() == 500 && responseCode2.get() == 500) {
                     responseCode.set(-1);
+                    threadFlag.set(false);
                     custon_progressDialog.dismiss();
                     if (responseCode2.get() == 500) {
                         rlu.startDialog(0, "재료 요청 실패", "없는 재료를 가져오는데 실패했습니다.", new ArrayList<>(Arrays.asList("확인")));
@@ -776,6 +778,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     }
                 } else if (responseCode.get() == 502 && responseCode2.get() == 502) {
                     responseCode.set(-1);
+                    threadFlag.set(false);
                     custon_progressDialog.dismiss();
                     rlu.startDialog(0, "서버 오류", "알 수 없는 오류입니다.", new ArrayList<>(Arrays.asList("확인")));
                 }
@@ -791,7 +794,11 @@ public class RecipeLookupActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    if(threadFlag.get()){
                     runOnUiThread(runnable);
+                    }else {
+                        i=30;
+                    }
                 }
             }
         }
@@ -800,7 +807,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
         crf.lookupRecipe(recipePostF.getPost_id(), ControlLogin_f.userinfo.getNickname());
         ControlIngredients_f cif = new ControlIngredients_f();
         cif.lookupUnExistIngredients(ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id());
-
+threadFlag.set(true);
         NewRunnable nr = new NewRunnable();
         Thread t = new Thread(nr);
         responseCode.set(-1);
