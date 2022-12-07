@@ -172,7 +172,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                                     if (isProgress) {
                                                         custon_progressDialog.show();
                                                     } else custon_progressDialog.dismiss();
-                                                    ;
                                                 }
                                             };
                                             runOnUiThread(progress);
@@ -225,6 +224,7 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                             }
                                             ControlRecipe_f crf = new ControlRecipe_f();
                                             crf.deleteRecipe(ControlLogin_f.userinfo.getNickname(), recipePostF.getPost_id());
+                                            threadFlag.set(true);
                                             NewRunnable1 nr = new NewRunnable1();
                                             Thread t = new Thread(nr);
                                             t.start();
