@@ -176,7 +176,6 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                                 }
                                             };
                                             runOnUiThread(progress);
-                                            custon_progressDialog.show();
                                             threadFlag.set(true);
                                             final Runnable runnable = new Runnable() {
                                                 @Override
@@ -661,13 +660,14 @@ public class RecipeLookupActivity extends AppCompatActivity {
                                         if (responseCode.get() == 200) {
                                             responseCode.set(-1);
                                             commentthreadFlag.set(false);
+                                            custon_progressDialog.dismiss();
                                             Log.d("댓글 작성", "성공");
                                             Intent intent = getIntent();
                                             finish(); //현재 액티비티 종료 실시
                                             overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
                                             startActivity(intent); //현재 액티비티 재실행 실시
                                             overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
-                                            custon_progressDialog.dismiss();
+
                                         } else if (responseCode.get() == 403) {
                                             responseCode.set(-1);
                                             commentthreadFlag.set(false);
